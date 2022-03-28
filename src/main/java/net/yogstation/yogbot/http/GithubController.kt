@@ -15,6 +15,8 @@ import net.yogstation.yogbot.http.labels.GithubLabel
 import net.yogstation.yogbot.util.HttpUtil
 import net.yogstation.yogbot.util.StringUtils
 import net.yogstation.yogbot.util.YogResult
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
@@ -42,11 +44,19 @@ class GithubController(
 	private val channelsConfig: DiscordChannelsConfig,
 	private val githubLabels: List<GithubLabel>
 ) {
-	private val keySpec: SecretKeySpec = SecretKeySpec(githubConfig.hmac.encodeToByteArray(), "HmacSHA256")
-	private val mac: Mac = Mac.getInstance("HmacSHA256")
+	private val logger: Logger = LoggerFactory.getLogger(javaClass)
+	private val keySpec: SecretKeySpec?
+	private val mac: Mac?
 
 	init {
-		mac.init(keySpec)
+		if(githubConfig.hmac == "") {
+			keySpec = null
+			mac = null
+		} else {
+			keySpec = SecretKeySpec(githubConfig.hmac.encodeToByteArray(), "HmacSHA256")
+			mac = Mac.getInstance("HmacSHA256")
+			mac.init(keySpec)
+		}
 	}
 
 	@PostMapping("/api/github")
@@ -67,7 +77,7 @@ class GithubController(
 			)
 			var action = jsonData.get("action").asText()
 			if (action != "opened" && action != "reopened" && action != "closed") {
-				return HttpUtil.ok("Action not supported");
+				return HttpUtil.ok("Action not supported")
 			}
 			if (jsonData.get("pull_request").get("merged") != null) action = "merged"
 			val title = jsonData.get("pull_request").get("title").asText()
@@ -181,6 +191,10 @@ class GithubController(
 	}
 
 	private fun verifySignature(data: String, hash: String): Boolean {
+		if(mac == null) {
+			logger.warn("Verification key not set for webhook, assuming valid")
+			return true
+		}
 		val signature = "sha256=${StringUtils.bytesToHex(mac.doFinal(data.encodeToByteArray()))}".lowercase()
 		return MessageDigest.isEqual(signature.encodeToByteArray(), hash.encodeToByteArray())
 	}
