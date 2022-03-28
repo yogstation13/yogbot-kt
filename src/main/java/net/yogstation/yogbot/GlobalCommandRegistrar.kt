@@ -56,21 +56,13 @@ class GlobalCommandRegistrar(
 				.readValue(json, ApplicationCommandRequest::class.java)
 			commands.add(request) //Add to our array list
 		}
-		if (config.useLocalCommands) {
-			logger.info("Loading ${commands.size} guild commands")
-			applicationService.bulkOverwriteGuildApplicationCommand(applicationId, config.mainGuildID, commands)
-				.doOnNext { logger.debug("Successfully registered guild Commands") }
-				.doOnError { e: Throwable? -> logger.error("Failed to register guild commands", e) }
-				.subscribe()
-			return
-		}
-		/* Bulk overwrite commands. This is now idempotent, so it is safe to use this even when only 1 command
-        is changed/added/removed
-        */
-		applicationService.bulkOverwriteGlobalApplicationCommand(applicationId, commands)
-			.doOnNext { logger.debug("Successfully registered Global Commands") }
-			.doOnError { e: Throwable? -> logger.error("Failed to register global commands", e) }
+
+		logger.info("Loading ${commands.size} guild commands")
+		applicationService.bulkOverwriteGuildApplicationCommand(applicationId, config.mainGuildID, commands)
+			.doOnNext { logger.debug("Successfully registered guild Commands") }
+			.doOnError { e: Throwable? -> logger.error("Failed to register guild commands", e) }
 			.subscribe()
+		return
 	}
 
 	/**
