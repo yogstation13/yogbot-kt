@@ -1,17 +1,19 @@
 package net.yogstation.yogbot.config
 
+import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.boot.context.properties.ConstructorBinding
 import org.springframework.stereotype.Component
 
-@Component
-class DatabaseConfig {
+@ConfigurationProperties(prefix = "yogbot.database")
+data class DatabaseConfig @ConstructorBinding constructor(
 	// Connection Info, default matches the game server's default
-	var hostname: String = "localhost"
-	var port: Int = 3306
-	var byondDatabase: String = "feedback"
-	var yogbotDatabase: String = "yogbot"
-	var username: String = "username"
-	var password: String = "password"
+	val hostname: String,
+	val port: Int,
+	val byondDatabase: String,
+	val yogbotDatabase: String,
+	val username: String,
+	val password: String,
 
 	// Database prefix
-	var prefix: String = "SS13_"
-}
+	val prefix: String
+)

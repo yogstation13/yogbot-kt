@@ -3,15 +3,14 @@ package net.yogstation.yogbot.config
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
-@ConstructorBinding
 @ConfigurationProperties(prefix = "yogbot.github")
-class GithubConfig {
+class GithubConfig @ConstructorBinding constructor(
 	// Token for authenticating the webhook
-	var hmac = ""
+	val hmac: String,
 
 	// Oauth token
-	var token = ""
+	val token: String,
 
 	// API link to the base repo, allows for testing
-	var repoLink = "https://api.github.com/repos/yogstation13/Yogstation"
-}
+	val repoLink: String,
+)
