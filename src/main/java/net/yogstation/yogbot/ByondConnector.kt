@@ -27,12 +27,12 @@ class ByondConnector(private val config: ByondConfig) {
 				val outputStream = socket.getOutputStream()
 				outputStream.write(buffer.array())
 				val inputStream = socket.getInputStream()
-				val headerBuffer = ByteArray(4)
-				if (inputStream.read(headerBuffer) < 4) return YogResult.error("Returned insufficient data")
+				val headerBuffer = inputStream.readNBytes(4)
+				if (headerBuffer.size < 4) return YogResult.error("Returned insufficient data")
 				if (headerBuffer[0].toInt() != 0x00 || headerBuffer[1] != 0x83.toByte()) return YogResult.error("Malformed response packet, " + headerBuffer[0] + " " + headerBuffer[1])
 				val size = ByteBuffer.wrap(headerBuffer, 2, 2).short
-				val bodyBuffer = ByteArray(size.toInt())
-				if (inputStream.read(bodyBuffer) < size) return YogResult.error("Returned insufficient data")
+				val bodyBuffer = inputStream.readNBytes(size.toInt())
+				if (bodyBuffer.size < size) return YogResult.error("Returned insufficient data")
 				val bb = ByteBuffer.wrap(bodyBuffer)
 				val type = bb.get()
 				if (type.toInt() == 0x2A) {
