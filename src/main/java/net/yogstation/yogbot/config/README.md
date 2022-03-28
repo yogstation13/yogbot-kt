@@ -2,7 +2,7 @@
 The classes in this package all represent some subset of the configuration for this bot. 
 
 ## Configuring the configs
-The default values in these classes should be either the value to be used on the live version of yogbot, 
+The default values in `resources/application.properties` should be either the value to be used on the live version of yogbot, 
 or if that is not possible, such as keys, a reasonable default for use in local testing.
 
 If you wish to configure the bot for your local testing, the easiest way would be to make an 

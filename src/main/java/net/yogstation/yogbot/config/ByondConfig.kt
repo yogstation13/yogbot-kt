@@ -3,21 +3,20 @@ package net.yogstation.yogbot.config
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
-@ConstructorBinding
 @ConfigurationProperties(prefix = "yogbot.byond")
-class ByondConfig {
+class ByondConfig @ConstructorBinding constructor (
 	// The comms key for communicating to byond
-	var serverKey: String = "no key for you :("
+	var serverKey: String,
 
 	// The webhook key used by byond to communicate to yogbot
-	var serverWebhookKey: String = "webkey"
+	var serverWebhookKey: String,
 
 	// The address of the byond server
-	var serverAddress: String = "158.69.120.60"
+	var serverAddress: String,
 
 	// The port of the byond server
-	var serverPort: Int = 4133
+	var serverPort: Int,
 
 	// Public facing addressed, send to user to indicate where to join
-	var serverJoinAddress: String = "https://yogstation.net/play.php"
-}
+	var serverJoinAddress: String
+)
