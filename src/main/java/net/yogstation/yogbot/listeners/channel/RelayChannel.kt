@@ -52,7 +52,7 @@ abstract class RelayChannel(channelsConfig: DiscordChannelsConfig, private val b
 		} else {
 			event.message.author.get().username
 		}
-		byondConnector.request(
+		return byondConnector.requestAsync(
 			"?$method=${URLEncoder.encode(messageBuilder.toString(), StandardCharsets.UTF_8)}&admin=${
 				URLEncoder.encode(
 					user,
@@ -60,6 +60,5 @@ abstract class RelayChannel(channelsConfig: DiscordChannelsConfig, private val b
 				)
 			}"
 		)
-		return Mono.empty<Any>()
 	}
 }

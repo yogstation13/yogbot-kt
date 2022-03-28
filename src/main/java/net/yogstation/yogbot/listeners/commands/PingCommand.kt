@@ -17,12 +17,16 @@ class PingCommand(
 	discordConfig
 ) {
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {
-		val pingResponse = byondConnector.request("?ping")
-		if (pingResponse.hasError()) return DiscordUtil.reply(event, pingResponse.error ?: "Unknown Error")
-		val playerCount: Int = (pingResponse.value as Float).toInt()
-		return DiscordUtil.reply(
-			event, "There are **${playerCount}** players online, join them now with ${byondConfig.serverJoinAddress}"
-		)
+		return byondConnector.requestAsync("?ping").flatMap { pingResponse ->
+			if (pingResponse.hasError()) DiscordUtil.reply(event, pingResponse.error ?: "Unknown Error")
+			else {
+				val playerCount: Int = (pingResponse.value as Float).toInt()
+				DiscordUtil.reply(
+					event,
+					"There are **${playerCount}** players online, join them now with ${byondConfig.serverJoinAddress}"
+				)
+			}
+		}
 	}
 
 	override val description = "Pings the server."

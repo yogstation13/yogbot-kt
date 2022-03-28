@@ -16,7 +16,9 @@ class AdminWhoCommand(
 	private val channelsConfig: DiscordChannelsConfig
 ) : TextCommand(discordConfig) {
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {
-		return DiscordUtil.reply(event, getAdmins(event.message.channelId, byondConnector, channelsConfig))
+		return getAdmins(event.message.channelId, byondConnector, channelsConfig).flatMap {
+			DiscordUtil.reply(event, it)
+		}
 	}
 
 	override val name = "adminwho"
@@ -27,13 +29,14 @@ class AdminWhoCommand(
 			channelID: Snowflake,
 			byondConnector: ByondConnector,
 			channelsConfig: DiscordChannelsConfig
-		): String {
+		): Mono<String> {
 			var byondMessage = "?adminwho"
 			if (channelsConfig.isAdminChannel(channelID.asLong())) byondMessage += "&adminchannel=1"
-			val result = byondConnector.request(byondMessage)
-			var admins = (if (result.hasError()) result.error else result.value) as String
-			admins = admins.replace("\u0000".toRegex(), "")
-			return admins
+			return byondConnector.requestAsync(byondMessage).map { result ->
+				var admins = (if (result.hasError()) result.error else result.value) as String
+				admins = admins.replace("\u0000".toRegex(), "")
+				admins
+			}
 		}
 	}
 }
