@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
-//@Component
+@Component
 class ChannelListener(private val channelMessageHandlers: List<AbstractChannel>, client: GatewayDiscordClient) {
 	init {
 		client.on(MessageCreateEvent::class.java) { event: MessageCreateEvent -> handle(event) }.subscribe()
