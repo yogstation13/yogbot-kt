@@ -13,6 +13,7 @@ import net.yogstation.yogbot.util.LogChannel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.jpa.domain.Specification
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.sql.SQLException
@@ -31,7 +32,7 @@ class RoleUpdater(
 	private val donorRole = Snowflake.of(discordConfig.donorRole)
 	private val verificationRole = Snowflake.of(discordConfig.byondVerificationRole)
 
-//	@Scheduled(fixedRate = 15000)
+	@Scheduled(fixedRate = 15000)
 	fun handleDonor() {
 		if (!client.gatewayResources.intents.contains(Intent.GUILD_MEMBERS)) {
 			logger.error("Unable to process unbans and donors, lacking GUILD_MEMBERS intent")
@@ -44,38 +45,38 @@ class RoleUpdater(
 			return
 		}
 
-		val donorSnowflakes: MutableSet<Snowflake> = HashSet()
-		val verifiedSnowflakes: MutableSet<Snowflake> = HashSet()
+//		val donorSnowflakes: MutableSet<Snowflake> = HashSet()
+//		val verifiedSnowflakes: MutableSet<Snowflake> = HashSet()
 		val bannedSnowflakes: Set<Snowflake> = banRepository.findAll(Specification.where(Ban.isBanActive())).map { Snowflake.of(it.discordId) }.toSet()
 		try {
-			databaseManager.byondDbConnection.use { connection ->
-				val stmt = connection.createStatement()
-				stmt.use { statement ->
-					statement.executeQuery(
-						"SELECT DISTINCT player.discord_id FROM ${databaseManager.prefix("player")} as player JOIN ${
-							databaseManager.prefix(
-								"donors"
-							)
-						} donor on player.ckey = donor.ckey WHERE (expiration_time > NOW()) AND revoked IS NULL;"
-					)
-						.use { results ->
-							while (results.next()) {
-								donorSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
-							}
-						}
-				}
-			}
-			databaseManager.byondDbConnection.use { connection ->
-				val stmt = connection.createStatement()
-				stmt.use { statement ->
-					statement.executeQuery("SELECT DISTINCT discord_id FROM ${databaseManager.prefix("player")};")
-						.use { results ->
-							while (results.next()) {
-								verifiedSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
-							}
-						}
-				}
-			}
+//			databaseManager.byondDbConnection.use { connection ->
+//				val stmt = connection.createStatement()
+//				stmt.use { statement ->
+//					statement.executeQuery(
+//						"SELECT DISTINCT player.discord_id FROM ${databaseManager.prefix("player")} as player JOIN ${
+//							databaseManager.prefix(
+//								"donors"
+//							)
+//						} donor on player.ckey = donor.ckey WHERE (expiration_time > NOW()) AND revoked IS NULL;"
+//					)
+//						.use { results ->
+//							while (results.next()) {
+//								donorSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
+//							}
+//						}
+//				}
+//			}
+//			databaseManager.byondDbConnection.use { connection ->
+//				val stmt = connection.createStatement()
+//				stmt.use { statement ->
+//					statement.executeQuery("SELECT DISTINCT discord_id FROM ${databaseManager.prefix("player")};")
+//						.use { results ->
+//							while (results.next()) {
+//								verifiedSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
+//							}
+//						}
+//				}
+//			}
 		} catch (e: SQLException) {
 			logger.error("Error fetching bans or donors", e)
 			return
