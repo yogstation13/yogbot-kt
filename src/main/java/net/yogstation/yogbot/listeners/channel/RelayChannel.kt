@@ -5,7 +5,6 @@ import net.yogstation.yogbot.ByondConnector
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import org.apache.commons.text.StringEscapeUtils
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -15,7 +14,6 @@ import java.nio.charset.StandardCharsets
  * such as asay, msay, and ooc. This class takes any message sent in the channel and forwards it to the specified
  * byond endpoint, attaching images if set to do so
  */
-@Component
 abstract class RelayChannel(channelsConfig: DiscordChannelsConfig, private val byondConnector: ByondConnector) :
 	AbstractChannel(
 		channelsConfig

@@ -45,38 +45,38 @@ class RoleUpdater(
 			return
 		}
 
-		val donorSnowflakes: MutableSet<Snowflake> = HashSet()
-		val verifiedSnowflakes: MutableSet<Snowflake> = HashSet()
+//		val donorSnowflakes: MutableSet<Snowflake> = HashSet()
+//		val verifiedSnowflakes: MutableSet<Snowflake> = HashSet()
 		val bannedSnowflakes: Set<Snowflake> = banRepository.findAll(Specification.where(Ban.isBanActive())).map { Snowflake.of(it.discordId) }.toSet()
 		try {
-			databaseManager.byondDbConnection.use { connection ->
-				val stmt = connection.createStatement()
-				stmt.use { statement ->
-					statement.executeQuery(
-						"SELECT DISTINCT player.discord_id FROM ${databaseManager.prefix("player")} as player JOIN ${
-							databaseManager.prefix(
-								"donors"
-							)
-						} donor on player.ckey = donor.ckey WHERE (expiration_time > NOW()) AND revoked IS NULL;"
-					)
-						.use { results ->
-							while (results.next()) {
-								donorSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
-							}
-						}
-				}
-			}
-			databaseManager.byondDbConnection.use { connection ->
-				val stmt = connection.createStatement()
-				stmt.use { statement ->
-					statement.executeQuery("SELECT DISTINCT discord_id FROM ${databaseManager.prefix("player")};")
-						.use { results ->
-							while (results.next()) {
-								verifiedSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
-							}
-						}
-				}
-			}
+//			databaseManager.byondDbConnection.use { connection ->
+//				val stmt = connection.createStatement()
+//				stmt.use { statement ->
+//					statement.executeQuery(
+//						"SELECT DISTINCT player.discord_id FROM ${databaseManager.prefix("player")} as player JOIN ${
+//							databaseManager.prefix(
+//								"donors"
+//							)
+//						} donor on player.ckey = donor.ckey WHERE (expiration_time > NOW()) AND revoked IS NULL;"
+//					)
+//						.use { results ->
+//							while (results.next()) {
+//								donorSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
+//							}
+//						}
+//				}
+//			}
+//			databaseManager.byondDbConnection.use { connection ->
+//				val stmt = connection.createStatement()
+//				stmt.use { statement ->
+//					statement.executeQuery("SELECT DISTINCT discord_id FROM ${databaseManager.prefix("player")};")
+//						.use { results ->
+//							while (results.next()) {
+//								verifiedSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
+//							}
+//						}
+//				}
+//			}
 		} catch (e: SQLException) {
 			logger.error("Error fetching bans or donors", e)
 			return
