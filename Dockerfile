@@ -9,7 +9,7 @@ COPY src src
 RUN gradle --no-daemon bootJar
 
 
-FROM alpine:3.15.2
+FROM alpine:3.15.3
 
 RUN apk add --no-cache openjdk17-jre-headless
 
