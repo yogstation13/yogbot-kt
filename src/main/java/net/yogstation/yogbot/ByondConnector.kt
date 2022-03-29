@@ -5,6 +5,8 @@ import net.yogstation.yogbot.util.YogResult
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 import java.io.IOException
 import java.net.Socket
 import java.nio.ByteBuffer
@@ -14,7 +16,14 @@ import java.nio.charset.StandardCharsets
 @Component
 class ByondConnector(private val config: ByondConfig) {
 	private val logger: Logger = LoggerFactory.getLogger(javaClass)
-	fun request(rawQuery: String): YogResult<Any?, String?> {
+
+	fun requestAsync(rawQuery: String): Mono<YogResult<Any?, String?>> {
+		return Mono.fromCallable {
+			request(rawQuery)
+		}.subscribeOn(Schedulers.boundedElastic())
+	}
+
+	private fun request(rawQuery: String): YogResult<Any?, String?> {
 		val query = String.format("%s&key=%s", rawQuery, config.serverKey)
 		val buffer = ByteBuffer.allocate(query.length + 10)
 		buffer.put(byteArrayOf(0x00, 0x83.toByte()))

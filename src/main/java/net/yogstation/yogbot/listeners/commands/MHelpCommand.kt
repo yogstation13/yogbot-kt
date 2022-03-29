@@ -47,10 +47,11 @@ class MHelpCommand(
 			builder.append("&admin_id=").append("0")
 		}
 		builder.append("&whom=").append(URLEncoder.encode(matcher.group(1), StandardCharsets.UTF_8))
-		val result = byondConnector.request(builder.toString())
-		if (result.hasError()) return DiscordUtil.reply(event, result.error ?: "Unknown Error")
-		return if (result.value as Float == 0f) {
-			DiscordUtil.reply(event, "Error: Mentor-PM: Client ${matcher.group(1)} not found.")
-		} else Mono.empty<Any>()
+		return byondConnector.requestAsync(builder.toString()).flatMap { result ->
+			if (result.hasError()) DiscordUtil.reply(event, result.error ?: "Unknown Error")
+			else if (result.value as Float == 0f) {
+				DiscordUtil.reply(event, "Error: Mentor-PM: Client ${matcher.group(1)} not found.")
+			} else Mono.empty()
+		}
 	}
 }

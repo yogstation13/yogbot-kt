@@ -89,11 +89,11 @@ class GithubController(
 
 			if (!securityPr) {
 				if (action == "opened") {
-					byondConnector.request(
+					resultPublishers = resultPublishers.and(byondConnector.requestAsync(
 						"?announce=$title&author=${
 							jsonData.get("sender").get("login")
 						}&id=${jsonData.get("pull_request").get("number")}"
-					)
+					))
 				}
 
 				resultPublishers = resultPublishers.and(sendEmbedTo(channelsConfig.channelPublic, embed))
