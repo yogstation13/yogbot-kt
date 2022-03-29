@@ -2,15 +2,24 @@ package net.yogstation.yogbot.data.entity
 
 import org.springframework.data.jpa.domain.Specification
 import java.util.Date
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
+import javax.persistence.Lob
+import javax.persistence.Temporal
+import javax.persistence.TemporalType
 
 @Entity
 data class Ban (
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(columnDefinition = "BIGINT(20) AUTO_INCREMENT")
 	val id: Long,
 	@Column(nullable = false)
 	val discordId: Long,
+	@Lob
 	@Column(nullable = false)
 	var reason: String,
 	@Temporal(TemporalType.TIMESTAMP)
