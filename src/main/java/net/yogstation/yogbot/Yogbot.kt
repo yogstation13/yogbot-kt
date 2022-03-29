@@ -77,5 +77,6 @@ open class Yogbot {
 }
 
 fun main(args: Array<String>) {
+	@Suppress("SpreadOperator")
 	SpringApplicationBuilder(Yogbot::class.java).build().run(*args)
 }

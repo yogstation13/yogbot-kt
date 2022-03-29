@@ -23,6 +23,7 @@ group 'net.yogstation'
 version '1.0-SNAPSHOT'
 
 repositories {
+	maven { url 'https://repo.spring.io/milestone' }
     mavenCentral()
 }
 

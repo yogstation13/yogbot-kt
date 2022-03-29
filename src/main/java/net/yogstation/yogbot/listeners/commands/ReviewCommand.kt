@@ -15,6 +15,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.SQLException
 import java.time.LocalDateTime
@@ -88,99 +89,125 @@ class ReviewCommand(
 				val relatedKeys: MutableMap<String, RelatedInfo> = HashMap()
 				val tableName = database.prefix("connection_log")
 				try {
-					database.byondDbConnection.use { connection ->
-						connection.prepareStatement(
-							String.format(
-								"SELECT computerid, ip FROM %s WHERE ckey = ?;",
-								tableName
-							)
-						).use { connectionsStmt ->
-							connection.prepareStatement(
-								String.format(
-									"SELECT ckey,ip,computerid FROM `%s` " +
-										"WHERE computerid IN (SELECT computerid FROM `%s` WHERE ckey = ?) OR " +
-										"ip IN (SELECT ip FROM `%s` WHERE ckey = ?)",
-									tableName, tableName, tableName
-								)
-							).use { relatedStmt ->
-								connectionsStmt.setString(1, thisCkey)
-								val connectionsResult: ResultSet = connectionsStmt.executeQuery()
-								while (connectionsResult.next()) {
-									thisCids.add(connectionsResult.getString("computerid"))
-									thisIps.add(connectionsResult.getString("ip"))
-								}
-								connectionsResult.close()
-								relatedStmt.setString(1, thisCkey)
-								relatedStmt.setString(2, thisCkey)
-								val relatedResult: ResultSet = relatedStmt.executeQuery()
-								while (relatedResult.next()) {
-									val relatedCkey: String = relatedResult.getString("ckey")
-									val relatedIp: String = relatedResult.getString("ip")
-									val relatedCid: String = relatedResult.getString("computerid")
-									if (ckeysChecked.containsKey(relatedCkey)) continue
-									if (!relatedKeys.containsKey(relatedCkey)) {
-										relatedKeys[relatedCkey] = RelatedInfo()
-									}
-									val relatedInfo = relatedKeys[relatedCkey]!!
-									if (thisIps.contains(relatedIp)) relatedInfo.ips.add(relatedIp)
-									if (thisCids.contains(relatedCid)) relatedInfo.cids.add(relatedCid)
-								}
-							}
-						}
-					}
+					getRelatedKeys(tableName, thisCkey, thisCids, thisIps, relatedKeys)
 				} catch (e: SQLException) {
 					logger.error("Error getting connections", e)
 					channel.createMessage("An error has occurred")
 					return
 				}
 				for (relatedKey in relatedKeys.keys) {
-					val info = relatedKeys[relatedKey] ?: continue
-					val builder = StringBuilder("Related to ").append(thisCkey).append(" via ")
-					if (info.cids.size > 0) {
-						builder.append("cid")
-						if (info.cids.size != 1) builder.append("s")
-						builder.append(" ")
-						builder.append(java.lang.String.join(", ", info.cids))
-					}
-					if (info.cids.size > 0 && info.ips.size > 0) builder.append(" ")
-					if (info.ips.size > 0) {
-						builder.append("ip")
-						if (info.ips.size != 1) builder.append("s")
-						builder.append(" ")
-						builder.append(java.lang.String.join(", ", info.ips))
-					}
-					ckeysChecked[relatedKey] = builder.toString()
-					ckeysQueue.add(relatedKey)
-					checkBannu(relatedKey)
+					processRelatedKey(relatedKeys, relatedKey, thisCkey)
 				}
 				sendUpdate(false)
 			}
 			sendUpdate(true)
 		}
 
+		private fun processRelatedKey(
+			relatedKeys: MutableMap<String, RelatedInfo>,
+			relatedKey: String,
+			thisCkey: String
+		) {
+			val info = relatedKeys[relatedKey] ?: return
+			val builder = StringBuilder("Related to ").append(thisCkey).append(" via ")
+			if (info.cids.size > 0) {
+				builder.append("cid")
+				if (info.cids.size != 1) builder.append("s")
+				builder.append(" ")
+				builder.append(java.lang.String.join(", ", info.cids))
+			}
+			if (info.cids.size > 0 && info.ips.size > 0) builder.append(" ")
+			if (info.ips.size > 0) {
+				builder.append("ip")
+				if (info.ips.size != 1) builder.append("s")
+				builder.append(" ")
+				builder.append(java.lang.String.join(", ", info.ips))
+			}
+			ckeysChecked[relatedKey] = builder.toString()
+			ckeysQueue.add(relatedKey)
+			checkBannu(relatedKey)
+		}
+
+		private fun getRelatedKeys(
+			tableName: String,
+			thisCkey: String,
+			thisCids: MutableSet<String>,
+			thisIps: MutableSet<String>,
+			relatedKeys: MutableMap<String, RelatedInfo>
+		) {
+			database.byondDbConnection.use { connection ->
+				connection.prepareStatement(
+					"SELECT computerid, ip FROM $tableName WHERE ckey = ?;"
+				).use { connectionsStmt ->
+					connection.prepareStatement(
+						"SELECT ckey,ip,computerid FROM `$tableName` WHERE " +
+							"computerid IN (SELECT computerid FROM `$tableName` WHERE ckey = ?) OR " +
+							"ip IN (SELECT ip FROM `$tableName` WHERE ckey = ?)"
+					).use { relatedStmt ->
+						queryRelatedKeys(connectionsStmt, thisCkey, thisCids, thisIps, relatedStmt, relatedKeys)
+					}
+				}
+			}
+		}
+
+		@Suppress("LongParameterList")
+		private fun queryRelatedKeys(
+			connectionsStmt: PreparedStatement,
+			thisCkey: String,
+			thisCids: MutableSet<String>,
+			thisIps: MutableSet<String>,
+			relatedStmt: PreparedStatement,
+			relatedKeys: MutableMap<String, RelatedInfo>
+		) {
+			connectionsStmt.setString(1, thisCkey)
+			val connectionsResult: ResultSet = connectionsStmt.executeQuery()
+			while (connectionsResult.next()) {
+				thisCids.add(connectionsResult.getString("computerid"))
+				thisIps.add(connectionsResult.getString("ip"))
+			}
+			connectionsResult.close()
+			relatedStmt.setString(1, thisCkey)
+			relatedStmt.setString(2, thisCkey)
+			val relatedResult: ResultSet = relatedStmt.executeQuery()
+			while (relatedResult.next()) {
+				val relatedCkey: String = relatedResult.getString("ckey")
+				val relatedIp: String = relatedResult.getString("ip")
+				val relatedCid: String = relatedResult.getString("computerid")
+				if (ckeysChecked.containsKey(relatedCkey)) continue
+				if (!relatedKeys.containsKey(relatedCkey)) {
+					relatedKeys[relatedCkey] = RelatedInfo()
+				}
+				val relatedInfo = relatedKeys[relatedCkey]!!
+				if (thisIps.contains(relatedIp)) relatedInfo.ips.add(relatedIp)
+				if (thisCids.contains(relatedCid)) relatedInfo.cids.add(relatedCid)
+			}
+		}
+
 		private fun checkBannu(victim: String) {
 			try {
 				database.byondDbConnection.use { connection ->
 					connection.prepareStatement(
-						String.format(
-							"SELECT 1 FROM `${database.prefix("ban")}` " +
-								"WHERE ckey = ? AND " +
-								"role IN ('Server') AND " +
-								"unbanned_datetime IS NULL AND " +
-								"(expiration_time IS NULL OR expiration_time > NOW())",
-						)
+						"SELECT 1 FROM `${database.prefix("ban")}` " +
+							"WHERE ckey = ? AND " +
+							"role IN ('Server') AND " +
+							"unbanned_datetime IS NULL AND " +
+							"(expiration_time IS NULL OR expiration_time > NOW())"
 					).use { bannuStmt ->
-						bannuStmt.setString(1, victim)
-						val resultSet: ResultSet = bannuStmt.executeQuery()
-						if (resultSet.next()) {
-							ckeysChecked[victim] = String.format("%s (BANNED)", ckeysChecked[victim])
-						}
-						resultSet.close()
+						testBannu(bannuStmt, victim)
 					}
 				}
 			} catch (e: SQLException) {
 				logger.error("Failed to check bannu of $victim", e)
 			}
+		}
+
+		private fun testBannu(bannuStmt: PreparedStatement, victim: String) {
+			bannuStmt.setString(1, victim)
+			val resultSet: ResultSet = bannuStmt.executeQuery()
+			if (resultSet.next()) {
+				ckeysChecked[victim] = "${ckeysChecked[victim]} (BANNED)"
+			}
+			resultSet.close()
 		}
 
 		private fun sendUpdate(complete: Boolean) {
@@ -189,7 +216,7 @@ class ReviewCommand(
 			for (i in 0 until count) {
 				val embedBuilder: EmbedCreateSpec.Builder = EmbedCreateSpec.builder()
 				embedBuilder.author(
-					String.format("Account review%s", if (i != 0) " (CONTINUED)" else ""), "",
+					"Account review${if (i != 0) " (CONTINUED)" else ""}", "",
 					"https://i.imgur.com/GPZgtbe.png"
 				)
 				for (ckey in checkedKeys.subList(i * 23, ((i + 1) * 23).coerceAtMost(checkedKeys.size))) {

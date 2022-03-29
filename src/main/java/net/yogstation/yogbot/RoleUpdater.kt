@@ -88,13 +88,15 @@ class RoleUpdater(
 					.and(logChannel.log("Softban automatically reapplied to ${it.username}"))
 			}) {
 				it.removeRole(softbanRole, "Ban expired").and(logChannel.log("Bans expired for ${it.username}"))
-			} /*.and(
+			}.and(
 				updateRole(donorSnowflakes, member, donorRole, {
 					it.addRole(donorRole, "Giving donor role")
 				}) {
 					it.removeRole(donorRole, "Donor status expired").and(
 						guild.getChannelById(Snowflake.of(channelsConfig.channelStaffPublic)).flatMap { channel ->
-							channel.restChannel.createMessage("${it.mention} Your donor tag on discord has been removed because we could not verify your donator status, ensure your discord is verified properly.")
+							channel.restChannel.createMessage("${it.mention} Your donor tag on discord has been " +
+								"removed because we could not verify your donator status, " +
+								"ensure your discord is verified properly.")
 						}
 					)
 				}
@@ -104,7 +106,7 @@ class RoleUpdater(
 				}) {
 					it.removeRole(donorRole, "Unable to verify")
 				}
-			)*/
+			)
 		}.subscribe()
 	}
 

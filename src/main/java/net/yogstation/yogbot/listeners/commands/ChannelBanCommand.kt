@@ -28,24 +28,20 @@ abstract class ChannelBanCommand(discordConfig: DiscordConfig, permissions: Perm
 		// If they have the rule, remove it
 		return if (partialMember.roleIds.contains(banRole)) partialMember.removeRole(
 			banRole,
-			String.format(
-				"Ban lifted by %s",
+			"Ban lifted by ${
 				if (event.message
-					.author
-					.isPresent
+						.author
+						.isPresent
 				) event.message
 					.author
 					.get()
 					.username else "unknown"
-			)
+			}"
 		).and(DiscordUtil.reply(event, "Ban lifted successfully"))
 		// If they don't have the rule, give it
 		else partialMember.addRole(
 			banRole,
-			String.format(
-				"Ban applied by %s",
-				if (event.message.author.isPresent) event.message.author.get().username else "unknown"
-			)
+			"Ban applied by ${if (event.message.author.isPresent) event.message.author.get().username else "unknown"}"
 		)
 			.and(DiscordUtil.reply(event, "Ban applied successfully"))
 	}

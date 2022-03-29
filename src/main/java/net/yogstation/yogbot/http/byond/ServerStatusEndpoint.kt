@@ -45,7 +45,7 @@ class ServerStatusEndpoint(
 				embed.description(
 					"A new round is about to begin! Join now at ${byondConfig.serverJoinAddress}"
 				)
-				embed.addField("Map Name", payload.map_name ?: "Unknown", true)
+				embed.addField("Map Name", payload.mapName ?: "Unknown", true)
 				embed.addField("Revision", payload.revision ?: "Unknown", true)
 				embed.addField("Round Number", payload.round?.toString() ?: "0", true)
 				embed.addField("Changelog", "No Changes", true)

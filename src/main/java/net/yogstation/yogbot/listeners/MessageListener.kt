@@ -3,8 +3,8 @@ package net.yogstation.yogbot.listeners
 import discord4j.common.util.Snowflake
 import discord4j.core.GatewayDiscordClient
 import discord4j.core.event.domain.message.MessageCreateEvent
-import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.GithubManager
+import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.DiscordUtil
 import reactor.core.publisher.Mono
 import java.util.regex.Matcher
@@ -40,7 +40,9 @@ class MessageListener(
 					.and(
 						DiscordUtil.reply(
 							event,
-							"It appears you have, for the first time, engaged in the dastardly action to ping Jester! For this crime you have been assigned the role of Jester. Congratulations on your promotion!"
+							"It appears you have, for the first time, engaged in the dastardly action to ping " +
+								"Jester! For this crime you have been assigned the role of Jester. " +
+								"Congratulations on your promotion!"
 						)
 					)
 			)

@@ -6,6 +6,7 @@ import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.DiscordUtil
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import java.sql.PreparedStatement
 import java.sql.SQLException
 
 @Component
@@ -15,24 +16,31 @@ class ListAdminsCommand(discordConfig: DiscordConfig, private val database: Data
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {
 		try {
 			database.byondDbConnection.use { connection ->
-				connection.prepareStatement(String.format("SELECT ckey,`rank` FROM `%s`", database.prefix("admin")))
+				connection.prepareStatement("SELECT ckey,`rank` FROM `${database.prefix("admin")}`")
 					.use { stmt ->
-						val results = stmt.executeQuery()
-						val builder = StringBuilder("Current Admins:")
-						while (results.next()) {
-							builder.append("\n")
-							builder.append(results.getString("ckey"))
-							builder.append(" - ")
-							builder.append(results.getString("rank"))
-						}
-						results.close()
-						return DiscordUtil.reply(event, builder.toString())
+						return replyWithAdmins(stmt, event)
 					}
 			}
 		} catch (e: SQLException) {
 			logger.error("Error with SQL Query", e)
 			return DiscordUtil.reply(event, "An error has occurred")
 		}
+	}
+
+	private fun replyWithAdmins(
+		stmt: PreparedStatement,
+		event: MessageCreateEvent
+	): Mono<*> {
+		val results = stmt.executeQuery()
+		val builder = StringBuilder("Current Admins:")
+		while (results.next()) {
+			builder.append("\n")
+			builder.append(results.getString("ckey"))
+			builder.append(" - ")
+			builder.append(results.getString("rank"))
+		}
+		results.close()
+		return DiscordUtil.reply(event, builder.toString())
 	}
 
 	override val description = "Get current admins."

@@ -29,7 +29,7 @@ class KickCommand(private val permissions: PermissionsManager) : IUserCommand, I
 					if (permissions.hasPermission(member, "kick")) event.reply().withEphemeral(true)
 						.withContent("Cannot kick staff")
 					else event.presentModal()
-						.withCustomId(String.format("%s-%s", idPrefix, event.targetId.asString()))
+						.withCustomId("$idPrefix-${event.targetId.asString()}")
 						.withTitle("Kick Menu")
 						.withComponents(
 							ActionRow.of(
@@ -63,11 +63,7 @@ class KickCommand(private val permissions: PermissionsManager) : IUserCommand, I
 			.flatMap { guild -> guild.getMemberById(toBan) }
 			.flatMap { member: Member ->
 				member.kick(
-					String.format(
-						"Kicked by %s for %s",
-						event.interaction.user.username,
-						finalReason
-					)
+					"Kicked by ${event.interaction.user.username} for $finalReason"
 				)
 			}
 	}

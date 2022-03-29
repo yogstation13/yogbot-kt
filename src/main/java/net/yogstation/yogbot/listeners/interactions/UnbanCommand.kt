@@ -23,7 +23,7 @@ class UnbanCommand(private val permissions: PermissionsManager, private val banM
 	override fun handle(event: UserInteractionEvent): Mono<*> {
 		return if (!permissions.hasPermission(event.interaction.member.orElse(null), "ban")) event.reply()
 			.withEphemeral(true).withContent("You do not have permission to run that command") else event.presentModal()
-			.withCustomId(String.format("%s-%s", idPrefix, event.targetId.asString()))
+			.withCustomId("$idPrefix-${event.targetId.asString()}")
 			.withTitle("Unban Menu")
 			.withComponents(ActionRow.of(TextInput.paragraph("reason", "Unban Reason")))
 	}

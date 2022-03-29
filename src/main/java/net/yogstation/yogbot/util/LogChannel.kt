@@ -15,6 +15,8 @@ class LogChannel(val client: GatewayDiscordClient, val channelsConfig: DiscordCh
 	): Mono<*> {
 		val currentTime = LocalDateTime.now()
 		return client.getChannelById(Snowflake.of(channelsConfig.channelPublicLog))
-			.flatMap { it.restChannel.createMessage("`[${currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}]` $message") }
+			.flatMap { it.restChannel.createMessage(
+				"`[${currentTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)}]` $message"
+			)}
 	}
 }
