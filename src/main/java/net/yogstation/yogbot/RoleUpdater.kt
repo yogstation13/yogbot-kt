@@ -13,7 +13,6 @@ import net.yogstation.yogbot.util.LogChannel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.data.jpa.domain.Specification
-import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.sql.SQLException
@@ -32,7 +31,7 @@ class RoleUpdater(
 	private val donorRole = Snowflake.of(discordConfig.donorRole)
 	private val verificationRole = Snowflake.of(discordConfig.byondVerificationRole)
 
-	@Scheduled(fixedRate = 15000)
+//	@Scheduled(fixedRate = 15000)
 	fun handleDonor() {
 		if (!client.gatewayResources.intents.contains(Intent.GUILD_MEMBERS)) {
 			logger.error("Unable to process unbans and donors, lacking GUILD_MEMBERS intent")
