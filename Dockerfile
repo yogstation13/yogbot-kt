@@ -1,4 +1,4 @@
-FROM alpine:3.15.2 as compiler
+FROM alpine:3.15.3 as compiler
 
 RUN apk add --no-cache openjdk17 gradle
 
