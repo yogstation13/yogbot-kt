@@ -14,15 +14,12 @@ import reactor.core.publisher.Mono
 
 @Component
 class InfoCommand(
-	discordConfig: DiscordConfig,
-	private val byondConnector: ByondConnector,
-	private val byondConfig: ByondConfig,
+	discordConfig: DiscordConfig, private val byondConnector: ByondConnector, private val byondConfig: ByondConfig,
 	private val channelsConfig: DiscordChannelsConfig
 ) : TextCommand(discordConfig) {
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {
 		return AdminWhoCommand.getAdmins(event.message.channelId, byondConnector, channelsConfig).flatMap { adminIn ->
 			val admins: String = adminIn.replace("\t".toRegex(), "")
-
 
 			byondConnector.requestAsync("?ping").flatMap { pingResponse ->
 				if (pingResponse.hasError()) DiscordUtil.reply(event, pingResponse.error ?: "Unknown Error")
