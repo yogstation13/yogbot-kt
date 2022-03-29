@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConfigurationProperties(prefix = "yogbot.channels")
-class DiscordChannelsConfig @ConstructorBinding constructor (
+data class DiscordChannelsConfig @ConstructorBinding constructor (
 	val channelImportantAdmin: Long,
 	val channelAdmin: Long,
 	val channelAdmemes: Long,
