@@ -20,9 +20,8 @@ import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
-import java.util.*
+import java.util.Random
 import java.util.function.Function
-
 
 @SpringBootApplication
 @EnableScheduling
@@ -37,12 +36,15 @@ open class Yogbot {
 			.setEnabledIntents(IntentSet.all())
 			.login()
 			.block() ?: return null
-		client.on(ReadyEvent::class.java, Function<ReadyEvent, Publisher<Any>> { event: ReadyEvent ->
-			Mono.fromRunnable {
-				val self: User = event.self
-				logger.info("Logged in as {}#{}", self.username, self.discriminator)
+		client.on(
+			ReadyEvent::class.java,
+			Function<ReadyEvent, Publisher<Any>> { event: ReadyEvent ->
+				Mono.fromRunnable {
+					val self: User = event.self
+					logger.info("Logged in as {}#{}", self.username, self.discriminator)
+				}
 			}
-		}).subscribe()
+		).subscribe()
 		return client
 	}
 
@@ -72,7 +74,6 @@ open class Yogbot {
 	}
 
 	private val logger = LoggerFactory.getLogger(Yogbot::class.java)
-
 }
 
 fun main(args: Array<String>) {

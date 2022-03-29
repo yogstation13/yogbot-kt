@@ -19,7 +19,7 @@ class ToggleOOCCommand(discordConfig: DiscordConfig, private val byondConnector:
 			) else DiscordUtil.reply(
 				event,
 				"OOC has been ${
-					if ((result.value as Float).toInt() == 1) "enabled" else "disabled"
+				if ((result.value as Float).toInt() == 1) "enabled" else "disabled"
 				}"
 			)
 		}

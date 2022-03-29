@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
 @Component
-class SoftbanCommand(private val permissions: PermissionsManager, private val banManager: BanManager) : IUserCommand,
+class SoftbanCommand(private val permissions: PermissionsManager, private val banManager: BanManager) :
+	IUserCommand,
 	IModalSubmitHandler {
 
 	override val name: String
@@ -44,8 +45,9 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 				for (data in component.data.components().get()) {
 					if (data.customId().isAbsent) continue
 					when (data.customId().get()) {
-						"duration" -> duration =
-							if (data.value().isAbsent || data.value().get() == "") -1 else data.value().get().toInt()
+						"duration" ->
+							duration =
+								if (data.value().isAbsent || data.value().get() == "") -1 else data.value().get().toInt()
 						"reason" -> {
 							if (data.value().isAbsent) return event.reply().withContent("Please specify a ban reason")
 							reason = data.value().get()

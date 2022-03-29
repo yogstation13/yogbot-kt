@@ -23,8 +23,10 @@ import kotlin.math.ceil
 
 @Component
 class ReviewCommand(
-	discordConfig: DiscordConfig, permissions: PermissionsManager,
-	private val channelsConfig: DiscordChannelsConfig, private val database: DatabaseManager
+	discordConfig: DiscordConfig,
+	permissions: PermissionsManager,
+	private val channelsConfig: DiscordChannelsConfig,
+	private val database: DatabaseManager
 ) : PermissionsCommand(discordConfig, permissions) {
 	override val requiredPermissions = "note"
 
@@ -95,7 +97,9 @@ class ReviewCommand(
 						).use { connectionsStmt ->
 							connection.prepareStatement(
 								String.format(
-									"SELECT ckey,ip,computerid FROM `%s` WHERE computerid IN (SELECT computerid FROM `%s` WHERE ckey = ?) OR ip IN (SELECT ip FROM `%s` WHERE ckey = ?)",
+									"SELECT ckey,ip,computerid FROM `%s` " +
+										"WHERE computerid IN (SELECT computerid FROM `%s` WHERE ckey = ?) OR " +
+										"ip IN (SELECT ip FROM `%s` WHERE ckey = ?)",
 									tableName, tableName, tableName
 								)
 							).use { relatedStmt ->
@@ -117,7 +121,7 @@ class ReviewCommand(
 									if (!relatedKeys.containsKey(relatedCkey)) {
 										relatedKeys[relatedCkey] = RelatedInfo()
 									}
-									val relatedInfo = relatedKeys[relatedCkey] ?: continue
+									val relatedInfo = relatedKeys[relatedCkey]!!
 									if (thisIps.contains(relatedIp)) relatedInfo.ips.add(relatedIp)
 									if (thisCids.contains(relatedCid)) relatedInfo.cids.add(relatedCid)
 								}
@@ -159,8 +163,11 @@ class ReviewCommand(
 				database.byondDbConnection.use { connection ->
 					connection.prepareStatement(
 						String.format(
-							"SELECT 1 FROM `%s` WHERE ckey = ? AND role IN ('Server') AND unbanned_datetime IS NULL AND (expiration_time IS NULL OR expiration_time > NOW())",
-							database.prefix("ban")
+							"SELECT 1 FROM `${database.prefix("ban")}` " +
+								"WHERE ckey = ? AND " +
+								"role IN ('Server') AND " +
+								"unbanned_datetime IS NULL AND " +
+								"(expiration_time IS NULL OR expiration_time > NOW())",
 						)
 					).use { bannuStmt ->
 						bannuStmt.setString(1, victim)
@@ -172,7 +179,7 @@ class ReviewCommand(
 					}
 				}
 			} catch (e: SQLException) {
-				e.printStackTrace()
+				logger.error("Failed to check bannu of $victim", e)
 			}
 		}
 
@@ -193,13 +200,9 @@ class ReviewCommand(
 					embedBuilder.addField("CONTINUED", "IN NEXT EMBED", false)
 				} else if (complete) {
 					embedBuilder.addField(
-						"*Done!*", String.format(
-							"Took %s seconds",
-							startTime.until(
-								LocalDateTime.now(),
-								ChronoUnit.SECONDS
-							)
-						), false
+						"*Done!*",
+						"Took ${startTime.until(LocalDateTime.now(), ChronoUnit.SECONDS)} seconds",
+						false
 					)
 				} else {
 					embedBuilder.addField("WORKING...", arrayOf("-", "\\", "|", "/")[updateIdx++ % 4], false)

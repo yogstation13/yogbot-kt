@@ -9,6 +9,7 @@ import net.yogstation.yogbot.util.StringUtils
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.sql.SQLException
+import java.util.Locale
 
 /**
  * Gets the activity of all the admins
@@ -20,7 +21,7 @@ class ActivityCommand(
 	private val database: DatabaseManager,
 ) : PermissionsCommand(discordConfig, permissions) {
 
-	// Chonky command, grabs the needed data
+	// Chonky query, grabs the needed data
 	private val activityQueryFormat: String = """
 			/*
 MIT License
@@ -33,7 +34,7 @@ copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 The above copyright notice and this permission notice shall be included in all
 copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED D"AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
@@ -50,7 +51,7 @@ SELECT adminlist.ckey as 'Ckey',
 	adminlist.rank as AdminRank
 FROM %s as adminlist
 JOIN %s as ranklist ON adminlist.rank = ranklist.`rank`;
-			"""
+	"""
 
 	// The ranks to be listed as excempt
 	private val exemptRanks = listOf(
@@ -69,7 +70,6 @@ JOIN %s as ranklist ON adminlist.rank = ranklist.`rank`;
 
 	public override fun doCommand(event: MessageCreateEvent): Mono<*> {
 		return try {
-			var action: Mono<*> = Mono.empty<Any>()
 			val conn = database.byondDbConnection
 			val activityStatement = conn.createStatement()
 			val activityResults = activityStatement.executeQuery(
@@ -110,49 +110,60 @@ JOIN %s as ranklist ON adminlist.rank = ranklist.`rank`;
 			loaStatement.close()
 			conn.close()
 
-			// Print out the activity table
-			val output = StringBuilder("```diff\n")
-			val title = StringBuilder("  ")
-			title.append(StringUtils.center("Username", adminLen))
-			title.append(" ")
-			title.append(StringUtils.center("Rank", rankLen))
-			title.append(" Activity")
-			output.append(title)
-			output.append('\n')
-			output.append(StringUtils.padStart("", title.length, '='))
-			output.append('\n')
-			for (activity in activityData) {
-				val line = StringBuilder()
-				val loa = loaAdmins.contains(activity.ckey)
-				val exempt = exemptRanks.contains(activity.rank)
-				if (activity.activity >= 12) line.append('+') else if (loa || exempt) line.append(' ') else line.append(
-					'-'
-				)
-				line.append(' ')
-				line.append(StringUtils.padStart(activity.ckey, adminLen))
-				line.append(' ')
-				line.append(StringUtils.padStart(activity.rank, rankLen))
-				line.append(' ')
-				line.append(StringUtils.padStart(String.format("%.1f", activity.activity), 8))
-				line.append(' ')
-				if (loa) line.append("(LOA)") else if (exempt) line.append("(Exempt)")
-				line.append('\n')
-				// If this line would make the message too big, send what we have and start a new one
-				if (output.length + line.length > 1990) {
-					output.append("```")
-					action = action.and(DiscordUtil.send(event, output.toString()))
-					output.setLength(0) // Empty the string builder
-					output.append("```diff\n")
-				}
-				output.append(line)
-			}
-			output.append("```")
-			action = action.and(DiscordUtil.send(event, output.toString()))
-			action
+			return printActivity(adminLen, rankLen, activityData, loaAdmins, event)
 		} catch (e: SQLException) {
 			logger.error("Error getting activity", e)
 			DiscordUtil.reply(event, "Unable to reach the database, try again later")
 		}
+	}
+
+	private fun printActivity(
+		adminLen: Int,
+		rankLen: Int,
+		activityData: MutableList<Activity>,
+		loaAdmins: MutableSet<String>,
+		event: MessageCreateEvent
+	): Mono<*> {
+		// Print out the activity table
+		val actions: MutableList<Mono<*>> = ArrayList()
+		val output = StringBuilder("```diff\n")
+		val title = StringBuilder("  ")
+		title.append(StringUtils.center("Username", adminLen))
+		title.append(" ")
+		title.append(StringUtils.center("Rank", rankLen))
+		title.append(" Activity")
+		output.append(title)
+		output.append('\n')
+		output.append(StringUtils.padStart("", title.length, '='))
+		output.append('\n')
+		for (activity in activityData) {
+			val line = StringBuilder()
+			val loa = loaAdmins.contains(activity.ckey)
+			val exempt = exemptRanks.contains(activity.rank)
+			if (activity.activity >= 12) line.append('+') else if (loa || exempt) line.append(' ') else line.append(
+				'-'
+			)
+			line.append(' ')
+			line.append(StringUtils.padStart(activity.ckey, adminLen))
+			line.append(' ')
+			line.append(StringUtils.padStart(activity.rank, rankLen))
+			line.append(' ')
+			line.append(StringUtils.padStart(String.format(Locale.getDefault(), "%.1f", activity.activity), 8))
+			line.append(' ')
+			if (loa) line.append("(LOA)") else if (exempt) line.append("(Exempt)")
+			line.append('\n')
+			// If this line would make the message too big, send what we have and start a new one
+			if (output.length + line.length > 1990) {
+				output.append("```")
+				actions.add(DiscordUtil.send(event, output.toString()))
+				output.setLength(0) // Empty the string builder
+				output.append("```diff\n")
+			}
+			output.append(line)
+		}
+		output.append("```")
+		actions.add(DiscordUtil.send(event, output.toString()))
+		return Mono.`when`(actions)
 	}
 
 	class Activity(val ckey: String, val rank: String, val activity: Float) : Comparable<Activity> {

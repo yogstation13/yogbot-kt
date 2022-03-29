@@ -13,7 +13,8 @@ import java.security.SecureRandom
 
 @Component
 class VerifyCommand(
-	discordConfig: DiscordConfig, private val verificationController: VerificationController,
+	discordConfig: DiscordConfig,
+	private val verificationController: VerificationController,
 	private val httpConfig: HttpConfig
 ) : TextCommand(discordConfig) {
 	private val random = SecureRandom()

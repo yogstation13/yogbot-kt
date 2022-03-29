@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConfigurationProperties(prefix = "yogbot.github")
-class GithubConfig @ConstructorBinding constructor(
+data class GithubConfig @ConstructorBinding constructor(
 	// Token for authenticating the webhook
 	val hmac: String,
 

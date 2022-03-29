@@ -1,12 +1,12 @@
-package net.yogstation.yogbot.listeners.commands
+package net.yogstation.yogbot.listeners.commands.image
 
 import net.yogstation.yogbot.config.DiscordConfig
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.Random
 
 @Component
 class DuckCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(discordConfig, random) {
-	//Duckpond
+	// Duckpond
 	override val images = listOf(
 		"http://i.imgur.com/YjWIJHU.png", "http://i.imgur.com/SEoP3pC.jpg",
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Mallard2.jpg/1200px-Mallard2.jpg",
@@ -61,7 +61,7 @@ class DuckCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"http://www.guy-sports.com/fun_pictures/duck_dead.jpg",
 		"http://www.kappit.com/img/pics/201406_2202_bacfa_sm.jpg",
 		"http://37.media.tumblr.com/ee601d99a4e0d0d52ab6fbbf55f28f2d/tumblr_n45sz1Fgth1sxnr93o1_500.gif",
-		"https://cdn.discordapp.com/attachments/734475284446707753/879604377285951488/20210823_140659.jpg" //Duckpond
+		"https://cdn.discordapp.com/attachments/734475284446707753/879604377285951488/20210823_140659.jpg" // Duckpond
 	)
 	override val title = "Random Duck"
 	override val name = "duck"

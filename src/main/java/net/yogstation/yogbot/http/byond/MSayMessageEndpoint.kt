@@ -18,8 +18,12 @@ import reactor.core.publisher.Mono
  */
 @RestController
 class MSayMessageEndpoint(
-	webClient: WebClient, mapper: ObjectMapper, database: DatabaseManager,
-	client: GatewayDiscordClient, discordConfig: DiscordConfig, byondConfig: ByondConfig
+	webClient: WebClient,
+	mapper: ObjectMapper,
+	database: DatabaseManager,
+	client: GatewayDiscordClient,
+	discordConfig: DiscordConfig,
+	byondConfig: ByondConfig
 ) : DiscordWebhookEndpoint(webClient, mapper, database, client, discordConfig, byondConfig) {
 
 	override val webhookUrl: String
@@ -27,8 +31,8 @@ class MSayMessageEndpoint(
 
 	@PostMapping("/byond/msaymessage")
 	fun handleMsayMessage(@RequestBody payload: CkeyMessageDTO): Mono<HttpEntity<String>> {
-		val keyError = validateKey(payload.key);
-		if (keyError != null) return keyError;
+		val keyError = validateKey(payload.key)
+		if (keyError != null) return keyError
 
 		return handleData(payload)
 	}

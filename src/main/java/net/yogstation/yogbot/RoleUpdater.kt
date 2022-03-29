@@ -54,9 +54,9 @@ class RoleUpdater(
 				stmt.use { statement ->
 					statement.executeQuery(
 						"SELECT DISTINCT player.discord_id FROM ${databaseManager.prefix("player")} as player JOIN ${
-							databaseManager.prefix(
-								"donors"
-							)
+						databaseManager.prefix(
+							"donors"
+						)
 						} donor on player.ckey = donor.ckey WHERE (expiration_time > NOW()) AND revoked IS NULL;"
 					)
 						.use { results ->
@@ -88,7 +88,7 @@ class RoleUpdater(
 					.and(logChannel.log("Softban automatically reapplied to ${it.username}"))
 			}) {
 				it.removeRole(softbanRole, "Ban expired").and(logChannel.log("Bans expired for ${it.username}"))
-			}/*.and(
+			} /*.and(
 				updateRole(donorSnowflakes, member, donorRole, {
 					it.addRole(donorRole, "Giving donor role")
 				}) {
@@ -122,6 +122,4 @@ class RoleUpdater(
 		}
 	} else
 		Mono.empty()
-
-
 }

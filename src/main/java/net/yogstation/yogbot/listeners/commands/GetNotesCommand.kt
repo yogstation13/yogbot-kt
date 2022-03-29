@@ -6,7 +6,7 @@ import net.yogstation.yogbot.permissions.PermissionsManager
 import java.sql.SQLException
 
 /**
- * Gets the notes of a player, to be used either for a player getting their own notes, or an admin getting someone else's
+ * Gets the notes of a player
  */
 abstract class GetNotesCommand(
 	discordConfig: DiscordConfig,
@@ -25,7 +25,12 @@ abstract class GetNotesCommand(
 			database.byondDbConnection.use { connection ->
 				connection.prepareStatement(
 					String.format(
-						"SELECT timestamp, text, adminckey FROM `%s` WHERE `targetckey` = ? AND `type`= \"note\" AND deleted = 0 AND (expire_timestamp > NOW() OR expire_timestamp IS NULL) AND `secret` = 0 ORDER BY `timestamp`",
+						"SELECT timestamp, text, adminckey FROM `%s` " +
+							"WHERE `targetckey` = ? AND " +
+							"`type`= \"note\" AND " +
+							"deleted = 0 AND " +
+							"(expire_timestamp > NOW() OR expire_timestamp IS NULL) AND " +
+							"`secret` = 0 ORDER BY `timestamp`",
 						database.prefix("messages")
 					)
 				).use { notesStmt ->
@@ -35,11 +40,8 @@ abstract class GetNotesCommand(
 					val notesString = StringBuilder("Notes for ").append(ckey).append("\n")
 					while (notesResult.next()) {
 						val nextNote = "```${notesResult.getDate("timestamp")}\t${notesResult.getString("text")}${
-							if (showAdmin) "   ${
-								notesResult.getString(
-									"adminckey"
-								)
-							}" else ""
+						if (showAdmin) "   ${notesResult.getString("adminckey")
+						}" else ""
 						}```"
 						if (notesString.length + nextNote.length > 2000) {
 							messages.add(notesString.toString())

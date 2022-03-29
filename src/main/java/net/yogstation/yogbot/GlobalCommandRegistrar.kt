@@ -22,23 +22,24 @@ import java.util.stream.Collectors
  */
 @Component
 class GlobalCommandRegistrar(
-	private val restClient: RestClient, private val interactionHandlers: List<IInteractionHandler>,
+	private val restClient: RestClient,
+	private val interactionHandlers: List<IInteractionHandler>,
 	private val config: DiscordConfig
 ) : ApplicationRunner {
 	private val logger = LoggerFactory.getLogger(this.javaClass)
 
-	//Since this will only run once on startup, blocking is okay.
+	// Since this will only run once on startup, blocking is okay.
 	@Throws(IOException::class)
 	override fun run(args: ApplicationArguments) {
 		val commandsJson: MutableList<String> = ArrayList()
-		//The name of the folder the commands json is in, inside our resources folder
+		// The name of the folder the commands json is in, inside our resources folder
 		val commandsFolderName = "commands/"
 		for (interactionHandler in interactionHandlers) {
 			val resourceFileAsString = getResourceFileAsString(commandsFolderName + interactionHandler.uri)
 			commandsJson.add(resourceFileAsString)
 		}
 
-		//Create an ObjectMapper that supports Discord4J classes
+		// Create an ObjectMapper that supports Discord4J classes
 		val d4jMapper = JacksonResources.create()
 
 		// Convenience variables for the sake of easier to read code below
@@ -49,12 +50,12 @@ class GlobalCommandRegistrar(
 			return
 		}
 
-		//Get our commands json from resources as command data
+		// Get our commands json from resources as command data
 		val commands: MutableList<ApplicationCommandRequest> = ArrayList()
 		for (json in commandsJson) {
 			val request = d4jMapper.objectMapper
 				.readValue(json, ApplicationCommandRequest::class.java)
-			commands.add(request) //Add to our array list
+			commands.add(request) // Add to our array list
 		}
 
 		logger.info("Loading ${commands.size} guild commands")

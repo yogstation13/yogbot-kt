@@ -1,8 +1,8 @@
-package net.yogstation.yogbot.listeners.commands
+package net.yogstation.yogbot.listeners.commands.image
 
 import net.yogstation.yogbot.config.DiscordConfig
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.Random
 
 @Component
 class JamieCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(discordConfig, random) {
@@ -43,8 +43,8 @@ class JamieCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(
 		"https://cdn.discordapp.com/attachments/734475284446707753/768887587988832307/unknown.png",
 		"https://cdn.discordapp.com/attachments/860107308574965760/860107324009742336/unknown-99.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/772700667969011712/unknown.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/839856694791241797/image0.png",  //Update your mother
-		"https://cdn.discordapp.com/attachments/734475284446707753/798848216237473822/Screenshot_20210113-013643.jpg",  //Jamie is not a good coder
+		"https://cdn.discordapp.com/attachments/734475284446707753/839856694791241797/image0.png", // Update your mother
+		"https://cdn.discordapp.com/attachments/734475284446707753/798848216237473822/Screenshot_20210113-013643.jpg", // Jamie is not a good coder
 		"https://cdn.discordapp.com/attachments/423761888309018624/878609957908541460/Backpeddle.PNG",
 		"https://cdn.discordapp.com/attachments/423761888309018624/878609965277909002/adamsuckit.PNG",
 		"https://cdn.discordapp.com/attachments/423761888309018624/878609974329221150/awake.PNG",

@@ -8,6 +8,7 @@ import net.yogstation.yogbot.util.DiscordUtil
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.sql.SQLException
+import java.util.Locale
 
 @Component
 class TicketCommand(
@@ -22,18 +23,19 @@ class TicketCommand(
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {
 		val args = event.message.content.split(" ").toTypedArray()
 		return if (args.size < 2) {
-			DiscordUtil.reply(event, String.format("Usage is `${discordConfig.commandPrefix}ticket <help|get>`"))
+			DiscordUtil.reply(event, "Usage is `${discordConfig.commandPrefix}ticket <help|get>`")
 		} else when (args[1]) {
 			"help" -> ticketHelp(event, args)
 			"get" -> getTicket(event, args)
-			else -> DiscordUtil.reply(event, String.format("Unknown subcommand `%s`", args[1]))
+			else -> DiscordUtil.reply(event, "Unknown subcommand `${args[1]}`")
 		}
 	}
 
 	private fun ticketHelp(event: MessageCreateEvent, args: Array<String>): Mono<*> {
 		if (args.size < 3) {
 			return DiscordUtil.reply(
-				event, String.format(
+				event,
+				String.format(
 					"""
 					Gets information on a ticket from the database.
 					Use `%sticket help <subcommand>` for help on a specific subcommand
@@ -43,17 +45,20 @@ class TicketCommand(
 			)
 		}
 		return if (args[2] == "get") DiscordUtil.reply(
-			event, String.format(
+			event,
+			String.format(
+				Locale.getDefault(),
 				"""Gets either the content of a ticket from a specific round, or the list of tickets from that round
-	Usage: `%sticket get <round_id> [ticket_id]`""",
+	Usage: `%sticket get <round_id> [ticket_id]`
+				""",
 				discordConfig.commandPrefix
 			)
-		) else DiscordUtil.reply(event, String.format("Unknown subcommand `%s`", args[1]))
+		) else DiscordUtil.reply(event, "Unknown subcommand `${args[1]}`")
 	}
 
 	private fun getTicket(event: MessageCreateEvent, args: Array<String>): Mono<*> {
 		if (args.size < 3) {
-			return DiscordUtil.reply(event, String.format("Usage: `%s get <round_id> [ticket_id]`", args[0]))
+			return DiscordUtil.reply(event, "Usage: `${args[0]} get <round_id> [ticket_id]`")
 		}
 		val roundId = args[2]
 		if (args.size < 4) {
@@ -68,7 +73,7 @@ class TicketCommand(
 						JOIN ${database.prefix("admin_ticket_interactions")} interactions on tickets.id = interactions.ticket_id
 						WHERE `tickets`.`round_id` = ?
 					) as ticket_list WHERE ticket_list.`rank` = 1;
-					"""
+						"""
 					).use { lookupStatement ->
 						lookupStatement.setString(1, roundId)
 						val resultSet = lookupStatement.executeQuery()
@@ -89,7 +94,7 @@ class TicketCommand(
 						resultSet.close()
 						if (!hasData) return DiscordUtil.reply(
 							event,
-							String.format("Failed to get ticket for round %s", roundId)
+							"Failed to get ticket for round $roundId"
 						)
 						builder.append("```")
 						return DiscordUtil.reply(event, builder.toString())
@@ -109,7 +114,7 @@ class TicketCommand(
 				FROM ${database.prefix("admin_tickets")} as tickets
 				JOIN ${database.prefix("admin_ticket_interactions")} interactions on tickets.id = interactions.ticket_id
 				WHERE `tickets`.`round_id` = ? AND `tickets`.`ticket_id` = ?;
-			"""
+					"""
 				).use { preparedStatement ->
 					preparedStatement.setString(1, roundId)
 					preparedStatement.setString(2, ticketId)
@@ -125,7 +130,7 @@ class TicketCommand(
 					}
 					if (!hasData) return DiscordUtil.reply(
 						event,
-						String.format("Unable to find ticket %s in round %s", ticketId, roundId)
+						"Unable to find ticket $ticketId in round $roundId"
 					)
 					builder.append("```")
 					return DiscordUtil.reply(event, builder.toString())

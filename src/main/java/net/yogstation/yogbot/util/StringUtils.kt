@@ -2,9 +2,8 @@ package net.yogstation.yogbot.util
 
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
-import java.util.*
 import java.util.AbstractMap.SimpleImmutableEntry
-import java.util.stream.Collectors
+import java.util.stream.*
 
 object StringUtils {
 	// Taken from https://stackoverflow.com/a/8155547 then modified
@@ -50,7 +49,6 @@ object StringUtils {
 	fun ckeyIze(key: String): String {
 		return key.lowercase().replace("[^a-z0-9]".toRegex(), "")
 	}
-
 
 	private val HEX_ARRAY = "0123456789ABCDEF".toByteArray(StandardCharsets.US_ASCII)
 

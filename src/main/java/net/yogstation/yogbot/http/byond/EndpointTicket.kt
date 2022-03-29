@@ -19,16 +19,20 @@ import reactor.core.publisher.Mono
  */
 @RestController
 class EndpointTicket(
-	webClient: WebClient, mapper: ObjectMapper, database: DatabaseManager,
-	client: GatewayDiscordClient, discordConfig: DiscordConfig, byondConfig: ByondConfig
+	webClient: WebClient,
+	mapper: ObjectMapper,
+	database: DatabaseManager,
+	client: GatewayDiscordClient,
+	discordConfig: DiscordConfig,
+	byondConfig: ByondConfig
 ) : DiscordWebhookEndpoint(webClient, mapper, database, client, discordConfig, byondConfig) {
 
 	override val webhookUrl = discordConfig.ticketWebhookUrl
 
 	@PostMapping("/byond/ticket")
 	fun receiveData(@RequestBody ticketPayload: TicketDTO): Mono<HttpEntity<String>> {
-		val keyError = validateKey(ticketPayload.key);
-		if (keyError != null) return keyError;
+		val keyError = validateKey(ticketPayload.key)
+		if (keyError != null) return keyError
 
 		val node = mapper.createObjectNode()
 		node.put("username", ticketPayload.roundId)

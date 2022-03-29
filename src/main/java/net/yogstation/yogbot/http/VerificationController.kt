@@ -27,6 +27,7 @@ import reactor.core.publisher.Mono
 import java.io.IOException
 import java.net.URI
 import java.security.SecureRandom
+import java.sql.PreparedStatement
 import java.sql.SQLException
 
 /**
@@ -85,48 +86,59 @@ class VerificationController(
 		oauthState.remove(state)
 
 		try {
-			database.byondDbConnection.use { connection ->
-				connection.prepareStatement(
-					String.format(
-						"SELECT discord_id FROM `%s` WHERE `ckey` = ?",
-						database.prefix("player")
-					)
-				).use { queryStmt ->
-					connection.prepareStatement(
-						String.format(
-							"UPDATE `%s` SET `discord_id` = ? WHERE `ckey` = ?",
-							database.prefix("player")
-						)
-					).use { linkStmt ->
-						queryStmt.setString(1, authIdentity.ckey)
-						val queryResults = queryStmt.executeQuery()
-						if (!queryResults.next()) {
-							model.addAttribute(
-								"error",
-								"New account detected, please login on the server at least once to proceed"
-							)
-							return "verification/error"
-						}
-						queryResults.close()
-						linkStmt.setString(1, authIdentity.snowflake.asString())
-						linkStmt.setString(2, authIdentity.ckey)
-						linkStmt.execute()
-						if (linkStmt.updateCount < 1) {
-							model.addAttribute("error", "Failed to link accounts!")
-							return "verification/error"
-						}
-						client.getMemberById(Snowflake.of(discordConfig.mainGuildID), authIdentity.snowflake)
-							.flatMap { member: Member -> member.addRole(Snowflake.of(discordConfig.byondVerificationRole)) }
-							.subscribe()
-						return "verification/success"
-					}
-				}
-			}
+			return linkAccounts(authIdentity, model)
 		} catch (e: SQLException) {
 			LOGGER.error("Error linking accounts", e)
 			model.addAttribute("error", "An error ahs occurred")
 			return "verification/error"
 		}
+	}
+
+	@Throws(SQLException::class)
+	private fun linkAccounts(
+		authIdentity: AuthIdentity,
+		model: Model
+	): String {
+		database.byondDbConnection.use { connection ->
+			connection.prepareStatement(
+				"SELECT discord_id FROM `${database.prefix("player")}` WHERE `ckey` = ?"
+			).use { queryStmt ->
+				connection.prepareStatement(
+					"UPDATE `${database.prefix("player")}` SET `discord_id` = ? WHERE `ckey` = ?"
+				).use { linkStmt ->
+					return doLinking(queryStmt, authIdentity, model, linkStmt)
+				}
+			}
+		}
+	}
+
+	private fun doLinking(
+		queryStmt: PreparedStatement,
+		authIdentity: AuthIdentity,
+		model: Model,
+		linkStmt: PreparedStatement
+	): String {
+		queryStmt.setString(1, authIdentity.ckey)
+		val queryResults = queryStmt.executeQuery()
+		if (!queryResults.next()) {
+			model.addAttribute(
+				"error",
+				"New account detected, please login on the server at least once to proceed"
+			)
+			return "verification/error"
+		}
+		queryResults.close()
+		linkStmt.setString(1, authIdentity.snowflake.asString())
+		linkStmt.setString(2, authIdentity.ckey)
+		linkStmt.execute()
+		if (linkStmt.updateCount < 1) {
+			model.addAttribute("error", "Failed to link accounts!")
+			return "verification/error"
+		}
+		client.getMemberById(Snowflake.of(discordConfig.mainGuildID), authIdentity.snowflake)
+			.flatMap { member: Member -> member.addRole(Snowflake.of(discordConfig.byondVerificationRole)) }
+			.subscribe()
+		return "verification/success"
 	}
 
 	/**
@@ -198,8 +210,9 @@ class VerificationController(
 			if (errorNode != null) {
 				val errorDescriptionNode = root["error_description"]
 				model.addAttribute(
-					"error", "Upstream error when fetching access to token ${
-						errorDescriptionNode?.asText() ?: errorNode.asText()
+					"error",
+					"Upstream error when fetching access to token ${
+					errorDescriptionNode?.asText() ?: errorNode.asText()
 					}"
 				)
 				return Mono.just("verification/error")
@@ -229,7 +242,8 @@ class VerificationController(
 				if (ckey != identity.ckey) {
 					model.addAttribute(
 						"error",
-						"Ckey does not match, you attempted to login using $ckey while the linking process was initialized with ${identity.ckey}"
+						"Ckey does not match, you attempted to login using $ckey" +
+							" while the linking process was initialized with ${identity.ckey}"
 					)
 					return@flatMap Mono.just("verification/error")
 				}

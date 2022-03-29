@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConfigurationProperties(prefix = "yogbot.discord")
-class DiscordConfig @ConstructorBinding constructor (
+data class DiscordConfig @ConstructorBinding constructor(
 
 	val botToken: String,
 	val commandPrefix: String,

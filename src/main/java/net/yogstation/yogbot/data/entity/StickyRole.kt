@@ -1,10 +1,13 @@
 package net.yogstation.yogbot.data.entity
 
-import java.util.*
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.GeneratedValue
+import javax.persistence.GenerationType
+import javax.persistence.Id
 
 @Entity
-data class StickyRole (
+data class StickyRole(
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	val id: Long,
@@ -13,5 +16,5 @@ data class StickyRole (
 	@Column(nullable = false)
 	var roleId: Long
 ) {
-	constructor(discordId: Long, roleId: Long): this(0, discordId, roleId)
+	constructor(discordId: Long, roleId: Long) : this(0, discordId, roleId)
 }

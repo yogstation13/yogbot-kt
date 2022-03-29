@@ -54,10 +54,10 @@ abstract class RelayChannel(channelsConfig: DiscordChannelsConfig, private val b
 		}
 		return byondConnector.requestAsync(
 			"?$method=${URLEncoder.encode(messageBuilder.toString(), StandardCharsets.UTF_8)}&admin=${
-				URLEncoder.encode(
-					user,
-					StandardCharsets.UTF_8
-				)
+			URLEncoder.encode(
+				user,
+				StandardCharsets.UTF_8
+			)
 			}"
 		)
 	}

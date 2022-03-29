@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
 @Component
-class UnbanCommand(private val permissions: PermissionsManager, private val banManager: BanManager) : IUserCommand,
+class UnbanCommand(private val permissions: PermissionsManager, private val banManager: BanManager) :
+	IUserCommand,
 	IModalSubmitHandler {
 	override val name: String
 		get() = "Unban"

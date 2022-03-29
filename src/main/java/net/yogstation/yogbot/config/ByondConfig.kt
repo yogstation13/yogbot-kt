@@ -4,7 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.boot.context.properties.ConstructorBinding
 
 @ConfigurationProperties(prefix = "yogbot.byond")
-class ByondConfig @ConstructorBinding constructor (
+data class ByondConfig @ConstructorBinding constructor(
 	// The comms key for communicating to byond
 	var serverKey: String,
 

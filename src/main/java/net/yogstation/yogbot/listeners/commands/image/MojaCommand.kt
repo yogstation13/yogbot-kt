@@ -1,8 +1,8 @@
-package net.yogstation.yogbot.listeners.commands
+package net.yogstation.yogbot.listeners.commands.image
 
 import net.yogstation.yogbot.config.DiscordConfig
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.Random
 
 @Component
 class MojaCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(discordConfig, random) {
@@ -42,11 +42,11 @@ class MojaCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"https://cdn.discordapp.com/attachments/734475284446707753/758264927169019944/Clown_shuttle.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/758264960337313802/mcdonalds.jpg",
 		"https://cdn.discordapp.com/attachments/734475284446707753/758265102234943488/unknown.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/758265354224271370/Moja.gif",  //September update goes here
+		"https://cdn.discordapp.com/attachments/734475284446707753/758265354224271370/Moja.gif", // September update goes here
 		"https://cdn.discordapp.com/attachments/734475284446707753/759871199382732863/unknown.png",
 		"https://cdn.discordapp.com/attachments/377098618974240768/760312786848317461/unknown.png",
 		"https://cdn.discordapp.com/attachments/377098618974240768/760312928984891492/unknown.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/760910981274009610/unknown.png",  //October, November update goes here
+		"https://cdn.discordapp.com/attachments/734475284446707753/760910981274009610/unknown.png", // October, November update goes here
 		"https://cdn.discordapp.com/attachments/734475284446707753/762763851862638652/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/765341351474495488/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/765341511042465812/unknown.png",
@@ -102,10 +102,10 @@ class MojaCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"https://cdn.discordapp.com/attachments/734475284446707753/774000278210084874/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/774001975549100032/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/774732985710280784/image0.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/815362585029246976/image0.png",  //Lettuce is 900 calories
-		"https://cdn.discordapp.com/attachments/734475284446707753/872199346395951114/Screenshot_20210803-142719__01.png",  //We can rebuild Moja
-		"https://cdn.discordapp.com/attachments/734475284446707753/874292567494262804/unknown.png",  //You will be purged from history
-		"https://cdn.discordapp.com/attachments/734475284446707753/874890010678153246/unknown-14.png" //Moja Laser Cannon
+		"https://cdn.discordapp.com/attachments/734475284446707753/815362585029246976/image0.png", // Lettuce is 900 calories
+		"https://cdn.discordapp.com/attachments/734475284446707753/872199346395951114/Screenshot_20210803-142719__01.png", // We can rebuild Moja
+		"https://cdn.discordapp.com/attachments/734475284446707753/874292567494262804/unknown.png", // You will be purged from history
+		"https://cdn.discordapp.com/attachments/734475284446707753/874890010678153246/unknown-14.png" // Moja Laser Cannon
 	)
 	override val title = "Moja Image"
 	override val description = "Wise words beyond mortal comprehension"
