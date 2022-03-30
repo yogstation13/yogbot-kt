@@ -88,17 +88,21 @@ class ForumsManager(
 						} else getDefaultPing(pingType)
 					}
 				} catch (e: ClientException) {
-					// Equality on the boolean because it is nullable
-					if(e.status == HttpResponseStatus.NOT_FOUND && e.message?.contains("Unknown Member") == true)
-						logger.debug("Error getting member from ID", e)
-					else {
-						logger.error("Unexpected error in getPing: ${e.message}")
-						logger.debug("Get ping exception: ", e)
-					}
+					processException(e)
 				}
 			}
 		}
 		return Mono.just(getDefaultPing(pingType))
+	}
+
+	private fun processException(e: ClientException) {
+		// Equality on the boolean because it is nullable
+		if (e.status == HttpResponseStatus.NOT_FOUND && e.message?.contains("Unknown Member") == true)
+			logger.debug("Error getting member from ID", e)
+		else {
+			logger.error("Unexpected error in getPing: ${e.message}")
+			logger.debug("Get ping exception: ", e)
+		}
 	}
 
 	private fun getDefaultPing(pingType: PingType): String {
