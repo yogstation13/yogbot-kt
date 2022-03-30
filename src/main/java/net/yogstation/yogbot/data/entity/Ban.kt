@@ -7,16 +7,19 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.Lob
 import javax.persistence.Temporal
 import javax.persistence.TemporalType
 
 @Entity
 data class Ban(
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "BIGINT(20) AUTO_INCREMENT")
 	val id: Long,
 	@Column(nullable = false)
 	val discordId: Long,
+	@Lob
 	@Column(nullable = false)
 	var reason: String,
 	@Temporal(TemporalType.TIMESTAMP)

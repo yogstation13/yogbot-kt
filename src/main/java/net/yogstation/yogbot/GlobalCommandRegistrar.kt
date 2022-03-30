@@ -61,7 +61,7 @@ class GlobalCommandRegistrar(
 		logger.info("Loading ${commands.size} guild commands")
 		applicationService.bulkOverwriteGuildApplicationCommand(applicationId, config.mainGuildID, commands)
 			.doOnNext { logger.debug("Successfully registered guild Commands") }
-			.doOnError { e: Throwable? -> logger.error("Failed to register guild commands", e) }
+			.doOnError { e: Throwable? -> logger.error("Failed to register guild commands, ${e?.message}") }
 			.subscribe()
 		return
 	}

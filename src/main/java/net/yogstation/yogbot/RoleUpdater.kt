@@ -5,6 +5,7 @@ import discord4j.core.GatewayDiscordClient
 import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
 import discord4j.gateway.intent.Intent
+import discord4j.rest.http.client.ClientException
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.data.BanRepository
@@ -39,7 +40,13 @@ class RoleUpdater(
 			return
 		}
 
-		val guild: Guild? = client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).block()
+		val guild: Guild?
+		try {
+			guild = client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).block()
+		} catch (e: ClientException) {
+			logger.error("Cannot access main guild, unable to handle unbans and donors: ${e.message}")
+			return
+		}
 		if (guild == null) {
 			logger.error("Unable to locate guild, cannot handle unbans and donors")
 			return
