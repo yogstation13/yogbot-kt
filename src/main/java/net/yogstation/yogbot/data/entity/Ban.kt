@@ -14,7 +14,7 @@ import javax.persistence.TemporalType
 @Entity
 data class Ban (
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "BIGINT(20) AUTO_INCREMENT")
 	val id: Long,
 	@Column(nullable = false)
