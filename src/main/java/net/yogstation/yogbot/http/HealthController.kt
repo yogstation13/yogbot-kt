@@ -19,7 +19,7 @@ class HealthController(val client: GatewayDiscordClient) {
 
 	@GetMapping("/api/health")
 	fun getHealth(): Mono<HttpEntity<String>> {
-		logger.info("Health check begin")
+		logger.debug("Health check begin")
 
 		if (!client.gatewayResources.intents.contains(Intent.GUILD_MEMBERS)) {
 			logger.error("GUILD_MEMBERS intent unavailable")
@@ -29,7 +29,7 @@ class HealthController(val client: GatewayDiscordClient) {
 		val gatewayGroup = client.gatewayClientGroup
 		val shardCount = gatewayGroup.shardCount
 
-		logger.info("Checking the health of the $shardCount shards")
+		logger.debug("Checking the health of the $shardCount shards")
 
 		val shards: MutableList<GatewayClient> = ArrayList()
 		for (i in 0 until shardCount) {
@@ -51,7 +51,7 @@ class HealthController(val client: GatewayDiscordClient) {
 					logger.error("There are $disconnectCount shards not connected")
 					HttpUtil.response("$disconnectCount shards are disconnected", HttpStatus.SERVICE_UNAVAILABLE)
 				} else {
-					logger.info("All shards working as intended")
+					logger.debug("All shards working as intended")
 					HttpUtil.ok("All shards running normally")
 				}
 			}
