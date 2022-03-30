@@ -6,6 +6,7 @@ import discord4j.core.`object`.component.MessageComponent
 import discord4j.core.`object`.component.TextInput
 import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
+import discord4j.core.event.domain.interaction.ApplicationCommandInteractionEvent
 import discord4j.core.event.domain.interaction.ModalSubmitInteractionEvent
 import discord4j.core.event.domain.interaction.UserInteractionEvent
 import net.yogstation.yogbot.bans.BanManager
@@ -21,15 +22,20 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 		get() = "Softban"
 
 	override fun handle(event: UserInteractionEvent): Mono<*> {
-		return if (!permissions.hasPermission(event.interaction.member.orElse(null), "ban")) event.reply()
-			.withEphemeral(true).withContent("You do not have permission to run that command") else event.presentModal()
-			.withCustomId(String.format("%s-%s", idPrefix, event.targetId.asString()))
-			.withTitle("Softban Menu")
-			.withComponents(
-				ActionRow.of(TextInput.small("duration", "Ban Duration (Minutes)").required(false)),
-				ActionRow.of(TextInput.paragraph("reason", "Ban Reason"))
-			)
+		return openModal(event, event.targetId)
 	}
+
+	fun openModal(
+		event: ApplicationCommandInteractionEvent,
+		userid: Snowflake
+	): Mono<*> = if (!permissions.hasPermission(event.interaction.member.orElse(null), "ban")) event.reply()
+		.withEphemeral(true).withContent("You do not have permission to run that command") else event.presentModal()
+		.withCustomId(String.format("%s-%s", idPrefix, userid.asString()))
+		.withTitle("Softban Menu")
+		.withComponents(
+			ActionRow.of(TextInput.small("duration", "Ban Duration (Minutes)").required(false)),
+			ActionRow.of(TextInput.paragraph("reason", "Ban Reason"))
+		)
 
 	override val idPrefix: String
 		get() = "softban"
