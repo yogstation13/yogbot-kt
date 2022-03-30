@@ -5,16 +5,11 @@ import discord4j.core.`object`.command.ApplicationCommandInteractionOption
 import discord4j.core.`object`.command.ApplicationCommandInteractionOptionValue
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent
 import net.yogstation.yogbot.listeners.interactions.ISlashCommand
-import net.yogstation.yogbot.permissions.PermissionsManager
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
-import net.yogstation.yogbot.listeners.interactions.UnbanCommand as UserUnbanCommand
 
 @Component
-class StaffBanCommand(
-	private val unbanCommand: UserUnbanCommand,
-	private val permissions: PermissionsManager
-): ISlashCommand {
+class StaffBanCommand: ISlashCommand {
 	override val name = "ban"
 
 	override fun handle(event: ChatInputInteractionEvent): Mono<*> {

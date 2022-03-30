@@ -1,7 +1,7 @@
 package net.yogstation.yogbot.http.labels
 
 import com.fasterxml.jackson.databind.JsonNode
-import net.yogstation.yogbot.http.GithubController
+import net.yogstation.yogbot.GithubManager
 
 /**
  * The superclass of all labels, should handle most logic fine
@@ -28,7 +28,7 @@ abstract class GithubLabel {
 		return true
 	}
 
-	protected open fun isMatch(changelog: GithubController.Changelog?): Boolean {
+	protected open fun isMatch(changelog: GithubManager.Changelog?): Boolean {
 		return changelogTypes.isEmpty() || changelog != null && changelogTypes.any { tag ->
 			changelog.entries.any {
 				it.type == tag
@@ -42,7 +42,7 @@ abstract class GithubLabel {
 		}
 	}
 
-	fun isMatch(eventData: JsonNode, changelog: GithubController.Changelog?, extensions: Set<String>): Boolean {
+	fun isMatch(eventData: JsonNode, changelog: GithubManager.Changelog?, extensions: Set<String>): Boolean {
 		return isMatch(eventData) && isMatch(changelog) && isMatch(extensions)
 	}
 }

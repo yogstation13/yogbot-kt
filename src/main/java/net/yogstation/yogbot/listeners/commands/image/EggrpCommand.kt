@@ -1,13 +1,13 @@
-package net.yogstation.yogbot.listeners.commands
+package net.yogstation.yogbot.listeners.commands.image
 
 import net.yogstation.yogbot.config.DiscordConfig
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.Random
 
 @Component
 class EggrpCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(discordConfig, random) {
-	//September Update Goes here
-	//Egg counter
+	// September Update Goes here
+	// Egg counter
 	override val images = listOf(
 		"https://cdn.discordapp.com/attachments/458282555284783114/572244783452651535/20181004_125250.jpg",
 		"https://cdn.discordapp.com/attachments/458282555284783114/572244790310207488/aemi.jpg",
@@ -27,11 +27,11 @@ class EggrpCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(
 		"https://cdn.discordapp.com/attachments/458282555284783114/572244948464697356/unknown.png",
 		"https://cdn.discordapp.com/attachments/458282555284783114/572244968337440787/DannyEgg.gif",
 		"https://cdn.discordapp.com/attachments/437332037649825792/664074732731105281/IMG_20200107_044541.jpg",
-		"https://cdn.discordapp.com/attachments/134720091576205312/747587010256175245/egg.png",  //September Update Goes here
+		"https://cdn.discordapp.com/attachments/134720091576205312/747587010256175245/egg.png", // September Update Goes here
 		"https://cdn.discordapp.com/attachments/734475284446707753/756286634852352152/dreamseeker_2020-09-17_17-17-21.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/758277438764744704/image0.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/761010462766399498/unknown-24.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/806941530915864586/unknown.png" //Egg counter
+		"https://cdn.discordapp.com/attachments/734475284446707753/806941530915864586/unknown.png" // Egg counter
 	)
 	override val title = "EggRP Image"
 	override val name = "eggrp"

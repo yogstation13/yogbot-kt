@@ -1,8 +1,8 @@
-package net.yogstation.yogbot.listeners.commands
+package net.yogstation.yogbot.listeners.commands.image
 
 import net.yogstation.yogbot.config.DiscordConfig
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.Random
 
 @Component
 class LockerCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(discordConfig, random) {
@@ -33,7 +33,7 @@ class LockerCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand
 		"https://cdn.discordapp.com/attachments/423761888309018624/769311935661080576/dreamseeker_W9FpTGaRsL.png",
 		"https://cdn.discordapp.com/attachments/134720091576205312/866620013149421598/dankparty.png",
 		"https://cdn.discordapp.com/attachments/134720091576205312/866620396374720512/RLBB.png",
-		"https://cdn.discordapp.com/attachments/870897234575786076/870898388021964820/The_Squad.png",  //November Update
+		"https://cdn.discordapp.com/attachments/870897234575786076/870898388021964820/The_Squad.png", // November Update
 		"https://cdn.discordapp.com/attachments/734475284446707753/770400751175467028/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/774341818488979466/unknown-188.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/776717021999923230/base1.png",
@@ -43,15 +43,15 @@ class LockerCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand
 		"https://cdn.discordapp.com/attachments/734475284446707753/735289620207501342/better_chamber.PNG",
 		"https://cdn.discordapp.com/attachments/734475284446707753/734508634595393536/SS13_yogstation_profile_pic.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/776717640294989835/base11.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/867997803882905690/image0.png",  //Cards Locker
-		"https://cdn.discordapp.com/attachments/734475284446707753/871861431144972308/unknown.png",  //Atmos Locker
-		"https://cdn.discordapp.com/attachments/698367324637626438/817894098806898748/unknown.png",  //Not a trap
-		"https://cdn.discordapp.com/attachments/734475284446707753/796111484719464448/unknown.png",  //Portable Brig
-		"https://cdn.discordapp.com/attachments/734475284446707753/926662256836620319/unknown.png",  //Hot Gas
-		"https://cdn.discordapp.com/attachments/734475284446707753/924578739663306762/unknown.png",  //Guillotine
-		"https://cdn.discordapp.com/attachments/134720091576205312/924547638924296282/bluespacedlocker.png",  //Why are we in space
-		"https://cdn.discordapp.com/attachments/734475284446707753/916951974740627486/unknown.png",  //Party locker
-		"https://cdn.discordapp.com/attachments/734475284446707753/914622487688523816/Screenshot_2021-11-28_153804.png" //Arcade Locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/867997803882905690/image0.png", // Cards Locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/871861431144972308/unknown.png", // Atmos Locker
+		"https://cdn.discordapp.com/attachments/698367324637626438/817894098806898748/unknown.png", // Not a trap
+		"https://cdn.discordapp.com/attachments/734475284446707753/796111484719464448/unknown.png", // Portable Brig
+		"https://cdn.discordapp.com/attachments/734475284446707753/926662256836620319/unknown.png", // Hot Gas
+		"https://cdn.discordapp.com/attachments/734475284446707753/924578739663306762/unknown.png", // Guillotine
+		"https://cdn.discordapp.com/attachments/134720091576205312/924547638924296282/bluespacedlocker.png", // Why are we in space
+		"https://cdn.discordapp.com/attachments/734475284446707753/916951974740627486/unknown.png", // Party locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/914622487688523816/Screenshot_2021-11-28_153804.png" // Arcade Locker
 	)
 
 	override val title = "Locker Image"

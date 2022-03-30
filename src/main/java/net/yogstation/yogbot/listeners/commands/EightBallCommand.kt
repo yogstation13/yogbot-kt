@@ -5,7 +5,7 @@ import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.DiscordUtil
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
-import java.util.*
+import java.util.Random
 
 @Component
 class EightBallCommand(discordConfig: DiscordConfig, private val random: Random) : TextCommand(

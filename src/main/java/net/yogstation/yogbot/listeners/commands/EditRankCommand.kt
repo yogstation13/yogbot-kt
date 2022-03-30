@@ -32,8 +32,11 @@ abstract class EditRankCommand(
 	 */
 	@Throws(SQLException::class)
 	protected fun giveRank(
-		event: MessageCreateEvent, target: CommandTarget, rankCheckStmt: PreparedStatement,
-		rankSetStmt: PreparedStatement, role: Long
+		event: MessageCreateEvent,
+		target: CommandTarget,
+		rankCheckStmt: PreparedStatement,
+		rankSetStmt: PreparedStatement,
+		role: Long
 	): Mono<*> {
 		val errors = target.populate(database)
 		if (errors != null) return DiscordUtil.reply(event, errors)
@@ -55,14 +58,16 @@ abstract class EditRankCommand(
 		}
 		rankCheckResults.close()
 
-		return result.and(event.guild
-			.flatMap { guild: Guild ->
-				guild.getMemberById(snowflake)
-					.flatMap { member: Member ->
-						member.addRole(Snowflake.of(role))
-							.and(DiscordUtil.send(event, "Added discord role"))
-					}
-			})
+		return result.and(
+			event.guild
+				.flatMap { guild: Guild ->
+					guild.getMemberById(snowflake)
+						.flatMap { member: Member ->
+							member.addRole(Snowflake.of(role))
+								.and(DiscordUtil.send(event, "Added discord role"))
+						}
+				}
+		)
 	}
 
 	/**
@@ -74,7 +79,9 @@ abstract class EditRankCommand(
 	 */
 	@Throws(SQLException::class)
 	protected fun removeRank(
-		event: MessageCreateEvent, target: CommandTarget, rankSetStmt: PreparedStatement,
+		event: MessageCreateEvent,
+		target: CommandTarget,
+		rankSetStmt: PreparedStatement,
 		role: Long
 	): Mono<*> {
 		val errors = target.populate(database)
@@ -88,13 +95,15 @@ abstract class EditRankCommand(
 		} else {
 			result.and(DiscordUtil.send(event, "Failed to remove in game rank"))
 		}
-		return result.and(event.guild
-			.flatMap { guild: Guild ->
-				guild.getMemberById(snowflake)
-					.flatMap { member: Member ->
-						member.removeRole(Snowflake.of(role))
-							.and(DiscordUtil.send(event, "Removed discord role"))
-					}
-			})
+		return result.and(
+			event.guild
+				.flatMap { guild: Guild ->
+					guild.getMemberById(snowflake)
+						.flatMap { member: Member ->
+							member.removeRole(Snowflake.of(role))
+								.and(DiscordUtil.send(event, "Removed discord role"))
+						}
+				}
+		)
 	}
 }

@@ -12,7 +12,8 @@ import reactor.core.publisher.Mono
  * Pulls a list of currently online admins
  */
 class AdminWhoCommand(
-	discordConfig: DiscordConfig, private val byondConnector: ByondConnector,
+	discordConfig: DiscordConfig,
+	private val byondConnector: ByondConnector,
 	private val channelsConfig: DiscordChannelsConfig
 ) : TextCommand(discordConfig) {
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {

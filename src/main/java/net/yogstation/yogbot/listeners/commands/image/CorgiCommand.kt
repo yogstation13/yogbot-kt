@@ -1,8 +1,8 @@
-package net.yogstation.yogbot.listeners.commands
+package net.yogstation.yogbot.listeners.commands.image
 
 import net.yogstation.yogbot.config.DiscordConfig
 import org.springframework.stereotype.Component
-import java.util.*
+import java.util.Random
 
 @Component
 class CorgiCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(discordConfig, random) {

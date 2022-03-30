@@ -13,7 +13,8 @@ import reactor.core.publisher.Mono
 
 @RestController
 class MHelpEndpoint(
-	private val channelsConfig: DiscordChannelsConfig, client: GatewayDiscordClient,
+	private val channelsConfig: DiscordChannelsConfig,
+	client: GatewayDiscordClient,
 	byondConfig: ByondConfig
 ) :
 	MessageRelayEndpoint(client, byondConfig) {
@@ -22,9 +23,8 @@ class MHelpEndpoint(
 
 	@PostMapping("/byond/mhelp")
 	fun handleMhelp(@RequestBody payload: CkeyMessageDTO): Mono<HttpEntity<String>> {
-		val keyError = validateKey(payload.key);
-		if (keyError != null) return keyError;
+		val keyError = validateKey(payload.key)
+		if (keyError != null) return keyError
 		return receiveData(payload)
 	}
-
 }

@@ -12,9 +12,9 @@ import javax.persistence.Temporal
 import javax.persistence.TemporalType
 
 @Entity
-data class Ban (
+data class Ban(
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(columnDefinition = "BIGINT(20) AUTO_INCREMENT")
 	val id: Long,
 	@Column(nullable = false)
@@ -30,7 +30,8 @@ data class Ban (
 	@Temporal(TemporalType.TIMESTAMP)
 	var revokedAt: Date?,
 ) {
-	constructor(discordId: Long, reason: String, expiresAt: Date?): this(0, discordId, reason, Date(System.currentTimeMillis()), expiresAt, null)
+	constructor(discordId: Long, reason: String, expiresAt: Date?) :
+		this(0, discordId, reason, Date(System.currentTimeMillis()), expiresAt, null)
 
 	companion object {
 		fun isBanFor(discordId: Long): Specification<Ban> {
@@ -42,7 +43,10 @@ data class Ban (
 		fun isBanActive(): Specification<Ban> {
 			return Specification { root, query, criteriaBuilder ->
 				val now = Date(System.currentTimeMillis())
-				val notExpire = criteriaBuilder.or(criteriaBuilder.greaterThan(root.get(Ban_.expiresAt), now), criteriaBuilder.isNull(root.get(Ban_.expiresAt)))
+				val notExpire = criteriaBuilder.or(
+					criteriaBuilder.greaterThan(root.get(Ban_.expiresAt), now),
+					criteriaBuilder.isNull(root.get(Ban_.expiresAt))
+				)
 				criteriaBuilder.and(notExpire, criteriaBuilder.isNull(root.get(Ban_.revokedAt)))
 			}
 		}

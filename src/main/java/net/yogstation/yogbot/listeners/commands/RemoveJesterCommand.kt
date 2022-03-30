@@ -16,7 +16,8 @@ class RemoveJesterCommand(discordConfig: DiscordConfig) : TextCommand(discordCon
 			.and(
 				DiscordUtil.reply(
 					event,
-					"Success! But beware if you violate the sacred Jester Oath by daring to ping Jester once again you shall be smited with a thousand YOGGERS!"
+					"Success! But beware if you violate the sacred Jester Oath by daring to ping Jester once " +
+						"again you shall be smited with a thousand YOGGERS!"
 				)
 			)
 	}

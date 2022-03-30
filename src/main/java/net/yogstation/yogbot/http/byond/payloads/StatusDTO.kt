@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 class StatusDTO(
 	@JsonProperty("key") val key: String,
 	@JsonProperty("status") val status: String,
-	@JsonProperty("map_name") val map_name: String?,
+	@JsonProperty("map_name") val mapName: String?,
 	@JsonProperty("round") val round: Int?,
 	@JsonProperty("revision") val revision: String?
 )

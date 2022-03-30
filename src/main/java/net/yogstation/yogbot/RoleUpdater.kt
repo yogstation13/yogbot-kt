@@ -6,7 +6,6 @@ import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
 import discord4j.gateway.intent.Intent
 import discord4j.rest.http.client.ClientException
-import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.data.BanRepository
 import net.yogstation.yogbot.data.entity.Ban
@@ -17,24 +16,23 @@ import org.springframework.data.jpa.domain.Specification
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
-import java.sql.SQLException
 
 @Component
 class RoleUpdater(
-	private val databaseManager: DatabaseManager,
+//	private val databaseManager: DatabaseManager,
 	private val client: GatewayDiscordClient,
 	private val discordConfig: DiscordConfig,
 	private val logChannel: LogChannel,
-	private val channelsConfig: DiscordChannelsConfig,
+//	private val channelsConfig: DiscordChannelsConfig,
 	private val banRepository: BanRepository
 ) {
 	private val logger: Logger = LoggerFactory.getLogger(javaClass)
 	private val softbanRole = Snowflake.of(discordConfig.softBanRole)
-	private val donorRole = Snowflake.of(discordConfig.donorRole)
-	private val verificationRole = Snowflake.of(discordConfig.byondVerificationRole)
+//	private val donorRole = Snowflake.of(discordConfig.donorRole)
+//	private val verificationRole = Snowflake.of(discordConfig.byondVerificationRole)
 
-	@Scheduled(fixedRate = 15000)
-	fun handleDonor() {
+	@Scheduled(fixedRate = 30000)
+	fun handleRoles() {
 		if (!client.gatewayResources.intents.contains(Intent.GUILD_MEMBERS)) {
 			logger.error("Unable to process unbans and donors, lacking GUILD_MEMBERS intent")
 			return
@@ -54,40 +52,18 @@ class RoleUpdater(
 
 //		val donorSnowflakes: MutableSet<Snowflake> = HashSet()
 //		val verifiedSnowflakes: MutableSet<Snowflake> = HashSet()
-		val bannedSnowflakes: Set<Snowflake> = banRepository.findAll(Specification.where(Ban.isBanActive())).map { Snowflake.of(it.discordId) }.toSet()
-		try {
+		val bannedSnowflakes: Set<Snowflake> = banRepository
+			.findAll(Specification.where(Ban.isBanActive()))
+			.map { Snowflake.of(it.discordId) }.toSet()
+
+//		try {
 //			databaseManager.byondDbConnection.use { connection ->
-//				val stmt = connection.createStatement()
-//				stmt.use { statement ->
-//					statement.executeQuery(
-//						"SELECT DISTINCT player.discord_id FROM ${databaseManager.prefix("player")} as player JOIN ${
-//							databaseManager.prefix(
-//								"donors"
-//							)
-//						} donor on player.ckey = donor.ckey WHERE (expiration_time > NOW()) AND revoked IS NULL;"
-//					)
-//						.use { results ->
-//							while (results.next()) {
-//								donorSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
-//							}
-//						}
-//				}
+//				getSnowflakes(donorSnowflakes, verifiedSnowflakes, connection)
 //			}
-//			databaseManager.byondDbConnection.use { connection ->
-//				val stmt = connection.createStatement()
-//				stmt.use { statement ->
-//					statement.executeQuery("SELECT DISTINCT discord_id FROM ${databaseManager.prefix("player")};")
-//						.use { results ->
-//							while (results.next()) {
-//								verifiedSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
-//							}
-//						}
-//				}
-//			}
-		} catch (e: SQLException) {
-			logger.error("Error fetching bans or donors", e)
-			return
-		}
+//		} catch (e: SQLException) {
+//			logger.error("Error fetching bans or donors", e)
+//			return
+//		}
 
 		guild.members.flatMap { member ->
 			updateRole(bannedSnowflakes, member, softbanRole, {
@@ -101,7 +77,9 @@ class RoleUpdater(
 				}) {
 					it.removeRole(donorRole, "Donor status expired").and(
 						guild.getChannelById(Snowflake.of(channelsConfig.channelStaffPublic)).flatMap { channel ->
-							channel.restChannel.createMessage("${it.mention} Your donor tag on discord has been removed because we could not verify your donator status, ensure your discord is verified properly.")
+							channel.restChannel.createMessage("${it.mention} Your donor tag on discord has been " +
+								"removed because we could not verify your donator status, " +
+								"ensure your discord is verified properly.")
 						}
 					)
 				}
@@ -114,6 +92,28 @@ class RoleUpdater(
 			)*/
 		}.subscribe()
 	}
+
+//	private fun getSnowflakes(
+//		donorSnowflakes: MutableSet<Snowflake>,
+//		verifiedSnowflakes: MutableSet<Snowflake>,
+//		connection: Connection
+//	) {
+//		connection.createStatement().use { statement ->
+//			statement.executeQuery("SELECT DISTINCT player.discord_id " +
+//				"FROM ${databaseManager.prefix("player")} as player " +
+//				"JOIN ${databaseManager.prefix("donors")} donor on player.ckey = donor.ckey " +
+//				"WHERE (expiration_time > NOW()) AND revoked IS NULL;"
+//			).use { results ->
+//				while (results.next()) donorSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
+//			}
+//
+//			statement.executeQuery(
+//				"SELECT DISTINCT discord_id FROM ${databaseManager.prefix("player")};"
+//			).use { results ->
+//				while (results.next()) verifiedSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
+//			}
+//		}
+//	}
 
 	private fun updateRole(
 		snowflakeSet: Set<Snowflake>,
@@ -129,6 +129,4 @@ class RoleUpdater(
 		}
 	} else
 		Mono.empty()
-
-
 }

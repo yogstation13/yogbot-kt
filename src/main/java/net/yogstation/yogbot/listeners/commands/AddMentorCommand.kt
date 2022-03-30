@@ -28,27 +28,35 @@ class AddMentorCommand(discordConfig: DiscordConfig, permissions: PermissionsMan
 				event,
 				"Correct usage: `${discordConfig.commandPrefix}addmentor <ckey or @Username>`"
 			)
-		try {
-			database.byondDbConnection.use { connection ->
-				connection.prepareStatement(
-					"SELECT ckey FROM `${database.prefix("mentor")}` WHERE `ckey` = ?;"
-				).use { mentorCheckStmt ->
-					connection.prepareStatement(
-						"INSERT INTO `${database.prefix("mentor")}` (`ckey`, `position`) VALUES (?, 'Mentor');"
-					).use { mentorSetStatement ->
-						return giveRank(
-							event,
-							target,
-							mentorCheckStmt,
-							mentorSetStatement,
-							discordConfig.mentorRole
-						)
-					}
-				}
-			}
+		return try {
+			giveRank(event, target)
 		} catch (e: SQLException) {
 			logger.error("Error in AddMentorCommand", e)
-			return DiscordUtil.reply(event, "Unable to access database.")
+			DiscordUtil.reply(event, "Unable to access database.")
+		}
+	}
+
+	@Throws(SQLException::class)
+	private fun giveRank(
+		event: MessageCreateEvent,
+		target: CommandTarget
+	): Mono<*> {
+		database.byondDbConnection.use { connection ->
+			connection.prepareStatement(
+				"SELECT ckey FROM `${database.prefix("mentor")}` WHERE `ckey` = ?;"
+			).use { mentorCheckStmt ->
+				connection.prepareStatement(
+					"INSERT INTO `${database.prefix("mentor")}` (`ckey`, `position`) VALUES (?, 'Mentor');"
+				).use { mentorSetStatement ->
+					return giveRank(
+						event,
+						target,
+						mentorCheckStmt,
+						mentorSetStatement,
+						discordConfig.mentorRole
+					)
+				}
+			}
 		}
 	}
 }

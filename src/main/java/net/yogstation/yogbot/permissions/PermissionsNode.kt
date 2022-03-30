@@ -6,7 +6,6 @@ class PermissionsNode(
 	private val permissions: MutableSet<String> = HashSet()
 	private val parents: MutableSet<PermissionsNode> = HashSet()
 
-
 	/**
 	 * Checks if this permission node has the specified permission
 	 *

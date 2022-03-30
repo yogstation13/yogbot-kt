@@ -22,7 +22,7 @@ abstract class TextCommand(protected val discordConfig: DiscordConfig) : IEventH
 	protected abstract val description: String
 
 	val helpText: String
-		get() = String.format("    `%s%s` - %s", discordConfig.commandPrefix, name, description)
+		get() = "    `${discordConfig.commandPrefix}$name` - $description"
 	open val isHidden: Boolean
 		get() = false
 
@@ -57,7 +57,7 @@ abstract class TextCommand(protected val discordConfig: DiscordConfig) : IEventH
 		}
 
 		fun populate(database: DatabaseManager): String? {
-			if(snowflake != null && ckey != null) return null
+			if (snowflake != null && ckey != null) return null
 			val tmpSnowflake = snowflake
 			val tmpCkey = ckey
 			if (tmpSnowflake == null) {

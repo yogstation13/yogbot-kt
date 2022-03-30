@@ -30,8 +30,12 @@ import java.net.URI
  * Represents a generic endpoint that posts its data to the discord via a webhook
  */
 abstract class DiscordWebhookEndpoint(
-	private val webClient: WebClient, protected val mapper: ObjectMapper, protected val database: DatabaseManager,
-	protected val client: GatewayDiscordClient, protected val discordConfig: DiscordConfig, byondConfig: ByondConfig
+	private val webClient: WebClient,
+	protected val mapper: ObjectMapper,
+	protected val database: DatabaseManager,
+	protected val client: GatewayDiscordClient,
+	protected val discordConfig: DiscordConfig,
+	byondConfig: ByondConfig
 ) : ByondEndpoint(byondConfig) {
 	protected val logger: Logger = LoggerFactory.getLogger(javaClass)
 
@@ -72,7 +76,7 @@ abstract class DiscordWebhookEndpoint(
 				.retrieve()
 				.toBodilessEntity().flatMap { HttpUtil.ok("Sent webhook message") }
 		} catch (e: JsonProcessingException) {
-			logger.error("Failed to make webhook json")
+			logger.error("Failed to make webhook json", e)
 			HttpUtil.response("Error making webhook json", HttpStatus.INTERNAL_SERVER_ERROR)
 		}
 	}
