@@ -17,6 +17,7 @@ import org.springframework.data.jpa.domain.Specification
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import java.sql.Connection
 import java.sql.SQLException
 
 @Component
@@ -54,35 +55,13 @@ class RoleUpdater(
 
 		val donorSnowflakes: MutableSet<Snowflake> = HashSet()
 		val verifiedSnowflakes: MutableSet<Snowflake> = HashSet()
-		val bannedSnowflakes: Set<Snowflake> = banRepository.findAll(Specification.where(Ban.isBanActive())).map { Snowflake.of(it.discordId) }.toSet()
+		val bannedSnowflakes: Set<Snowflake> = banRepository
+			.findAll(Specification.where(Ban.isBanActive()))
+			.map { Snowflake.of(it.discordId) }.toSet()
+
 		try {
 			databaseManager.byondDbConnection.use { connection ->
-				val stmt = connection.createStatement()
-				stmt.use { statement ->
-					statement.executeQuery(
-						"SELECT DISTINCT player.discord_id FROM ${databaseManager.prefix("player")} as player JOIN ${
-						databaseManager.prefix(
-							"donors"
-						)
-						} donor on player.ckey = donor.ckey WHERE (expiration_time > NOW()) AND revoked IS NULL;"
-					)
-						.use { results ->
-							while (results.next()) {
-								donorSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
-							}
-						}
-				}
-			}
-			databaseManager.byondDbConnection.use { connection ->
-				val stmt = connection.createStatement()
-				stmt.use { statement ->
-					statement.executeQuery("SELECT DISTINCT discord_id FROM ${databaseManager.prefix("player")};")
-						.use { results ->
-							while (results.next()) {
-								verifiedSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
-							}
-						}
-				}
+				getSnowflakes(donorSnowflakes, verifiedSnowflakes, connection)
 			}
 		} catch (e: SQLException) {
 			logger.error("Error fetching bans or donors", e)
@@ -115,6 +94,28 @@ class RoleUpdater(
 				}
 			)
 		}.subscribe()
+	}
+
+	private fun getSnowflakes(
+		donorSnowflakes: MutableSet<Snowflake>,
+		verifiedSnowflakes: MutableSet<Snowflake>,
+		connection: Connection
+	) {
+		connection.createStatement().use { statement ->
+			statement.executeQuery("SELECT DISTINCT player.discord_id " +
+				"FROM ${databaseManager.prefix("player")} as player " +
+				"JOIN ${databaseManager.prefix("donors")} donor on player.ckey = donor.ckey " +
+				"WHERE (expiration_time > NOW()) AND revoked IS NULL;"
+			).use { results ->
+				while (results.next()) donorSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
+			}
+
+			statement.executeQuery(
+				"SELECT DISTINCT discord_id FROM ${databaseManager.prefix("player")};"
+			).use { results ->
+				while (results.next()) verifiedSnowflakes.add(Snowflake.of(results.getLong("discord_id")))
+			}
+		}
 	}
 
 	private fun updateRole(

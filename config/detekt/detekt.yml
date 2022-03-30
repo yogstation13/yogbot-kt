@@ -118,7 +118,7 @@ complexity:
     threshold: 60
   LongParameterList:
     active: true
-    functionThreshold: 6
+    functionThreshold: 7
     # Spring DI can be a bit much
     constructorThreshold: 100
     ignoreDefaultParameters: false
@@ -531,7 +531,7 @@ style:
     active: true
     excludes: ['**']
   LoopWithTooManyJumpStatements:
-    active: true
+    active: false
     maxJumpCount: 1
   MagicNumber:
     active: false

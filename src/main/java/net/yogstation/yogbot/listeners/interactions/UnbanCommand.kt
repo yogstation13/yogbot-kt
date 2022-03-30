@@ -35,15 +35,12 @@ class UnbanCommand(private val permissions: PermissionsManager, private val banM
 		val toBan: Snowflake = Snowflake.of(event.customId.split("-").toTypedArray()[1])
 		var reason = ""
 		for (component in event.components) {
-			if (component.type == MessageComponent.Type.ACTION_ROW) {
-				if (component.data.components().isAbsent) continue
-				for (data in component.data.components().get()) {
-					if (data.customId().isAbsent) continue
-					if ("reason" == data.customId().get()) {
-						if (data.value().isAbsent) return event.reply().withContent("Please specify a ban reason")
-						reason = data.value().get()
-					}
-				}
+			if (component.type != MessageComponent.Type.ACTION_ROW || component.data.components().isAbsent) continue
+			for (data in component.data.components().get()) {
+				if (data.customId().isAbsent) continue
+				if ("reason" != data.customId().get()) continue
+				if (data.value().isAbsent) return event.reply().withContent("Please specify a ban reason")
+				reason = data.value().get()
 			}
 		}
 		val finalReason = reason
