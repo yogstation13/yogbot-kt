@@ -11,7 +11,7 @@ import reactor.core.publisher.Mono
 import net.yogstation.yogbot.listeners.interactions.UnbanCommand as UserUnbanCommand
 
 @Component
-class UnbanCommand(
+class KickCommand(
 	private val unbanCommand: UserUnbanCommand,
 	private val permissions: PermissionsManager
 ): ISlashCommand {
@@ -22,9 +22,13 @@ class UnbanCommand(
 			.map(ApplicationCommandInteractionOptionValue::asSnowflake).orElse(Snowflake.of(0))
 		if(userid.asLong() == 0L) event.reply().withEphemeral(true).withContent("Failed to find person")
 
-		return unbanCommand.openModal(event, userid)
+		return event.interaction.guild.flatMap { guild ->
+			guild.getMemberById(userid).flatMap { member ->
+				member.kick("Kicked by ${event.interaction.user.username}")
+			}
+		}
 	}
 
 	override val uri: String
-		get() = "slash_unban.json"
+		get() = "slash_kick.json"
 }
