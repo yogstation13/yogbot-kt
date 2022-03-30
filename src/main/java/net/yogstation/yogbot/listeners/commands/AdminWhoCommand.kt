@@ -6,11 +6,13 @@ import net.yogstation.yogbot.ByondConnector
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.DiscordUtil
+import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
 /**
  * Pulls a list of currently online admins
  */
+@Component
 class AdminWhoCommand(
 	discordConfig: DiscordConfig,
 	private val byondConnector: ByondConnector,
