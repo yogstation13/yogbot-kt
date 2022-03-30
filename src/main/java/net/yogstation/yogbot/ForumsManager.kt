@@ -8,6 +8,7 @@ import discord4j.discordjson.json.MessageData
 import discord4j.discordjson.json.MessageEditRequest
 import discord4j.discordjson.possible.Possible
 import discord4j.rest.http.client.ClientException
+import io.netty.handler.codec.http.HttpResponseStatus
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.ByondLinkUtil
@@ -87,7 +88,13 @@ class ForumsManager(
 						} else getDefaultPing(pingType)
 					}
 				} catch (e: ClientException) {
-					logger.debug("Error getting member from ID", e)
+					// Equality on the boolean because it is nullable
+					if(e.status == HttpResponseStatus.NOT_FOUND && e.message?.contains("Unknown Member") == true)
+						logger.debug("Error getting member from ID", e)
+					else {
+						logger.error("Unexpected error in getPing: ${e.message}")
+						logger.debug("Get ping exception: ", e)
+					}
 				}
 			}
 		}
