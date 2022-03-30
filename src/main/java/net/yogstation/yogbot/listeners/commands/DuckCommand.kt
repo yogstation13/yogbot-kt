@@ -18,7 +18,6 @@ class DuckCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"https://web.stanford.edu/dept/CTL/cgi-bin/academicskillscoaching/wp-content/uploads/2012/07/baby-duck.jpg",
 		"http://i.imgur.com/LXn5gKI.png",
 		"http://cdn1.uk.mentalfloss.com/sites/mentalflossuk/files/9/18//muscovy-duck-binns-img_3828-copy.jpg",
-		"http://i3.kym-cdn.com/photos/images/original/001/248/525/3e4.jpg",
 		"https://thenypost.files.wordpress.com/2017/05/ducks1.jpg",
 		"http://seaduckjv.org/wp-content/wow-aqua-3/data1/images/hoodedmerganser.jpg",
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/d/d8/Tunnel_of_ducks.jpg/1200px-Tunnel_of_ducks.jpg",
