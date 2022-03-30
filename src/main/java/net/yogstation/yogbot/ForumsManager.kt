@@ -7,10 +7,14 @@ import discord4j.core.`object`.entity.channel.GuildChannel
 import discord4j.discordjson.json.MessageData
 import discord4j.discordjson.json.MessageEditRequest
 import discord4j.discordjson.possible.Possible
+import discord4j.rest.http.client.ClientException
+import io.netty.handler.codec.http.HttpResponseStatus
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.ByondLinkUtil
 import net.yogstation.yogbot.util.StringUtils
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -37,6 +41,8 @@ class ForumsManager(
 		Pattern.compile("<item>\\s+<title>(?<title>.+application)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
 	private val mentorApplicationsPattern: Pattern =
 		Pattern.compile("<item>\\s+<title>(?<title>.+application)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
+
+	private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
 	val guild: Guild? = client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).block()
 
@@ -75,14 +81,28 @@ class ForumsManager(
 			val ckey = StringUtils.ckeyIze(mention)
 			val response = ByondLinkUtil.getMemberID(ckey, databaseManager)
 			if (response.value != null) {
-				return guild.getMemberById(response.value).map {
-					if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {
-						it.mention
-					} else getDefaultPing(pingType)
+				try{
+					return guild.getMemberById(response.value).map {
+						if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {
+							it.mention
+						} else getDefaultPing(pingType)
+					}
+				} catch (e: ClientException) {
+					processException(e)
 				}
 			}
 		}
 		return Mono.just(getDefaultPing(pingType))
+	}
+
+	private fun processException(e: ClientException) {
+		// Equality on the boolean because it is nullable
+		if (e.status == HttpResponseStatus.NOT_FOUND && e.message?.contains("Unknown Member") == true)
+			logger.debug("Error getting member from ID", e)
+		else {
+			logger.error("Unexpected error in getPing: ${e.message}")
+			logger.debug("Get ping exception: ", e)
+		}
 	}
 
 	private fun getDefaultPing(pingType: PingType): String {
