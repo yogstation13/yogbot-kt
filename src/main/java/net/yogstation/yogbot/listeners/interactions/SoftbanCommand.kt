@@ -23,7 +23,9 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 		get() = "Softban"
 
 	override fun handle(event: UserInteractionEvent): Mono<*> {
-		return if (!permissions.hasPermission(event.interaction.member.orElse(null), "ban")) event.reply().withEphemeral(true).withContent("You do not have permission to run that command") else event.presentModal().withCustomId("$idPrefix-${event.targetId.asString()}")
+		return if (!permissions.hasPermission(event.interaction.member.orElse(null), "ban")) event.reply()
+			.withEphemeral(true).withContent("You do not have permission to run that command") else event.presentModal()
+			.withCustomId("$idPrefix-${event.targetId.asString()}")
 			.withTitle("Softban Menu")
 			.withComponents(
 				ActionRow.of(TextInput.small("duration", "Ban Duration (Minutes)").required(false)),
