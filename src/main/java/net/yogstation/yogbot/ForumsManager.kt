@@ -12,13 +12,14 @@ import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.ByondLinkUtil
 import net.yogstation.yogbot.util.StringUtils
 import org.springframework.scheduling.annotation.Scheduled
+import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import java.net.URI
 import java.util.*
 import java.util.regex.*
 
-//@Component
+@Component
 class ForumsManager(
 	private val channelsConfig: DiscordChannelsConfig,
 	client: GatewayDiscordClient,
