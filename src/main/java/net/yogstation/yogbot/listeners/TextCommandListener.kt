@@ -6,7 +6,6 @@ import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.listeners.commands.TextCommand
 import net.yogstation.yogbot.util.DiscordUtil
 import org.springframework.stereotype.Component
-import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 
@@ -21,6 +20,7 @@ class TextCommandListener(
 	}
 
 	fun handle(event: MessageCreateEvent): Mono<*> {
+		if (event.message.guildId.isEmpty || event.message.guildId.get().asLong() != config.mainGuildID) return Mono.empty<Any>()
 		if(!event.message.content.startsWith(config.commandPrefix)) return Mono.empty<Any>()
 		val command: TextCommand = commands.firstOrNull { command: TextCommand ->
 			event.message.content.startsWith(

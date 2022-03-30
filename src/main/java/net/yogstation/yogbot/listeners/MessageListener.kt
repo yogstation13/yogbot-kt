@@ -6,7 +6,6 @@ import discord4j.core.event.domain.message.MessageCreateEvent
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.http.GithubController
 import net.yogstation.yogbot.util.DiscordUtil
-import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -24,6 +23,7 @@ class MessageListener(
 	}
 
 	fun handle(event: MessageCreateEvent): Mono<*> {
+		if (event.message.guildId.isEmpty || event.message.guildId.get().asLong() != discordConfig.mainGuildID) return Mono.empty<Any>()
 		var responses: Mono<*> = Mono.empty<Any>()
 
 		val content: String = event.message.content
