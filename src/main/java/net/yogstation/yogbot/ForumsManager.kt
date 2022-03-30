@@ -15,11 +15,10 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import java.net.URI
-import java.util.Optional
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import java.util.*
+import java.util.regex.*
 
-// @Component
+//@Component
 class ForumsManager(
 	private val channelsConfig: DiscordChannelsConfig,
 	client: GatewayDiscordClient,

@@ -7,10 +7,9 @@ import net.yogstation.yogbot.GithubManager
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.DiscordUtil
 import reactor.core.publisher.Mono
-import java.util.regex.Matcher
-import java.util.regex.Pattern
+import java.util.regex.*
 
-// @Component
+//@Component
 class MessageListener(
 	client: GatewayDiscordClient,
 	val discordConfig: DiscordConfig,
