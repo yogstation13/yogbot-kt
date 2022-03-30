@@ -8,9 +8,11 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
 @Component
-class ToggleOOCCommand(discordConfig: DiscordConfig, private val byondConnector: ByondConnector) : TextCommand(
+class ToggleOOCCommand(discordConfig: DiscordConfig, private val byondConnector: ByondConnector) : PermissionsCommand (
 	discordConfig
 ) {
+	override val requiredPermissions = "toggleooc"
+
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {
 		return byondConnector.requestAsync("?toggleooc").flatMap { result ->
 			if (result.hasError()) DiscordUtil.reply(
