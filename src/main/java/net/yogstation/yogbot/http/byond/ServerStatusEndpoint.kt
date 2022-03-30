@@ -26,8 +26,10 @@ import reactor.core.publisher.Mono
  */
 @RestController
 class ServerStatusEndpoint(
-	byondConfig: ByondConfig, private val channelsConfig: DiscordChannelsConfig,
-	private val client: GatewayDiscordClient, private val discordConfig: DiscordConfig
+	byondConfig: ByondConfig,
+	private val channelsConfig: DiscordChannelsConfig,
+	private val client: GatewayDiscordClient,
+	private val discordConfig: DiscordConfig
 ) :
 	ByondEndpoint(byondConfig) {
 
@@ -36,33 +38,34 @@ class ServerStatusEndpoint(
 		val keyError = validateKey(payload.key)
 		if (keyError != null) return keyError
 
-		if (payload.status == "lobby") {
-			val embed = EmbedCreateSpec.builder()
-			embed.author("New round notifier", "", "https://i.imgur.com/GPZgtbe.png")
-			embed.description(
-				String.format(
-					"A new round is about to begin! Join now at %s",
-					byondConfig.serverJoinAddress
+		return when(payload.status) {
+			"lobby" -> {
+				val embed = EmbedCreateSpec.builder()
+				embed.author("New round notifier", "", "https://i.imgur.com/GPZgtbe.png")
+				embed.description(
+					"A new round is about to begin! Join now at ${byondConfig.serverJoinAddress}"
 				)
-			)
-			embed.addField("Map Name", payload.map_name ?: "Unknown", true)
-			embed.addField("Revision", payload.revision ?: "Unknown", true)
-			embed.addField("Round Number", payload.round?.toString() ?: "0", true)
-			embed.addField("Changelog", "No Changes", true)
-			embed.color(Color.of(0x62F442))
-			return client.getChannelById(Snowflake.of(channelsConfig.channelBotspam)).flatMap { channel: Channel ->
-				channel.restChannel.createMessage(
-					MessageCreateRequest.builder().content("<@&${discordConfig.subscriberRole}>")
-						.embed(embed.build().asRequest()).build()
-				)
+				embed.addField("Map Name", payload.mapName ?: "Unknown", true)
+				embed.addField("Revision", payload.revision ?: "Unknown", true)
+				embed.addField("Round Number", payload.round?.toString() ?: "0", true)
+				embed.addField("Changelog", "No Changes", true)
+				embed.color(Color.of(0x62F442))
+
+				client.getChannelById(Snowflake.of(channelsConfig.channelBotspam)).flatMap { channel: Channel ->
+					channel.restChannel.createMessage(
+						MessageCreateRequest.builder().content("<@&${discordConfig.subscriberRole}>")
+							.embed(embed.build().asRequest()).build()
+					)
+				}
+					.and(client.updatePresence(ClientPresence.online(ClientActivity.playing("Round Starting!"))))
+					.then(HttpUtil.ok("Status set"))
 			}
-				.and(client.updatePresence(ClientPresence.online(ClientActivity.playing("Round Starting!"))))
+
+			"ingame" -> client.updatePresence(ClientPresence.online(ClientActivity.playing("In Game")))
+				.then(HttpUtil.ok("Status set"))
+
+			else -> client.updatePresence(ClientPresence.online(ClientActivity.playing("Round Ending")))
 				.then(HttpUtil.ok("Status set"))
 		}
-		return if (payload.status == "ingame") {
-			client.updatePresence(ClientPresence.online(ClientActivity.playing("In Game")))
-				.then(HttpUtil.ok("Status set"))
-		} else client.updatePresence(ClientPresence.online(ClientActivity.playing("Round Ending")))
-			.then(HttpUtil.ok("Status set"))
 	}
 }

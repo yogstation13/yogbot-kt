@@ -8,13 +8,15 @@ import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
 import discord4j.core.event.domain.interaction.ModalSubmitInteractionEvent
 import discord4j.core.event.domain.interaction.UserInteractionEvent
+import discord4j.discordjson.json.ComponentData
 import net.yogstation.yogbot.bans.BanManager
 import net.yogstation.yogbot.permissions.PermissionsManager
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
 @Component
-class SoftbanCommand(private val permissions: PermissionsManager, private val banManager: BanManager) : IUserCommand,
+class SoftbanCommand(private val permissions: PermissionsManager, private val banManager: BanManager) :
+	IUserCommand,
 	IModalSubmitHandler {
 
 	override val name: String
@@ -23,7 +25,7 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 	override fun handle(event: UserInteractionEvent): Mono<*> {
 		return if (!permissions.hasPermission(event.interaction.member.orElse(null), "ban")) event.reply()
 			.withEphemeral(true).withContent("You do not have permission to run that command") else event.presentModal()
-			.withCustomId(String.format("%s-%s", idPrefix, event.targetId.asString()))
+			.withCustomId("$idPrefix-${event.targetId.asString()}")
 			.withTitle("Softban Menu")
 			.withComponents(
 				ActionRow.of(TextInput.small("duration", "Ban Duration (Minutes)").required(false)),
@@ -36,26 +38,10 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 
 	override fun handle(event: ModalSubmitInteractionEvent): Mono<*> {
 		val toBan: Snowflake = Snowflake.of(event.customId.split("-").toTypedArray()[1])
-		var duration = -1
-		var reason = ""
-		for (component in event.components) {
-			if (component.type == MessageComponent.Type.ACTION_ROW) {
-				if (component.data.components().isAbsent) continue
-				for (data in component.data.components().get()) {
-					if (data.customId().isAbsent) continue
-					when (data.customId().get()) {
-						"duration" -> duration =
-							if (data.value().isAbsent || data.value().get() == "") -1 else data.value().get().toInt()
-						"reason" -> {
-							if (data.value().isAbsent) return event.reply().withContent("Please specify a ban reason")
-							reason = data.value().get()
-						}
-					}
-				}
-			}
-		}
-		val finalDuration = duration
-		val finalReason = reason
+		val reasonDuration = getReasonDuration(event)
+		if(reasonDuration.error != null || reasonDuration.reason == null || reasonDuration.duration == null)
+			return event.reply().withEphemeral(true).withContent(reasonDuration.error ?: "Unknown Error")
+
 		return event.interaction
 			.guild
 			.flatMap { guild: Guild -> guild.getMemberById(toBan) }
@@ -63,7 +49,7 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 				if (member == null) event.reply().withEphemeral(true).withContent("Cannot find member")
 				else {
 					val result = banManager.ban(
-						member, finalReason, finalDuration,
+						member, reasonDuration.reason!!, reasonDuration.duration!!,
 						event.interaction.user.username
 					)
 					if (result.error != null || result.value == null) event.reply().withEphemeral(true)
@@ -71,5 +57,37 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 					else result.value.and(event.reply().withEphemeral(true).withContent("Ban issued successfully"))
 				}
 			}
+	}
+
+	private fun getReasonDuration(event: ModalSubmitInteractionEvent): ReasonDuration {
+		val reasonDuration = ReasonDuration()
+		for (component in event.components) {
+			if (component.type != MessageComponent.Type.ACTION_ROW) continue
+			if (component.data.components().isAbsent) continue
+			for (data in component.data.components().get()) {
+				parseData(data, reasonDuration)
+			}
+		}
+		return reasonDuration
+	}
+
+	private fun parseData(
+		data: ComponentData,
+		reasonDuration: ReasonDuration
+	) {
+		if (data.customId().isAbsent) return
+		if ("reason" == data.customId().get()) {
+			if (data.value().isAbsent) reasonDuration.error = "Please specify a kick reason"
+			reasonDuration.reason = data.value().get()
+		} else if ("duration" == data.customId().get()) {
+			if (data.value().isAbsent) reasonDuration.duration = 0
+			else reasonDuration.duration = data.value().get().toInt()
+		}
+	}
+
+	private class ReasonDuration {
+		var duration: Int? = null
+		var reason: String? = null
+		var error: String? = null
 	}
 }

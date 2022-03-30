@@ -7,4 +7,3 @@ class CkeyMessageDTO(
 	@JsonProperty("ckey") val ckey: String,
 	@JsonProperty("message") val message: String
 )
-

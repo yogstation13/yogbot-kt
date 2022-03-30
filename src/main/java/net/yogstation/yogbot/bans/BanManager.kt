@@ -8,14 +8,10 @@ import net.yogstation.yogbot.data.BanRepository
 import net.yogstation.yogbot.data.entity.Ban
 import net.yogstation.yogbot.util.LogChannel
 import net.yogstation.yogbot.util.YogResult
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import org.springframework.data.jpa.domain.Specification.where
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.sql.Date
-import java.sql.SQLException
-import java.time.LocalDateTime
 
 /**
  * Handles banning and unbanning people, although ban expiration is handled by RoleUpdater
@@ -27,7 +23,6 @@ class BanManager(
 	private val banRepository: BanRepository,
 	private val logChannel: LogChannel
 ) {
-	private val logger: Logger = LoggerFactory.getLogger(this::class.java)
 	private val softbanRole = Snowflake.of(discordConfig.softBanRole)
 
 	/**
@@ -52,23 +47,21 @@ class BanManager(
 			banMessage.append("not expire.")
 		}
 
-		val date: Date? = if(duration > 0)
+		val date: Date? = if (duration > 0)
 			Date(System.currentTimeMillis() + (duration.toLong() * 60000))
 		else null
 
 		banRepository.save(Ban(discordId = member.id.asLong(), reason = reason, expiresAt = date))
 
-
-		return YogResult.success(
+		return YogResult.success(Mono.`when`(listOf(
 			member.addRole(
 				softbanRole,
 				"${if (duration <= 0) "Permanent" else "Temporary"} softban by $author for ${reason.trim()}"
-			)
-				.and(member.privateChannel
-					.flatMap { privateChannel -> privateChannel.createMessage(banMessage.toString()) }).and(
-					logChannel.log("${member.username} was banned ${if (duration <= 0) "permanently" else "for $duration minutes"} by $author for $reason")
-				)
-		)
+			),
+			member.privateChannel.flatMap { privateChannel -> privateChannel.createMessage(banMessage.toString()) },
+			logChannel.log("${member.username} was banned ${
+					if (duration <= 0) "permanently" else "for $duration minutes"} by $author for $reason")
+		)))
 	}
 
 	/**
@@ -96,9 +89,8 @@ class BanManager(
 	 * @param member The member to check
 	 */
 	fun onLogin(member: Member): Mono<*> {
-		return if(banRepository.count(where(Ban.isBanActive()).and(Ban.isBanFor(member.id.asLong()))) > 0) {
-			logChannel.log("${member.displayName} is banned, reapplying the ban role")
-				.and(member.addRole(softbanRole))
+		return if (banRepository.count(where(Ban.isBanActive()).and(Ban.isBanFor(member.id.asLong()))) > 0) {
+			logChannel.log("${member.displayName} is banned, reapplying the ban role").and(member.addRole(softbanRole))
 		} else {
 			Mono.empty<Any>()
 		}

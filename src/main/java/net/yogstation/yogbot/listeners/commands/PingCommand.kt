@@ -23,7 +23,7 @@ class PingCommand(
 				val playerCount: Int = (pingResponse.value as Float).toInt()
 				DiscordUtil.reply(
 					event,
-					"There are **${playerCount}** players online, join them now with ${byondConfig.serverJoinAddress}"
+					"There are **$playerCount** players online, join them now with ${byondConfig.serverJoinAddress}"
 				)
 			}
 		}

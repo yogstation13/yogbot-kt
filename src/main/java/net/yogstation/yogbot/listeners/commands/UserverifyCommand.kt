@@ -9,7 +9,7 @@ import net.yogstation.yogbot.permissions.PermissionsManager
 import net.yogstation.yogbot.util.DiscordUtil
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
-import java.util.*
+import java.util.Optional
 
 @Component
 class UserverifyCommand(discordConfig: DiscordConfig, permissions: PermissionsManager) : PermissionsCommand(
@@ -28,15 +28,15 @@ class UserverifyCommand(discordConfig: DiscordConfig, permissions: PermissionsMa
 		if (author.isEmpty) return Mono.empty<Any>()
 		val user: String = author.get().username
 		val verifyRole: Snowflake = Snowflake.of(discordConfig.manualVerifyRole)
+
 		return if (target.roleIds.contains(verifyRole)) target.removeRole(
 			verifyRole,
 			"Manually unverified by $user"
-		)
-			.and(DiscordUtil.reply(event, "User unverified")) else target.addRole(
+		).and(DiscordUtil.reply(event, "User unverified"))
+		else target.addRole(
 			verifyRole,
 			"Manually verified by $user"
-		)
-			.and(DiscordUtil.reply(event, "User verified"))
+		).and(DiscordUtil.reply(event, "User verified"))
 	}
 
 	override val description = "Verifies someone on the discord. Use again to un-verify someone."

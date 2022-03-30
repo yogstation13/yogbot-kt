@@ -27,7 +27,6 @@ class HelpCommand(val commands: List<TextCommand>, discordConfig: DiscordConfig)
 
 	override val description = """
 	Displays a list of commands you have access to
-	    `${discordConfig.commandPrefix}${name} hidden` - Displays hidden commands"
+	    `${discordConfig.commandPrefix}$name hidden` - Displays hidden commands"
 	""".trimIndent()
 }
-

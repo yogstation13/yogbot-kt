@@ -1,4 +1,4 @@
-package net.yogstation.yogbot.listeners.commands
+package net.yogstation.yogbot.listeners.commands.image
 
 import net.yogstation.yogbot.config.DiscordConfig
 import org.springframework.stereotype.Component
@@ -6,14 +6,16 @@ import java.util.*
 
 @Component
 class DuckCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(discordConfig, random) {
-	//Duckpond
+	// Duckpond
 	override val images = listOf(
-		"http://i.imgur.com/YjWIJHU.png", "http://i.imgur.com/SEoP3pC.jpg",
+		"http://i.imgur.com/YjWIJHU.png",
+		"http://i.imgur.com/SEoP3pC.jpg",
 		"https://upload.wikimedia.org/wikipedia/commons/thumb/a/a1/Mallard2.jpg/1200px-Mallard2.jpg",
 		"http://kids.nationalgeographic.com/content/dam/kids/photos/animals/Birds/H-P/mallard-male-standing.adapt.945.1.jpg",
 		"http://hunsci.com/data/out/129/581482.png",
 		"http://www.michiganduckrescueandsanctuary.com/wp-content/uploads/2014/12/marold_donate_transparent_504.png",
-		"http://i.imgur.com/IAWzbHm.png", "http://i.imgur.com/pZIeNmX.jpg",
+		"http://i.imgur.com/IAWzbHm.png",
+		"http://i.imgur.com/pZIeNmX.jpg",
 		"http://i.imgur.com/4Ztso2W.png",
 		"https://web.stanford.edu/dept/CTL/cgi-bin/academicskillscoaching/wp-content/uploads/2012/07/baby-duck.jpg",
 		"http://i.imgur.com/LXn5gKI.png",
@@ -34,7 +36,8 @@ class DuckCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"http://www.tringa.org/images/0351_Wood_Duck_11-16-2008_12.jpg",
 		"http://seaduckjv.org/wp-content/wow-aqua-3/data1/images/kingeideronwater.jpg",
 		"http://www.worldofmunchkin.com/duckofdoom/img/cover_lg.jpg",
-		"http://i.imgur.com/esV0pAF.jpg", "http://i.imgur.com/yFD8wOX.png",
+		"http://i.imgur.com/esV0pAF.jpg",
+		"http://i.imgur.com/yFD8wOX.png",
 		"http://assets.epicurious.com/photos/5776e73c58145bd155a1271e/master/pass/duck-confit.jpg",
 		"http://www.agweb.com/assets/1/6/duck1.jpg",
 		"http://officeducks.com/wp-content/uploads/2015/05/27-degree-Duck.png",
@@ -60,7 +63,7 @@ class DuckCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"http://www.guy-sports.com/fun_pictures/duck_dead.jpg",
 		"http://www.kappit.com/img/pics/201406_2202_bacfa_sm.jpg",
 		"http://37.media.tumblr.com/ee601d99a4e0d0d52ab6fbbf55f28f2d/tumblr_n45sz1Fgth1sxnr93o1_500.gif",
-		"https://cdn.discordapp.com/attachments/734475284446707753/879604377285951488/20210823_140659.jpg" //Duckpond
+		"https://cdn.discordapp.com/attachments/734475284446707753/879604377285951488/20210823_140659.jpg" // Duckpond
 	)
 	override val title = "Random Duck"
 	override val name = "duck"

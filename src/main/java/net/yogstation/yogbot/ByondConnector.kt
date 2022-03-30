@@ -24,7 +24,7 @@ class ByondConnector(private val config: ByondConfig) {
 	}
 
 	private fun request(rawQuery: String): YogResult<Any?, String?> {
-		val query = String.format("%s&key=%s", rawQuery, config.serverKey)
+		val query = "$rawQuery&key=${config.serverKey}"
 		val buffer = ByteBuffer.allocate(query.length + 10)
 		buffer.put(byteArrayOf(0x00, 0x83.toByte()))
 		buffer.putShort((query.length + 6).toShort())
@@ -38,7 +38,8 @@ class ByondConnector(private val config: ByondConfig) {
 				val inputStream = socket.getInputStream()
 				val headerBuffer = inputStream.readNBytes(4)
 				if (headerBuffer.size < 4) return YogResult.error("Returned insufficient data")
-				if (headerBuffer[0].toInt() != 0x00 || headerBuffer[1] != 0x83.toByte()) return YogResult.error("Malformed response packet, " + headerBuffer[0] + " " + headerBuffer[1])
+				if (headerBuffer[0].toInt() != 0x00 || headerBuffer[1] != 0x83.toByte())
+					return YogResult.error("Malformed response packet, " + headerBuffer[0] + " " + headerBuffer[1])
 				val size = ByteBuffer.wrap(headerBuffer, 2, 2).short
 				val bodyBuffer = inputStream.readNBytes(size.toInt())
 				if (bodyBuffer.size < size) return YogResult.error("Returned insufficient data")

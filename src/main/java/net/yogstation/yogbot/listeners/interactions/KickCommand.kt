@@ -29,7 +29,7 @@ class KickCommand(private val permissions: PermissionsManager) : IUserCommand, I
 					if (permissions.hasPermission(member, "kick")) event.reply().withEphemeral(true)
 						.withContent("Cannot kick staff")
 					else event.presentModal()
-						.withCustomId(String.format("%s-%s", idPrefix, event.targetId.asString()))
+						.withCustomId("$idPrefix-${event.targetId.asString()}")
 						.withTitle("Kick Menu")
 						.withComponents(
 							ActionRow.of(
@@ -46,15 +46,15 @@ class KickCommand(private val permissions: PermissionsManager) : IUserCommand, I
 		val toBan: Snowflake = Snowflake.of(event.customId.split("-").toTypedArray()[1])
 		var reason = ""
 		for (component in event.components) {
-			if (component.type == MessageComponent.Type.ACTION_ROW) {
-				if (component.data.components().isAbsent) continue
-				for (data in component.data.components().get()) {
-					if (data.customId().isAbsent) continue
-					if ("reason" == data.customId().get()) {
-						if (data.value().isAbsent) return event.reply().withContent("Please specify a kick reason")
-						reason = data.value().get()
-					}
-				}
+			if (component.type != MessageComponent.Type.ACTION_ROW) continue
+			if (component.data.components().isAbsent) continue
+
+			for (data in component.data.components().get()) {
+				if (data.customId().isAbsent) continue
+				if ("reason" != data.customId().get()) continue
+				if (data.value().isAbsent) return event.reply().withContent("Please specify a kick reason")
+
+				reason = data.value().get()
 			}
 		}
 		val finalReason = reason
@@ -62,13 +62,7 @@ class KickCommand(private val permissions: PermissionsManager) : IUserCommand, I
 			.guild
 			.flatMap { guild -> guild.getMemberById(toBan) }
 			.flatMap { member: Member ->
-				member.kick(
-					String.format(
-						"Kicked by %s for %s",
-						event.interaction.user.username,
-						finalReason
-					)
-				)
+				member.kick("Kicked by ${event.interaction.user.username} for $finalReason")
 			}
 	}
 }

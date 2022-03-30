@@ -16,15 +16,16 @@ import reactor.core.publisher.Mono
  */
 @RestController
 class OOCEndpoint(
-	client: GatewayDiscordClient, private val channelsConfig: DiscordChannelsConfig,
+	client: GatewayDiscordClient,
+	private val channelsConfig: DiscordChannelsConfig,
 	byondConfig: ByondConfig
 ) : MessageRelayEndpoint(client, byondConfig) {
 	override val channelId: Snowflake = Snowflake.of(channelsConfig.channelOOC)
 
 	@PostMapping("/byond/oocmessage")
 	fun handleMhelp(@RequestBody payload: CkeyMessageDTO): Mono<HttpEntity<String>> {
-		val keyError = validateKey(payload.key);
-		if (keyError != null) return keyError;
+		val keyError = validateKey(payload.key)
+		if (keyError != null) return keyError
 		return receiveData(payload)
 	}
 }
