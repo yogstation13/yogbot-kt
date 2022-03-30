@@ -6,7 +6,6 @@ import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
 import discord4j.gateway.intent.Intent
 import discord4j.rest.http.client.ClientException
-import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.data.BanRepository
 import net.yogstation.yogbot.data.entity.Ban
@@ -20,17 +19,17 @@ import reactor.core.publisher.Mono
 
 @Component
 class RoleUpdater(
-	private val databaseManager: DatabaseManager,
+//	private val databaseManager: DatabaseManager,
 	private val client: GatewayDiscordClient,
 	private val discordConfig: DiscordConfig,
 	private val logChannel: LogChannel,
-	private val channelsConfig: DiscordChannelsConfig,
+//	private val channelsConfig: DiscordChannelsConfig,
 	private val banRepository: BanRepository
 ) {
 	private val logger: Logger = LoggerFactory.getLogger(javaClass)
 	private val softbanRole = Snowflake.of(discordConfig.softBanRole)
-	private val donorRole = Snowflake.of(discordConfig.donorRole)
-	private val verificationRole = Snowflake.of(discordConfig.byondVerificationRole)
+//	private val donorRole = Snowflake.of(discordConfig.donorRole)
+//	private val verificationRole = Snowflake.of(discordConfig.byondVerificationRole)
 
 	@Scheduled(fixedRate = 30000)
 	fun handleRoles() {
