@@ -2,7 +2,7 @@ package net.yogstation.yogbot.listeners.commands.image
 
 import net.yogstation.yogbot.config.DiscordConfig
 import org.springframework.stereotype.Component
-import java.util.Random
+import java.util.*
 
 @Component
 class WikiCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(discordConfig, random) {
@@ -85,4 +85,5 @@ class WikiCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 	override val name = "wiki"
 	override val title = "Wiki Image"
 	override val description = "Wiki department of yogstation"
+	override val color = 0xAD1457
 }
