@@ -21,7 +21,7 @@ class TextCommandListener(
 	fun handle(event: MessageCreateEvent): Mono<*> {
 		if (!event.message.content.startsWith(config.commandPrefix)) return Mono.empty<Any>()
 		val command: TextCommand = commands.firstOrNull { command: TextCommand ->
-			event.message.content.startsWith(
+			event.message.content.lowercase().startsWith(
 				config.commandPrefix + command.name
 			)
 		} ?: return DiscordUtil.reply(event, "Command ${event.message.content.split(" ", limit = 2)[0]} not found")
