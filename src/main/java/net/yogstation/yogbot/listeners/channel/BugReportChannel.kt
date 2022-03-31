@@ -20,7 +20,7 @@ import java.net.URI
  * Grabs messages from the bug reports channel, attempts to format them as a bug report, then uploads the new bug
  * report to github
  */
-//@Component
+@Component
 class BugReportChannel(
 	channelsConfig: DiscordChannelsConfig,
 	private val webClient: WebClient,
