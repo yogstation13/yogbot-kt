@@ -137,7 +137,7 @@ class BugReportChannel(
 				formattedBody.append("## Supplied Image:\n$suppliedImages")
 			}
 
-			formattedBody.append("\n Submitted by: ")
+			formattedBody.append("\n Submitted by: $author")
 
 			return IssueSubmitDTO(title, formattedBody.toString())
 		}
