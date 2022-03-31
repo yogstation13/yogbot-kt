@@ -19,7 +19,7 @@ class MentorWhoCommand(
 		return byondConnector.requestAsync("?mentorwho").map { result ->
 			var mentors= (if (result.hasError()) result.error else result.value) as String
 			mentors = mentors.replace("\u0000".toRegex(), "")
-			DiscordUtil.reply(event, admins)
+			DiscordUtil.reply(event, mentors)
 		}
 	}
 
