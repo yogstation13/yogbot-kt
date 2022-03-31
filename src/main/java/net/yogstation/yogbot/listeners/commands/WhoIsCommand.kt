@@ -21,7 +21,7 @@ class WhoIsCommand(
 		val target =
 			getTarget(event) ?: return DiscordUtil.reply(
 				event,
-				"Usage: `${discordConfig.commandPrefix}whois <@Username|ckey>"
+				"Usage: `${discordConfig.commandPrefix}whois <@Username|ckey>`"
 			)
 		val error = target.populate(database)
 		if (error != null) return DiscordUtil.reply(event, error)
