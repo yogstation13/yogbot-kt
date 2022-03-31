@@ -85,7 +85,7 @@ class ForumsManager(
 					if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {
 						it.mention
 					} else getDefaultPing(pingType)
-				}.onErrorResume {
+				}.doOnError {
 					// Equality on the boolean because it is nullable
 					if (it is ClientException &&
 						it.status == HttpResponseStatus.NOT_FOUND &&
@@ -95,8 +95,7 @@ class ForumsManager(
 						logger.error("Unexpected error in getPing: ${it.message}")
 						logger.debug("Get ping exception: ", it)
 					}
-					Mono.just(getDefaultPing(pingType))
-				}
+				}.onErrorReturn(getDefaultPing(pingType))
 			}
 		}
 		return Mono.just(getDefaultPing(pingType))
