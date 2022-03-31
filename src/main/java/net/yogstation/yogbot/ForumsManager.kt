@@ -81,28 +81,24 @@ class ForumsManager(
 			val ckey = StringUtils.ckeyIze(mention)
 			val response = ByondLinkUtil.getMemberID(ckey, databaseManager)
 			if (response.value != null) {
-				try{
-					return guild.getMemberById(response.value).map {
-						if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {
-							it.mention
-						} else getDefaultPing(pingType)
+				return guild.getMemberById(response.value).map {
+					if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {
+						it.mention
+					} else getDefaultPing(pingType)
+				}.doOnError {
+					// Equality on the boolean because it is nullable
+					if (it is ClientException &&
+						it.status == HttpResponseStatus.NOT_FOUND &&
+						it.message?.contains("Unknown Member") == true)
+						logger.debug("Error getting member from ID", it)
+					else {
+						logger.error("Unexpected error in getPing: ${it.message}")
+						logger.debug("Get ping exception: ", it)
 					}
-				} catch (e: ClientException) {
-					processException(e)
-				}
+				}.onErrorReturn(getDefaultPing(pingType))
 			}
 		}
 		return Mono.just(getDefaultPing(pingType))
-	}
-
-	private fun processException(e: ClientException) {
-		// Equality on the boolean because it is nullable
-		if (e.status == HttpResponseStatus.NOT_FOUND && e.message?.contains("Unknown Member") == true)
-			logger.debug("Error getting member from ID", e)
-		else {
-			logger.error("Unexpected error in getPing: ${e.message}")
-			logger.debug("Get ping exception: ", e)
-		}
 	}
 
 	private fun getDefaultPing(pingType: PingType): String {
