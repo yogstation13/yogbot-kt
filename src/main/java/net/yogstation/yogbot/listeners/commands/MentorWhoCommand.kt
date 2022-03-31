@@ -1,0 +1,43 @@
+package net.yogstation.yogbot.listeners.commands
+
+import discord4j.common.util.Snowflake
+import discord4j.core.event.domain.message.MessageCreateEvent
+import net.yogstation.yogbot.ByondConnector
+import net.yogstation.yogbot.config.DiscordChannelsConfig
+import net.yogstation.yogbot.config.DiscordConfig
+import net.yogstation.yogbot.util.DiscordUtil
+import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
+
+/**
+ * Pulls a list of currently online admins
+ */
+@Component
+class MentorWhoCommand(
+	discordConfig: DiscordConfig,
+	private val byondConnector: ByondConnector,
+	private val channelsConfig: DiscordChannelsConfig
+) : TextCommand(discordConfig) {
+	override fun doCommand(event: MessageCreateEvent): Mono<*> {
+		return getAdmins(event.message.channelId, byondConnector, channelsConfig).flatMap {
+			DiscordUtil.reply(event, it)
+		}
+	}
+
+	override val name = "mentorwho"
+	override val description = "Get current mentors online."
+
+	companion object {
+		fun getAdmins(
+			channelID: Snowflake,
+			byondConnector: ByondConnector,
+			channelsConfig: DiscordChannelsConfig
+		): Mono<String> {
+			return byondConnector.requestAsync("?mentorwho").map { result ->
+				var admins = (if (result.hasError()) result.error else result.value) as String
+				admins = admins.replace("\u0000".toRegex(), "")
+				admins
+			}
+		}
+	}
+}
