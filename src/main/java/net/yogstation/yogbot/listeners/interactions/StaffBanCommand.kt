@@ -3,6 +3,7 @@ package net.yogstation.yogbot.listeners.interactions
 import discord4j.common.util.Snowflake
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.User
+import discord4j.core.event.domain.interaction.ApplicationCommandInteractionEvent
 import discord4j.core.event.domain.interaction.UserInteractionEvent
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.permissions.PermissionsManager
@@ -21,21 +22,29 @@ class StaffBanCommand(private val permissions: PermissionsManager, private val d
 			.withContent("Must be used in a guild")
 
 		return if (!permissions.hasPermission(event.interaction.member.orElse(null), "staffban")) event.reply()
-			.withEphemeral(true).withContent("You do not have permission to run that command") else event.targetUser
+			.withEphemeral(true).withContent("You do not have permission to run that command")
+		else event.targetUser
 			.flatMap { user: User ->
 				user.asMember(event.interaction.guildId.get()).flatMap { member: Member ->
-					val roles = member.roleIds
-					if (roles.contains(Snowflake.of(discordConfig.secondWarningRole))) {
-						member.addRole(Snowflake.of(discordConfig.staffPublicBanRole))
-							.and(event.reply().withContent("${member.mention} was banned from staff public"))
-					} else if (roles.contains(Snowflake.of(discordConfig.firstWarningRole))) {
-						member.addRole(Snowflake.of(discordConfig.secondWarningRole))
-							.and(event.reply().withContent("${member.mention} was given the second warning role"))
-					} else {
-						member.addRole(Snowflake.of(discordConfig.firstWarningRole))
-							.and(event.reply().withContent("${member.mention} was given the first warning role"))
-					}
+					staffBan(member, event)
 				}
 			}
+	}
+
+	fun staffBan(
+		member: Member,
+		event: ApplicationCommandInteractionEvent
+	): Mono<Void> {
+		val roles = member.roleIds
+		return if (roles.contains(Snowflake.of(discordConfig.secondWarningRole))) {
+			member.addRole(Snowflake.of(discordConfig.staffPublicBanRole))
+				.and(event.reply().withContent("${member.mention} was banned from staff public"))
+		} else if (roles.contains(Snowflake.of(discordConfig.firstWarningRole))) {
+			member.addRole(Snowflake.of(discordConfig.secondWarningRole))
+				.and(event.reply().withContent("${member.mention} was given the second warning role"))
+		} else {
+			member.addRole(Snowflake.of(discordConfig.firstWarningRole))
+				.and(event.reply().withContent("${member.mention} was given the first warning role"))
+		}
 	}
 }

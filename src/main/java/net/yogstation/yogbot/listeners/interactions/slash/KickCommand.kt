@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono
 
 @Component
 class KickCommand: ISlashCommand {
-	override val name = "ban"
+	override val name = "kick"
 
 	override fun handle(event: ChatInputInteractionEvent): Mono<*> {
 		val userid: Snowflake = event.getOption("person").flatMap(ApplicationCommandInteractionOption::getValue)

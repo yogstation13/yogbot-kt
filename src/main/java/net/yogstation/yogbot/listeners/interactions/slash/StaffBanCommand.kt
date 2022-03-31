@@ -7,9 +7,12 @@ import discord4j.core.event.domain.interaction.ChatInputInteractionEvent
 import net.yogstation.yogbot.listeners.interactions.ISlashCommand
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import net.yogstation.yogbot.listeners.interactions.StaffBanCommand as SBCommand
 
 @Component
-class StaffBanCommand: ISlashCommand {
+class StaffBanCommand(
+	private val sbCommand: SBCommand
+): ISlashCommand {
 	override val name = "ban"
 
 	override fun handle(event: ChatInputInteractionEvent): Mono<*> {
@@ -19,7 +22,7 @@ class StaffBanCommand: ISlashCommand {
 
 		return event.interaction.guild.flatMap { guild ->
 			guild.getMemberById(userid).flatMap { member ->
-				member.kick("Kicked by ${event.interaction.user.username}")
+				sbCommand.staffBan(member, event)
 			}
 		}
 	}
