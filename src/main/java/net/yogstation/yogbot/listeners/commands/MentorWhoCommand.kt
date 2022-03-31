@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
 /**
- * Pulls a list of currently online admins
+ * Pulls a list of currently online mentors
  */
 @Component
 class MentorWhoCommand(
