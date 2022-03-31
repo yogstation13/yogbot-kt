@@ -4,8 +4,6 @@ import discord4j.common.util.Snowflake
 import discord4j.core.`object`.component.ActionRow
 import discord4j.core.`object`.component.MessageComponent
 import discord4j.core.`object`.component.TextInput
-import discord4j.core.`object`.entity.Guild
-import discord4j.core.`object`.entity.Member
 import discord4j.core.event.domain.interaction.ModalSubmitInteractionEvent
 import discord4j.core.event.domain.interaction.UserInteractionEvent
 import discord4j.discordjson.json.ComponentData
@@ -42,21 +40,14 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 		if(reasonDuration.error != null || reasonDuration.reason == null || reasonDuration.duration == null)
 			return event.reply().withEphemeral(true).withContent(reasonDuration.error ?: "Unknown Error")
 
-		return event.interaction
-			.guild
-			.flatMap { guild: Guild -> guild.getMemberById(toBan) }
-			.flatMap { member: Member? ->
-				if (member == null) event.reply().withEphemeral(true).withContent("Cannot find member")
-				else {
-					val result = banManager.ban(
-						member, reasonDuration.reason!!, reasonDuration.duration!!,
-						event.interaction.user.username
-					)
-					if (result.error != null || result.value == null) event.reply().withEphemeral(true)
-						.withContent(result.error ?: "Unknown Error")
-					else result.value.and(event.reply().withEphemeral(true).withContent("Ban issued successfully"))
-				}
-			}
+		return banManager.ban(
+			toBan, reasonDuration.reason!!, reasonDuration.duration!!,
+			event.interaction.user.username
+		).flatMap { result ->
+			if (result.error != null || result.value == null) event.reply().withEphemeral(true)
+				.withContent(result.error ?: "Unknown Error")
+			else result.value.and(event.reply().withEphemeral(true).withContent("Ban issued successfully"))
+		}
 	}
 
 	private fun getReasonDuration(event: ModalSubmitInteractionEvent): ReasonDuration {
@@ -80,7 +71,7 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 			if (data.value().isAbsent) reasonDuration.error = "Please specify a kick reason"
 			reasonDuration.reason = data.value().get()
 		} else if ("duration" == data.customId().get()) {
-			if (data.value().isAbsent) reasonDuration.duration = 0
+			if (data.value().isAbsent || data.value().get() == "") reasonDuration.duration = 0
 			else reasonDuration.duration = data.value().get().toInt()
 		}
 	}
