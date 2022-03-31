@@ -7,7 +7,7 @@ import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.listeners.commands.TextCommand
 import net.yogstation.yogbot.util.DiscordUtil
 import reactor.core.publisher.Mono
-import java.util.Random
+import java.util.*
 
 abstract class ImageCommand(discordConfig: DiscordConfig, protected val random: Random) : TextCommand(
 	discordConfig
@@ -16,7 +16,7 @@ abstract class ImageCommand(discordConfig: DiscordConfig, protected val random: 
 		val urls = images
 		val url = urls[random.nextInt(urls.size)]
 		val embed = EmbedCreateSpec.builder()
-			.color(Color.of(random.nextInt(0xFFFFFF)))
+			.color(Color.of(color ?: random.nextInt(0xFFFFFF)))
 			.title(title)
 			.image(url)
 			.footer(url, "")
@@ -27,4 +27,5 @@ abstract class ImageCommand(discordConfig: DiscordConfig, protected val random: 
 	protected abstract val images: List<String>
 	protected abstract val title: String
 	override val isHidden = true
+	protected open val color: Int? = null
 }
