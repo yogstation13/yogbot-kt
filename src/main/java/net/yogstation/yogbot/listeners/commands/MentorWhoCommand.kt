@@ -17,7 +17,7 @@ class MentorWhoCommand(
 ) : TextCommand(discordConfig) {
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {
 		return byondConnector.requestAsync("?mentorwho").map { result ->
-			var admins = (if (result.hasError()) result.error else result.value) as String
+			var mentors= (if (result.hasError()) result.error else result.value) as String
 			admins = admins.replace("\u0000".toRegex(), "")
 			DiscordUtil.reply(event, admins)
 		}
