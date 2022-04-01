@@ -78,8 +78,14 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 			reasonDuration.reason = data.value().get()
 			if (reasonDuration.reason!!.isBlank()) reasonDuration.error = "Reason must be specified"
 		} else if ("duration" == data.customId().get()) {
-			if (data.value().isAbsent || data.value().get() == "") reasonDuration.duration = 0
-			else reasonDuration.duration = data.value().get().toInt()
+			if(data.value().isAbsent || data.value().get().isBlank()) reasonDuration.duration = 0
+			else {
+				try {
+					reasonDuration.duration = data.value().get().toInt()
+				} catch (e: java.lang.NumberFormatException) {
+					reasonDuration.error = "'${data.value().get()}' is not a valid number."
+				}
+			}
 		}
 	}
 
