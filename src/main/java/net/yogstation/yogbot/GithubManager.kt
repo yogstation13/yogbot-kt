@@ -226,7 +226,7 @@ class GithubManager(
 				foundOpeningTag = true
 
 				val clAuthors: List<String> = line.split(" ", limit = 2)
-				username = if (clAuthors.size < 2) username else clAuthors[2]
+				username = if (clAuthors.size < 2) username else clAuthors[1]
 
 			} else if (line.startsWith("/:cl:") ||
 				line.startsWith("/ :cl:") ||
