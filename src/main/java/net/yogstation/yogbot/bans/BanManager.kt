@@ -11,6 +11,7 @@ import net.yogstation.yogbot.util.YogResult
 import org.springframework.data.jpa.domain.Specification.where
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 import java.sql.Date
 
 /**
@@ -27,12 +28,12 @@ class BanManager(
 
 	/**
 	 * Issues a ban for a member
-	 * @param member The member to ban
+	 * @param snowflake The snowflake of the member to ban
 	 * @param reason The text reason for the ban, it will be sent to the user and logged
 	 * @param duration The duration of the ban in minutes, zero or negative values provide indefinite bans
 	 * @param author The person who issued the ban, for logging purposes
 	 */
-	fun ban(member: Member, reason: String, duration: Int, author: String): YogResult<Mono<*>?, String?> {
+	fun ban(snowflake: Snowflake, reason: String, duration: Int, author: String): Mono<YogResult<Mono<*>?, String?>> {
 
 		val banMessage: StringBuilder = StringBuilder("You have been banned from ")
 		banMessage.append(discordConfig.serverName)
@@ -51,17 +52,30 @@ class BanManager(
 			Date(System.currentTimeMillis() + (duration.toLong() * 60000))
 		else null
 
-		banRepository.save(Ban(discordId = member.id.asLong(), reason = reason, expiresAt = date))
-
-		return YogResult.success(Mono.`when`(listOf(
-			member.addRole(
-				softbanRole,
-				"${if (duration <= 0) "Permanent" else "Temporary"} softban by $author for ${reason.trim()}"
-			),
-			member.privateChannel.flatMap { privateChannel -> privateChannel.createMessage(banMessage.toString()) },
-			logChannel.log("${member.username} was banned ${
-					if (duration <= 0) "permanently" else "for $duration minutes"} by $author for $reason")
-		)))
+		return Mono.fromRunnable<Void> {
+			banRepository.save(Ban(discordId = snowflake.asLong(), reason = reason, expiresAt = date))
+		}.subscribeOn(Schedulers.boundedElastic()).then(
+			client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).flatMap { guild ->
+				guild.getMemberById(snowflake).map<YogResult<Mono<*>?, String?>?> { member ->
+					YogResult.success(Mono.`when`(listOf(
+						member.addRole(
+							softbanRole,
+							"${if (duration <= 0) "Permanent" else "Temporary"} softban by $author for ${reason.trim()}"
+						),
+						member.privateChannel.flatMap { privateChannel ->
+							privateChannel.createMessage(banMessage.toString())
+						},
+						logChannel.log("${member.username} was banned ${
+							if (duration <= 0) "permanently" else "for $duration minutes"
+						} by $author for $reason")
+					)))
+				}.onErrorReturn (
+					YogResult.success(logChannel.log("${snowflake.asString()} was banned ${
+						if (duration <= 0) "permanently" else "for $duration minutes"
+					} by $author for $reason"))
+				)
+			}
+		)
 	}
 
 	/**
