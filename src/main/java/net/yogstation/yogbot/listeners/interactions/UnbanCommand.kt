@@ -45,6 +45,7 @@ class UnbanCommand(private val permissions: PermissionsManager, private val banM
 				if ("reason" != data.customId().get()) continue
 				if (data.value().isAbsent) return event.reply().withContent("Please specify a ban reason")
 				reason = data.value().get()
+				if (reason.isBlank()) return event.reply().withContent("Reason must be specified")
 			}
 		}
 		val finalReason = reason
@@ -57,7 +58,7 @@ class UnbanCommand(private val permissions: PermissionsManager, private val banM
 				)
 				if (result.error != null || result.value == null) event.reply().withEphemeral(true)
 					.withContent(result.error ?: "Unknown Error")
-				else result.value.and(event.reply().withEphemeral(true).withContent("Ban issued successfully"))
+				else result.value.and(event.reply().withEphemeral(true).withContent("Ban lifted successfully"))
 			}
 	}
 }
