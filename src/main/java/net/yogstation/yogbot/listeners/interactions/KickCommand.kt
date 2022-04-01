@@ -6,8 +6,10 @@ import discord4j.core.`object`.component.MessageComponent
 import discord4j.core.`object`.component.TextInput
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.User
+import discord4j.core.event.domain.interaction.ApplicationCommandInteractionEvent
 import discord4j.core.event.domain.interaction.ModalSubmitInteractionEvent
 import discord4j.core.event.domain.interaction.UserInteractionEvent
+import discord4j.core.spec.InteractionPresentModalMono
 import net.yogstation.yogbot.permissions.PermissionsManager
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
@@ -28,16 +30,20 @@ class KickCommand(private val permissions: PermissionsManager) : IUserCommand, I
 				user.asMember(event.interaction.guildId.get()).flatMap { member: Member? ->
 					if (permissions.hasPermission(member, "kick")) event.reply().withEphemeral(true)
 						.withContent("Cannot kick staff")
-					else event.presentModal()
-						.withCustomId("$idPrefix-${event.targetId.asString()}")
-						.withTitle("Kick Menu")
-						.withComponents(
-							ActionRow.of(
-								TextInput.paragraph("reason", "Kick Reason")
-							)
-						)
+					else presentModal(event, event.targetId)
 				}
 			}
+	}
+
+	fun presentModal(event: ApplicationCommandInteractionEvent, snowflake: Snowflake): InteractionPresentModalMono {
+		return event.presentModal()
+			.withCustomId("$idPrefix-${snowflake.asString()}")
+			.withTitle("Kick Menu")
+			.withComponents(
+				ActionRow.of(
+					TextInput.paragraph("reason", "Kick Reason")
+				)
+			)
 	}
 
 	override val idPrefix = "kick"
@@ -55,6 +61,7 @@ class KickCommand(private val permissions: PermissionsManager) : IUserCommand, I
 				if (data.value().isAbsent) return event.reply().withContent("Please specify a kick reason")
 
 				reason = data.value().get()
+				if (reason.isBlank()) return event.reply().withContent("Reason must be specified")
 			}
 		}
 		val finalReason = reason
@@ -63,6 +70,6 @@ class KickCommand(private val permissions: PermissionsManager) : IUserCommand, I
 			.flatMap { guild -> guild.getMemberById(toBan) }
 			.flatMap { member: Member ->
 				member.kick("Kicked by ${event.interaction.user.username} for $finalReason")
-			}
+			}.then(event.reply())
 	}
 }

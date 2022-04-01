@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 @Component
 class StaffBanCommand(private val permissions: PermissionsManager, private val discordConfig: DiscordConfig) :
 	IUserCommand {
-	override val name = "Staff Public Ban"
+	override val name = "staffban"
 
 	override val uri = "staffban.json"
 
@@ -38,13 +38,13 @@ class StaffBanCommand(private val permissions: PermissionsManager, private val d
 		val roles = member.roleIds
 		return if (roles.contains(Snowflake.of(discordConfig.secondWarningRole))) {
 			member.addRole(Snowflake.of(discordConfig.staffPublicBanRole))
-				.and(event.reply().withContent("${member.mention} was banned from staff public"))
+				.then(event.reply().withContent("${member.mention} was banned from staff public"))
 		} else if (roles.contains(Snowflake.of(discordConfig.firstWarningRole))) {
 			member.addRole(Snowflake.of(discordConfig.secondWarningRole))
-				.and(event.reply().withContent("${member.mention} was given the second warning role"))
+				.then(event.reply().withContent("${member.mention} was given the second warning role"))
 		} else {
 			member.addRole(Snowflake.of(discordConfig.firstWarningRole))
-				.and(event.reply().withContent("${member.mention} was given the first warning role"))
+				.then(event.reply().withContent("${member.mention} was given the first warning role"))
 		}
 	}
 }

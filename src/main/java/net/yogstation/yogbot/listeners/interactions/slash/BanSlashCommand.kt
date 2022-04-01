@@ -5,13 +5,15 @@ import discord4j.core.`object`.command.ApplicationCommandInteractionOption
 import discord4j.core.`object`.command.ApplicationCommandInteractionOptionValue
 import discord4j.core.event.domain.interaction.ChatInputInteractionEvent
 import net.yogstation.yogbot.listeners.interactions.ISlashCommand
+import net.yogstation.yogbot.listeners.interactions.SoftbanCommand
+import net.yogstation.yogbot.permissions.PermissionsManager
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
-import net.yogstation.yogbot.listeners.interactions.StaffBanCommand as SBCommand
 
 @Component
-class StaffBanCommand(
-	private val sbCommand: SBCommand
+class BanSlashCommand(
+	private val softbanCommand: SoftbanCommand,
+	private val permissions: PermissionsManager
 ): ISlashCommand {
 	override val name = "ban"
 
@@ -20,13 +22,6 @@ class StaffBanCommand(
 			.map(ApplicationCommandInteractionOptionValue::asSnowflake).orElse(Snowflake.of(0))
 		if(userid.asLong() == 0L) event.reply().withEphemeral(true).withContent("Failed to find person")
 
-		return event.interaction.guild.flatMap { guild ->
-			guild.getMemberById(userid).flatMap { member ->
-				sbCommand.staffBan(member, event)
-			}
-		}
+		return softbanCommand.openModal(event, userid)
 	}
-
-	override val uri: String
-		get() = "slash_staffban.json"
 }

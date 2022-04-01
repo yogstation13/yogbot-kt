@@ -76,6 +76,7 @@ class SoftbanCommand(private val permissions: PermissionsManager, private val ba
 		if ("reason" == data.customId().get()) {
 			if (data.value().isAbsent) reasonDuration.error = "Please specify a kick reason"
 			reasonDuration.reason = data.value().get()
+			if (reasonDuration.reason!!.isBlank()) reasonDuration.error = "Reason must be specified"
 		} else if ("duration" == data.customId().get()) {
 			if (data.value().isAbsent || data.value().get() == "") reasonDuration.duration = 0
 			else reasonDuration.duration = data.value().get().toInt()
