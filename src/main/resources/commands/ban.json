@@ -1,0 +1,12 @@
+{
+	"name": "ban",
+	"description": "Opens the ban menu for the specified user, alternate to user command",
+	"options": [
+		{
+			"name": "person",
+			"description": "The person to ban",
+			"type": 6,
+			"required": true
+		}
+	]
+}

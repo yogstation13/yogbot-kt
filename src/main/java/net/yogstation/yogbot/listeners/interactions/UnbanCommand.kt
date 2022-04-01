@@ -6,6 +6,7 @@ import discord4j.core.`object`.component.MessageComponent
 import discord4j.core.`object`.component.TextInput
 import discord4j.core.`object`.entity.Guild
 import discord4j.core.`object`.entity.Member
+import discord4j.core.event.domain.interaction.ApplicationCommandInteractionEvent
 import discord4j.core.event.domain.interaction.ModalSubmitInteractionEvent
 import discord4j.core.event.domain.interaction.UserInteractionEvent
 import net.yogstation.yogbot.bans.BanManager
@@ -21,12 +22,15 @@ class UnbanCommand(private val permissions: PermissionsManager, private val banM
 		get() = "Unban"
 
 	override fun handle(event: UserInteractionEvent): Mono<*> {
-		return if (!permissions.hasPermission(event.interaction.member.orElse(null), "ban")) event.reply()
+		return openModal(event, event.targetId)
+	}
+
+	fun openModal(event: ApplicationCommandInteractionEvent, snowflake: Snowflake): Mono<*> =
+		if (!permissions.hasPermission(event.interaction.member.orElse(null), "ban")) event.reply()
 			.withEphemeral(true).withContent("You do not have permission to run that command") else event.presentModal()
-			.withCustomId("$idPrefix-${event.targetId.asString()}")
+			.withCustomId("$idPrefix-${snowflake.asString()}")
 			.withTitle("Unban Menu")
 			.withComponents(ActionRow.of(TextInput.paragraph("reason", "Unban Reason")))
-	}
 
 	override val idPrefix: String
 		get() = "unban"

@@ -78,7 +78,7 @@ class GithubEndpoint (
 	): Mono<HttpEntity<String>> {
 		var action = jsonData.get("action").asText()
 		if (action != "opened" && action != "reopened" && action != "closed") return HttpUtil.ok("Action not supported")
-		if (jsonData.get("pull_request").get("merged") != null) action = "merged"
+		if (jsonData.get("pull_request").get("merged").asBoolean()) action = "merged"
 
 		val monoCollection: MutableList<Mono<*>> = ArrayList()
 

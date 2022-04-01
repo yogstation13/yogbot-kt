@@ -4,9 +4,10 @@ import discord4j.common.util.Snowflake
 import discord4j.core.`object`.reaction.ReactionEmoji
 import discord4j.core.event.domain.message.MessageCreateEvent
 import net.yogstation.yogbot.config.DiscordChannelsConfig
+import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 
-// @Component
+@Component
 class MemesChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(channelsConfig) {
 	override val channel: Snowflake = Snowflake.of(channelsConfig.channelMemes)
 
