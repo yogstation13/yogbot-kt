@@ -78,7 +78,8 @@ class YoggersCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 		"https://cdn.discordapp.com/attachments/734475284446707753/959554256636092477/unknown.png", // Ana Bow is hit
 		"https://cdn.discordapp.com/attachments/734475284446707753/959589195091968000/unknown.png", // Obamium SM
 		"https://cdn.discordapp.com/attachments/734475284446707753/944432875900641360/unknown.png", // The Circle of Mord
-		"https://cdn.discordapp.com/attachments/734475284446707753/934180054215323649/dreamseeker_lCK9DagK5R.png" // Cheese Chefs
+		"https://cdn.discordapp.com/attachments/734475284446707753/934180054215323649/dreamseeker_lCK9DagK5R.png", // Cheese Chefs
+		"https://cdn.discordapp.com/attachments/734475284446707753/959591368592855090/unknown.png" // Bridge Hallway Gym
 	)
 
 	override val name = "yoggers"
