@@ -64,7 +64,7 @@ class CoderCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(
 		"https://cdn.discordapp.com/attachments/734475284446707753/921906106752704592/firefox_rx9in6oPrZ.png", // Files Changed 145
 		"https://cdn.discordapp.com/attachments/734475284446707753/920021959247560744/unknown.png", // Force italian accent
 		"https://cdn.discordapp.com/attachments/734475284446707753/920021959247560744/unknown.png", // Reverts and alternatives
-		"https://cdn.discordapp.com/attachments/734475284446707753/933964199065968650/unknown.png" //Too late retard3
+		"https://cdn.discordapp.com/attachments/734475284446707753/933964199065968650/unknown.png" //Too late retard
 	)
 
 	override val title = "Coder Image"
