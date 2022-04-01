@@ -35,14 +35,16 @@ class KickCommand(private val permissions: PermissionsManager) : IUserCommand, I
 			}
 	}
 
-	fun presentModal(event: ApplicationCommandInteractionEvent, snowflake: Snowflake): InteractionPresentModalMono = event.presentModal()
-		.withCustomId("$idPrefix-${snowflake.asString()}")
-		.withTitle("Kick Menu")
-		.withComponents(
-			ActionRow.of(
-				TextInput.paragraph("reason", "Kick Reason")
+	fun presentModal(event: ApplicationCommandInteractionEvent, snowflake: Snowflake): InteractionPresentModalMono {
+		return event.presentModal()
+			.withCustomId("$idPrefix-${snowflake.asString()}")
+			.withTitle("Kick Menu")
+			.withComponents(
+				ActionRow.of(
+					TextInput.paragraph("reason", "Kick Reason")
+				)
 			)
-		)
+	}
 
 	override val idPrefix = "kick"
 
