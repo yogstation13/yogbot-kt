@@ -19,8 +19,8 @@ import org.springframework.web.reactive.function.client.WebClient
 import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.core.publisher.Mono
 import java.net.URI
-import java.util.Base64
-import java.util.regex.Pattern
+import java.util.*
+import java.util.regex.*
 
 @Component
 class GithubManager(
