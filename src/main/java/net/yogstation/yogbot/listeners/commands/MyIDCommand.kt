@@ -15,6 +15,6 @@ class MyIDCommand(discordConfig: DiscordConfig) : TextCommand(discordConfig) {
 		)
 	}
 
-	override val description = "Provides your Discord ID, no longer used for account linking"
+	public override val description = "Provides your Discord ID, no longer used for account linking"
 	override val name = "myid"
 }
