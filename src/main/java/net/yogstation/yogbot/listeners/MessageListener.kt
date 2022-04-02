@@ -6,10 +6,11 @@ import discord4j.core.event.domain.message.MessageCreateEvent
 import net.yogstation.yogbot.GithubManager
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.DiscordUtil
+import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.util.regex.*
 
-//@Component
+@Component
 class MessageListener(
 	client: GatewayDiscordClient,
 	val discordConfig: DiscordConfig,
