@@ -1,8 +1,10 @@
 package net.yogstation.yogbot.listeners.commands.image
 
 import net.yogstation.yogbot.config.DiscordConfig
+import org.springframework.stereotype.Component
 import java.util.*
 
+@Component
 class MentorCommand(
 	discordConfig: DiscordConfig,
 	random: Random
