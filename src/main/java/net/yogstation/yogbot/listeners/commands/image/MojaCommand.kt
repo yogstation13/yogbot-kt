@@ -105,7 +105,10 @@ class MojaCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"https://cdn.discordapp.com/attachments/734475284446707753/815362585029246976/image0.png", // Lettuce is 900 calories
 		"https://cdn.discordapp.com/attachments/734475284446707753/872199346395951114/Screenshot_20210803-142719__01.png", // We can rebuild Moja
 		"https://cdn.discordapp.com/attachments/734475284446707753/874292567494262804/unknown.png", // You will be purged from history
-		"https://cdn.discordapp.com/attachments/734475284446707753/874890010678153246/unknown-14.png" // Moja Laser Cannon
+		"https://cdn.discordapp.com/attachments/734475284446707753/874890010678153246/unknown-14.png", // Moja Laser Cannon
+		"https://cdn.discordapp.com/attachments/734475284446707753/958773606819721257/unknown.png", // Players can suck my dick
+		"https://cdn.discordapp.com/attachments/734475284446707753/944678167250079774/unknown.png",  // AGH MOJA
+		"https://cdn.discordapp.com/attachments/734475284446707753/932190745350258748/Screenshot_2022-01-16_032420.png" // Wall of Moja
 	)
 	override val title = "Moja Image"
 	override val description = "Wise words beyond mortal comprehension"

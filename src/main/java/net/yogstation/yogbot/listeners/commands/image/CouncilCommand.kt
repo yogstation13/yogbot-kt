@@ -13,7 +13,8 @@ class CouncilCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 			"https://cdn.discordapp.com/attachments/734475284446707753/826240137225830400/image0.png", // Ashcorr gets fooled by Morderhel
 			"https://cdn.discordapp.com/attachments/734475284446707753/804697809323556864/unknown.png", // Get a sense of humor
 			"https://cdn.discordapp.com/attachments/734475284446707753/804192496322084864/ban.png", // Banned by public vote
-			"https://cdn.discordapp.com/attachments/734475284446707753/800864882870059028/image0.png" // Council don't know hotkeys
+			"https://cdn.discordapp.com/attachments/734475284446707753/800864882870059028/image0.png", // Council don't know hotkeys
+			"https://cdn.discordapp.com/attachments/734475284446707753/959203191478681661/unknown.png" // Xantam moderator app
 		)
 	override val title = "Council Image"
 	override val name = "council"

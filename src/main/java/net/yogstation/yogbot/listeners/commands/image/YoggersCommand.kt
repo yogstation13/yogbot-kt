@@ -12,7 +12,6 @@ class YoggersCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 		"https://cdn.discordapp.com/attachments/734475284446707753/734532488478851142/Screenshot_4.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/734532569961463878/fatal_error.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/734644410909982750/aZ5RfKI.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/734744943406612541/image0.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/735289662087757824/GOD.PNG",
 		"https://cdn.discordapp.com/attachments/734475284446707753/735556743865565267/Discord_gmXSn7s1aA.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/736973311590006894/image0.png",
@@ -75,7 +74,12 @@ class YoggersCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 		"https://cdn.discordapp.com/attachments/734475284446707753/918046252468412427/unknown.png", // Downloading traitor maint
 		"https://cdn.discordapp.com/attachments/734475284446707753/915526833628393472/unknown.png", // We'll be right back
 		"https://media.discordapp.net/attachments/378318242906636288/908145094383796234/image0.jpg", // Do we even have a roof?
-		"https://cdn.discordapp.com/attachments/734475284446707753/905208360083787896/unknown.png" // You dumb e girl
+		"https://cdn.discordapp.com/attachments/734475284446707753/905208360083787896/unknown.png", // You dumb e girl
+		"https://cdn.discordapp.com/attachments/734475284446707753/959554256636092477/unknown.png", // Ana Bow is hit
+		"https://cdn.discordapp.com/attachments/734475284446707753/959589195091968000/unknown.png", // Obamium SM
+		"https://cdn.discordapp.com/attachments/734475284446707753/944432875900641360/unknown.png", // The Circle of Mord
+		"https://cdn.discordapp.com/attachments/734475284446707753/934180054215323649/dreamseeker_lCK9DagK5R.png", // Cheese Chefs
+		"https://cdn.discordapp.com/attachments/734475284446707753/959591368592855090/unknown.png" // Bridge Hallway Gym
 	)
 
 	override val name = "yoggers"
