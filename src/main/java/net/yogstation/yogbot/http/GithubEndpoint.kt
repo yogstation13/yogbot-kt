@@ -83,7 +83,11 @@ class GithubEndpoint (
 		val monoCollection: MutableList<Mono<*>> = ArrayList()
 
 		val changelogResult = githubManager.compileChangelog(jsonData.get("pull_request").get("body").asText() ?: "")
-		val embed: EmbedCreateSpec = getEventPrEmbed(jsonData, changelogResult)
+		val embed: EmbedCreateSpec = getEventPrEmbed(
+			jsonData,
+			"A PR has been $action by ${jsonData.get("sender").get("login").asText()}",
+			changelogResult
+		)
 		val title = jsonData.get("pull_request").get("title").asText()
 		val securityPr = title.lowercase().contains("[s]")
 
@@ -124,10 +128,14 @@ class GithubEndpoint (
 		}
 	}
 
-	private fun getEventPrEmbed(data: JsonNode, changelog: YogResult<GithubManager.Changelog?, String?>): EmbedCreateSpec {
+	private fun getEventPrEmbed(
+		data: JsonNode,
+		titleOverride: String?,
+		changelog: YogResult<GithubManager.Changelog?, String?>
+	): EmbedCreateSpec {
 		return githubManager.getPrEmbed(
 			data.get("pull_request"),
-			"A PR has been ${data.get("action").asText()} by ${data.get("sender").get("login").asText()}",
+			titleOverride,
 			changelog
 		)
 	}
