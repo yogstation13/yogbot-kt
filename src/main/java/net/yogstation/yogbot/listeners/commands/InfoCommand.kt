@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono
 import reactor.kotlin.core.util.function.component1
 import reactor.kotlin.core.util.function.component2
 import reactor.kotlin.core.util.function.component3
-import java.util.Locale
+import java.util.*
 
 @Component
 class InfoCommand(
@@ -29,7 +29,7 @@ class InfoCommand(
 		).flatMap { (adminIn, pingResponse, statusResponse) ->
 			if (pingResponse.hasError()) return@flatMap DiscordUtil.reply(event, pingResponse.error ?: "Unknown Error")
 			if (statusResponse.hasError()) return@flatMap DiscordUtil.reply(event,statusResponse.error ?: "Unknown Error")
-			val admins: String = adminIn.replace("\t".toRegex(), "")
+			val admins: String = adminIn.replace("\t".toRegex(), "").substring(8)
 			val playerCount: Int = (pingResponse.value as Float).toInt()
 			var statusString = statusResponse.value as String
 			statusString = statusString.replace("\u0000".toRegex(), "")
