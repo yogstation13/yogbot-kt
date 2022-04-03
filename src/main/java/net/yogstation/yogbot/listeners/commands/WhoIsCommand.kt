@@ -31,7 +31,7 @@ class WhoIsCommand(
 			.flatMap { user ->
 				DiscordUtil.reply(
 					event, if(givenCkey)
-						"Ckey ${target.ckey} is linked to discord account ${user.username}#${user.discriminator}"
+						"Ckey ${target.ckey} is linked to discord account ${user.tag}"
 					else
 						"Discord account ${user.tag} is linked to ckey ${target.ckey}"
 				)
