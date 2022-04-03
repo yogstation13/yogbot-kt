@@ -49,7 +49,7 @@ class MessageListener(
 		}
 
 		val prMatcher: Matcher = prPattern.matcher(content)
-		if (prMatcher.matches()) {
+		if (prMatcher.find()) {
 			responses = responses.and(
 				event.message.channel.flatMap { channel ->
 					githubManager.postPR(
