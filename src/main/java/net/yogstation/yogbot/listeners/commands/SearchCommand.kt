@@ -18,7 +18,7 @@ class SearchCommand(
 
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {
 		val args: List<String> = event.message.content.split(" ", limit = 3)
-		if(args.size < 3) return DiscordUtil.reply(event, "Usage: `$args[0] <repo> <text>`")
+		if(args.size < 3) return DiscordUtil.reply(event, "Usage: `${args[0]} <repo> <text>`")
 		val repo = URLEncoder.encode(args[1], StandardCharsets.UTF_8)
 		val query = URLEncoder.encode(args[2], StandardCharsets.UTF_8)
 		return DiscordUtil.reply(event, "https://github.com/yogstation13/$repo/search?q=$query")
