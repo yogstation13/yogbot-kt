@@ -17,5 +17,5 @@ class UnsubscribeCommand(discordConfig: DiscordConfig) : TextCommand(discordConf
 	}
 
 	override val description = "unsubscribe to the roundstart announcements"
-	override val name = "subscribe"
+	override val name = "unsubscribe"
 }
