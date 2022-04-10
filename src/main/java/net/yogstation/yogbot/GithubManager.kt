@@ -42,7 +42,7 @@ class GithubManager(
 		changelogFile.append("\"\ndelete-after: true \nchanges: \n")
 
 		for (change in changelog.entries) {
-			val body = change.body.replace("\"", "\\\"").replace("<", "")
+			val body = change.body.replace("\\", "\\\\").replace("\"", "\\\"").replace("<", "&lt;")
 			changelogFile.append("  - ${change.type}: \"$body\"\n")
 		}
 
