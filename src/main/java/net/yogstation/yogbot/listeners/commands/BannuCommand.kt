@@ -5,13 +5,13 @@ import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.util.DiscordUtil
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
-import java.util.regex.Pattern
+import java.util.regex.*
 
 @Component
 class BannuCommand(discordConfig: DiscordConfig) :
 	TextCommand(discordConfig) {
 
-	private val argsPattern = Pattern.compile(".\\w+\\s(<@!?\\d+>)\\s?(.*)")
+	private val argsPattern = Pattern.compile(".\\w+\\s(\\S+)\\s?(.*)")
 	override val name = "bannu"
 	override val description = "\"\"\"\"\"Ban\"\"\"\"\" a user"
 	override val isHidden = true
