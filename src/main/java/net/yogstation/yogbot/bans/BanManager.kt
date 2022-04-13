@@ -93,7 +93,7 @@ class BanManager(
 		return YogResult.success(
 			member.removeRole(
 				softbanRole,
-				"Unbanned by $user for $reason"
+				"Unbanned by $user for ${reason.trim()}"
 			).and(logChannel.log("${member.username} was unbanned by $user for $reason"))
 		)
 	}
