@@ -90,7 +90,7 @@ class RoleUpdater(
 				updateRole(verifiedSnowflakes, member, verificationRole, {
 					it.addRole(verificationRole, "Reapplying verification role")
 				}) {
-					it.removeRole(donorRole, "Unable to verify")
+					it.removeRole(verificationRole, "Unable to verify")
 				}
 			)
 		}.subscribe()
