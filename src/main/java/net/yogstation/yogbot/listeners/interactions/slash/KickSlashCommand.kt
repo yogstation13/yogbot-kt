@@ -1,9 +1,9 @@
 package net.yogstation.yogbot.listeners.interactions.slash
 
 import discord4j.common.util.Snowflake
+import discord4j.core.event.domain.interaction.ChatInputInteractionEvent
 import discord4j.core.`object`.command.ApplicationCommandInteractionOption
 import discord4j.core.`object`.command.ApplicationCommandInteractionOptionValue
-import discord4j.core.event.domain.interaction.ChatInputInteractionEvent
 import net.yogstation.yogbot.listeners.interactions.ISlashCommand
 import net.yogstation.yogbot.listeners.interactions.KickCommand
 import net.yogstation.yogbot.permissions.PermissionsManager
@@ -21,6 +21,8 @@ class KickSlashCommand(
 		val userid: Snowflake = event.getOption("person").flatMap(ApplicationCommandInteractionOption::getValue)
 			.map(ApplicationCommandInteractionOptionValue::asSnowflake).orElse(Snowflake.of(0))
 		if(userid.asLong() == 0L) event.reply().withEphemeral(true).withContent("Failed to find person")
+		if (!permissions.hasPermission(event.interaction.member.orElse(null), "kick")) return event.reply()
+			.withEphemeral(true).withContent("You do not have permission to run that command")
 
 		return event.interaction.guild.flatMap { guild ->
 			guild.getMemberById(userid).flatMap { member ->
