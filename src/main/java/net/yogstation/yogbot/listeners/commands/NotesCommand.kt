@@ -22,6 +22,7 @@ class NotesCommand(discordConfig: DiscordConfig, permissions: PermissionsManager
 		if (target == null) notes = listOf(
 			"Usage is `${discordConfig.commandPrefix}notes <ckey or @Username>`"
 		) else {
+			target.populate(database)
 			val targetCkey = target.ckey
 			if (targetCkey == null) {
 				val populateResult = target.populate(database)
