@@ -19,7 +19,8 @@ class UnclaimedTicketEndpoint(
     @PostMapping("/byond/unclaimedticket")
     fun unclaimedTicket(@RequestBody unclaimedTicketDTO: UnclaimedTicketDTO) {
         // Send the ticket to the admin channel
-		val message: String = "@here Unclaimed Ticket #${unclaimedTicketDTO.id} (${unclaimedTicketDTO.ckey}): ${unclaimedTicketDTO.message}"
+		val message =
+				"@here Unclaimed Ticket #${unclaimedTicketDTO.id} (${unclaimedTicketDTO.ckey}): ${unclaimedTicketDTO.message}"
 		client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).flatMap { guild ->
 			guild.getChannelById(Snowflake.of(discordChannelsConfig.channelAdmin)).flatMap { channel ->
 				channel.restChannel.createMessage(message)
