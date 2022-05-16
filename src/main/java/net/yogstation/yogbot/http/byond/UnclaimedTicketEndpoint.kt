@@ -25,7 +25,8 @@ class UnclaimedTicketEndpoint(
     @PostMapping("/byond/ticket_unclaimed")
     fun unclaimedTicket(@RequestBody unclaimedTicketDTO: UnclaimedTicketDTO): Mono<HttpEntity<String>> {
 		val keyError = validateKey(unclaimedTicketDTO.key)
-		if (keyError != null) return keyError;
+		if (keyError != null)
+			return keyError
         // Send the ticket to the admin channel
 		val message =
 				"@here Unclaimed Ticket #${unclaimedTicketDTO.id} (${unclaimedTicketDTO.ckey}): ${unclaimedTicketDTO.message}"
