@@ -2,6 +2,9 @@ package net.yogstation.yogbot.http.byond
 
 import discord4j.common.util.Snowflake
 import discord4j.core.GatewayDiscordClient
+import discord4j.core.`object`.entity.channel.TextChannel
+import discord4j.core.spec.EmbedCreateSpec
+import discord4j.rest.util.Color
 import net.yogstation.yogbot.config.ByondConfig
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
@@ -30,9 +33,15 @@ class UnclaimedTicketEndpoint(
         // Send the ticket to the admin channel
 		val message =
 				"@here Unclaimed Ticket #${unclaimedTicketDTO.id} (${unclaimedTicketDTO.ckey}): ${unclaimedTicketDTO.message}"
+		val embed = EmbedCreateSpec.builder()
+			.title("Ticket #${unclaimedTicketDTO.id} Unclaimed")
+			.description("${unclaimedTicketDTO.ckey}: ${unclaimedTicketDTO.message}")
+			.color(Color.RED)
+			.build()
 		return client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).flatMap { guild ->
-			guild.getChannelById(Snowflake.of(discordChannelsConfig.channelAdmin)).flatMap { channel ->
-				channel.restChannel.createMessage(message)
+			guild.getChannelById(Snowflake.of(discordChannelsConfig.channelAdminBotspam)).flatMap { channel ->
+				if(channel is TextChannel) channel.createMessage(embed)
+				else Mono.empty<Any>()
 			}
 		}.then(HttpUtil.ok("Success"))
     }
