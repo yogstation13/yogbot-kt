@@ -31,8 +31,6 @@ class UnclaimedTicketEndpoint(
 		if (keyError != null)
 			return keyError
         // Send the ticket to the admin channel
-		val message =
-				"@here Unclaimed Ticket #${unclaimedTicketDTO.id} (${unclaimedTicketDTO.ckey}): ${unclaimedTicketDTO.message}"
 		val embed = EmbedCreateSpec.builder()
 			.title("Ticket #${unclaimedTicketDTO.id} Unclaimed")
 			.description("${unclaimedTicketDTO.ckey}: ${unclaimedTicketDTO.message}")
