@@ -29,7 +29,7 @@ class UnclaimedTicketEndpoint(
 			return keyError
         // Send the ticket to the admin channel
 		val message =
-				"@here Unclaimed Ticket #${unclaimedTicketDTO.id} (${unclaimedTicketDTO.ckey}): ${unclaimedTicketDTO.message}"
+				"Unclaimed Ticket #${unclaimedTicketDTO.id} (${unclaimedTicketDTO.ckey}): ${unclaimedTicketDTO.message}"
 		return client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).flatMap { guild ->
 			guild.getChannelById(Snowflake.of(discordChannelsConfig.channelAdmin)).flatMap { channel ->
 				channel.restChannel.createMessage(message)
