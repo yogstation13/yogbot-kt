@@ -38,7 +38,7 @@ jobs:
         with:
           image-name: ${{ env.REGISTRY }}/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_REF_SLUG }}-${{ github.sha }}
 
-      - name: Push docker image
+      - name: Build and push Docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
