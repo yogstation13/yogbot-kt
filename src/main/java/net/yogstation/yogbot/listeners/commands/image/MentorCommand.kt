@@ -146,7 +146,7 @@ class MentorCommand(
 		//June Update
 		"https://cdn.discordapp.com/attachments/734475284446707753/975253806298300486/c30.png", //Fails is a healer but
 		"https://cdn.discordapp.com/attachments/734475284446707753/980826387998973953/preternis.png", //How recharge as preternis
-		"https://cdn.discordapp.com/attachments/734475284446707753/981416123532730428/loophole.png", //Loopless Engine
+		"https://cdn.discordapp.com/attachments/734475284446707753/981416123532730428/loophole.png" //Loopless Engine
 	)
 	override val title = "Mentor Image"
 	override val color = 0x259E80
