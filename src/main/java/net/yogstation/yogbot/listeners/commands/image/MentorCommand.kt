@@ -49,43 +49,26 @@ class MentorCommand(
 		"https://cdn.discordapp.com/attachments/734475284446707753/734532409042665552/HobbleCrystal.png",
 		//August 2020 update goes here.
 		"https://cdn.discordapp.com/attachments/734475284446707753/734744951807541348/image0.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/734744994333851708/image0.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/734760343946919936/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/734902093063913563/ss13_475goatcubesfinaledit.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/734920287736299520/Discord_2020-07-20_19-50-17.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/735200184295882824/image0.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/736076686910685264/unknown.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/736081562755399780/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/736419384675008662/unknown.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/736971900319825970/image0.jpg",
-		"https://cdn.discordapp.com/attachments/734475284446707753/736972365212155904/image0.jpg",
 		"https://cdn.discordapp.com/attachments/734475284446707753/736972983209295994/image0.png",
-		"https://images-ext-2.discordapp.net/external/jASYmLLTdqdG4uaSecNvwsSnovMdquVDLg_ygRzwSQ0/https/media.discordapp.net/attachments/134720091576205312/680288228418650126/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/737397857962688664/unknown.png",
 		"https://i.gyazo.com/f6236e484122b554685730b84b2d073c.png",
 		"https://media.discordapp.net/attachments/134720091576205312/737496806656573490/unknown.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/740461196653625384/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/737733504640745592/ohno.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/738040538615251095/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/739019341655441468/mspaint_2020-08-01_03-15-19.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/739414393510428692/void_gas.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/739618353953374279/ss13_atlasxenobiomoment.PNG",
 		"https://cdn.discordapp.com/attachments/734475284446707753/739652352801243136/unknown.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/739687726080589874/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/739978122924916837/unknown.png",
 		"https://i.imgur.com/zOtOQvV.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/740354501650939954/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/740786631384236102/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/741080606858805279/Png.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/742933471558893608/unknown.png",
 		"https://i.gyazo.com/dd8c1ac5c161d9fa368bbe3550e8fbe2.png",
-		"https://i.gyazo.com/79d17bac34ac7b6416b7fabb05877128.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/743434593570390016/1x1_SM_for_posting.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/743503840824787024/ss13_bowlgetscremated.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/743671213469204541/image0.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/744951805510942802/discordmentorsarentreal.PNG",
-		"https://cdn.discordapp.com/attachments/734475284446707753/745802418045845605/unknown.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/746232195210936340/unknown.png",
 		//September Update
 		"https://cdn.discordapp.com/attachments/734475284446707753/747954233621479484/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/750903021340459058/unknown.png",
@@ -160,6 +143,10 @@ class MentorCommand(
 		"https://cdn.discordapp.com/attachments/734475284446707753/916231741868478485/unknown.png", //Cutting my arms with a toolbox
 		"https://cdn.discordapp.com/attachments/734475284446707753/914011832694493194/unknown.png", //Step 1: Die
 		"https://cdn.discordapp.com/attachments/734475284446707753/906794257002676284/unknown.png", //I killed your gf
+		//June Update
+		"https://cdn.discordapp.com/attachments/734475284446707753/975253806298300486/c30.png", //Fails is a healer but
+		"https://cdn.discordapp.com/attachments/734475284446707753/980826387998973953/preternis.png", //How recharge as preternis
+		"https://cdn.discordapp.com/attachments/734475284446707753/981416123532730428/loophole.png", //Loopless Engine
 	)
 	override val title = "Mentor Image"
 	override val color = 0x259E80
