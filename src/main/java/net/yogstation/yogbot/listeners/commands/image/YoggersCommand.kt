@@ -79,7 +79,16 @@ class YoggersCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 		"https://cdn.discordapp.com/attachments/734475284446707753/959589195091968000/unknown.png", // Obamium SM
 		"https://cdn.discordapp.com/attachments/734475284446707753/944432875900641360/unknown.png", // The Circle of Mord
 		"https://cdn.discordapp.com/attachments/734475284446707753/934180054215323649/dreamseeker_lCK9DagK5R.png", // Cheese Chefs
-		"https://cdn.discordapp.com/attachments/734475284446707753/959591368592855090/unknown.png" // Bridge Hallway Gym
+		"https://cdn.discordapp.com/attachments/734475284446707753/959591368592855090/unknown.png", // Bridge Hallway Gym
+		//June
+		"https://cdn.discordapp.com/attachments/734475284446707753/959711489827151882/unknown.png", // Hopcurity arrests the AI
+		"https://cdn.discordapp.com/attachments/734475284446707753/959917829996572672/unknown.png", // Jim meets Jim
+		"https://cdn.discordapp.com/attachments/734475284446707753/967063293627879484/unknown.png", // For purposes of simping
+		"https://cdn.discordapp.com/attachments/734475284446707753/968328957923557386/unknown.png", // GUH
+		"https://cdn.discordapp.com/attachments/734475284446707753/972925472214229022/unknown.png", // AI no open door?
+		"https://cdn.discordapp.com/attachments/734475284446707753/976966811268567111/unknown.png", // Bloodsucker spam
+		"https://cdn.discordapp.com/attachments/734475284446707753/978415638546616390/unknown.png", // The end is neigh
+		"https://cdn.discordapp.com/attachments/734475284446707753/982434340103405598/unknown.png", // Grill with the boys
 	)
 
 	override val name = "yoggers"
