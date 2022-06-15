@@ -86,7 +86,6 @@ class MojaCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"https://cdn.discordapp.com/attachments/734475284446707753/765347511551524884/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767170995441500170/YOGBEATHIPPIE.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767171116908544000/Mime_Shuttle.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/767171253492121640/ahelp.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767486641484857444/syX4vlf.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767821101072908398/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767821705816047687/moja.png",
