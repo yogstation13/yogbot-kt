@@ -51,7 +51,13 @@ class LockerCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand
 		"https://cdn.discordapp.com/attachments/734475284446707753/924578739663306762/unknown.png", // Guillotine
 		"https://cdn.discordapp.com/attachments/134720091576205312/924547638924296282/bluespacedlocker.png", // Why are we in space
 		"https://cdn.discordapp.com/attachments/734475284446707753/916951974740627486/unknown.png", // Party locker
-		"https://cdn.discordapp.com/attachments/734475284446707753/914622487688523816/Screenshot_2021-11-28_153804.png" // Arcade Locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/914622487688523816/Screenshot_2021-11-28_153804.png", // Arcade Locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/978038716943695963/unknown.png", // Garden Locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/978290534332399627/unknown-132.png", // Vampire Locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/978395660774694992/unknown.png", // Medbay Locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/978397276269580338/The_Squad.png", //Yet another medbay locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/978410919426138202/Screenshot_2022-05-23_153508.png" //Atmos locker
+		//Stop adding locker images like half of this shit is the same
 	)
 
 	override val title = "Locker Image"

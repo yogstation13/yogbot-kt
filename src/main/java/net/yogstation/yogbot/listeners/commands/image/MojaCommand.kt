@@ -86,7 +86,6 @@ class MojaCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"https://cdn.discordapp.com/attachments/734475284446707753/765347511551524884/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767170995441500170/YOGBEATHIPPIE.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767171116908544000/Mime_Shuttle.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/767171253492121640/ahelp.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767486641484857444/syX4vlf.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767821101072908398/unknown.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/767821705816047687/moja.png",
@@ -107,7 +106,9 @@ class MojaCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"https://cdn.discordapp.com/attachments/734475284446707753/874890010678153246/unknown-14.png", // Moja Laser Cannon
 		"https://cdn.discordapp.com/attachments/734475284446707753/958773606819721257/unknown.png", // Players can suck my dick
 		"https://cdn.discordapp.com/attachments/734475284446707753/944678167250079774/unknown.png",  // AGH MOJA
-		"https://cdn.discordapp.com/attachments/734475284446707753/932190745350258748/Screenshot_2022-01-16_032420.png" // Wall of Moja
+		"https://cdn.discordapp.com/attachments/734475284446707753/932190745350258748/Screenshot_2022-01-16_032420.png", // Wall of Moja
+		"https://cdn.discordapp.com/attachments/734475284446707753/967064374764257350/unknown.png", //Caught by Moja
+		"https://cdn.discordapp.com/attachments/734475284446707753/974339716105240606/unknown.png" //Banana chamber
 	)
 	override val title = "Moja Image"
 	override val description = "Wise words beyond mortal comprehension"
