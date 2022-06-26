@@ -2,6 +2,7 @@ package net.yogstation.yogbot.listeners.commands
 
 import discord4j.core.event.domain.message.MessageCreateEvent
 import net.yogstation.yogbot.DatabaseManager
+import net.yogstation.yogbot.Yogbot
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.permissions.PermissionsManager
 import net.yogstation.yogbot.util.DiscordUtil
@@ -9,7 +10,7 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.sql.PreparedStatement
 import java.sql.SQLException
-import java.util.Locale
+import java.util.*
 
 @Component
 class TicketCommand(
@@ -103,20 +104,38 @@ class TicketCommand(
 		preparedStatement.setString(2, ticketId)
 		val resultSet = preparedStatement.executeQuery()
 		var hasData = false
+		var hasSent = false
+		val monos: MutableList<Mono<*>> = ArrayList();
 		val builder = StringBuilder("Ticket ").append(ticketId)
 		builder.append(" for round ").append(roundId).append("\n```\n")
+
 		while (resultSet.next()) {
 			hasData = true
-			builder.append(resultSet.getTimestamp("when").toString())
-			builder.append(": ").append(resultSet.getString("user"))
-			builder.append(": ").append(resultSet.getString("text")).append("\n")
+			val newline = "${resultSet.getTimestamp("when")}: " +
+				"${resultSet.getString("user")}: " +
+				"${resultSet.getString("text")}\n"
+			if (builder.length + newline.length > Yogbot.MAX_MESSAGE_LENGTH - 10) {
+				builder.append("```")
+				if(hasSent)
+					monos.add(DiscordUtil.reply(event, builder.toString()))
+				else
+					monos.add(DiscordUtil.send(event, builder.toString()))
+				hasSent = true;
+				builder.setLength(0)
+				builder.append("```\n")
+			}
+			builder.append(newline)
 		}
 		if (!hasData) return DiscordUtil.reply(
 			event,
 			"Unable to find ticket $ticketId in round $roundId"
 		)
 		builder.append("```")
-		return DiscordUtil.reply(event, builder.toString())
+		if(hasSent)
+			monos.add(DiscordUtil.reply(event, builder.toString()))
+		else
+			monos.add(DiscordUtil.send(event, builder.toString()))
+		return Mono.`when`(monos);
 	}
 
 	private fun getSingleTicket(
