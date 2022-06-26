@@ -79,7 +79,7 @@ open class Yogbot {
 		/**
 		 * Maximum number of characters in a message
 		 */
-		val MAX_MESSAGE_LENGTH = 2000;
+		const val MAX_MESSAGE_LENGTH = 2000;
 	}
 }
 
