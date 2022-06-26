@@ -2,6 +2,7 @@ package net.yogstation.yogbot.listeners.commands
 
 import discord4j.core.event.domain.message.MessageCreateEvent
 import net.yogstation.yogbot.DatabaseManager
+import net.yogstation.yogbot.Yogbot
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.permissions.PermissionsManager
 import net.yogstation.yogbot.util.DiscordUtil
@@ -113,7 +114,7 @@ class TicketCommand(
 			val newline = "${resultSet.getTimestamp("when")}: " +
 				"${resultSet.getString("user")}: " +
 				"${resultSet.getString("text")}\n"
-			if (builder.length + newline.length > 3990) {
+			if (builder.length + newline.length > Yogbot.MAX_MESSAGE_LENGTH - 10) {
 				builder.append("```")
 				if(hasSent)
 					monos.add(DiscordUtil.reply(event, builder.toString()))

@@ -3,10 +3,10 @@ package net.yogstation.yogbot
 import com.fasterxml.jackson.databind.ObjectMapper
 import discord4j.core.DiscordClientBuilder
 import discord4j.core.GatewayDiscordClient
+import discord4j.core.event.domain.lifecycle.ReadyEvent
 import discord4j.core.`object`.entity.User
 import discord4j.core.`object`.presence.ClientActivity
 import discord4j.core.`object`.presence.ClientPresence
-import discord4j.core.event.domain.lifecycle.ReadyEvent
 import discord4j.gateway.intent.IntentSet
 import discord4j.rest.RestClient
 import net.yogstation.yogbot.config.DiscordConfig
@@ -20,8 +20,8 @@ import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
-import java.util.Random
-import java.util.function.Function
+import java.util.*
+import java.util.function.*
 
 @SpringBootApplication
 @EnableScheduling
@@ -74,6 +74,13 @@ open class Yogbot {
 	}
 
 	private val logger = LoggerFactory.getLogger(Yogbot::class.java)
+
+	companion object {
+		/**
+		 * Maximum number of characters in a message
+		 */
+		val MAX_MESSAGE_LENGTH = 2000;
+	}
 }
 
 fun main(args: Array<String>) {
