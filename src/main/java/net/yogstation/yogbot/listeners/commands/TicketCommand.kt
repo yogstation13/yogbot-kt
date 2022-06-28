@@ -116,7 +116,7 @@ class TicketCommand(
 				"${resultSet.getString("text")}\n"
 			if (builder.length + newline.length > Yogbot.MAX_MESSAGE_LENGTH - 10) {
 				builder.append("```")
-				if(hasSent)
+				if(!hasSent)
 					monos.add(DiscordUtil.reply(event, builder.toString()))
 				else
 					monos.add(DiscordUtil.send(event, builder.toString()))
@@ -131,7 +131,7 @@ class TicketCommand(
 			"Unable to find ticket $ticketId in round $roundId"
 		)
 		builder.append("```")
-		if(hasSent)
+		if(!hasSent)
 			monos.add(DiscordUtil.reply(event, builder.toString()))
 		else
 			monos.add(DiscordUtil.send(event, builder.toString()))
