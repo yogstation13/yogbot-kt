@@ -17,7 +17,8 @@ class MemesChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(chan
 		if (message.attachments.size > 0 ||
 			message.embeds.size > 0 ||
 			message.content.contains(".mp4") ||
-			message.content.contains(".gif")
+			message.content.contains(".gif") ||
+			message.content.contains(".mov")
 		) {
 			// Java is strange with unicode in strings, this is thumbs up and down emoji
 			return message.addReaction(ReactionEmoji.unicode("\uD83D\uDC4D"))
