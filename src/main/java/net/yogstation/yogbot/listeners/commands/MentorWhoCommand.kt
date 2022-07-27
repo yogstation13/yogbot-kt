@@ -16,7 +16,7 @@ class MentorWhoCommand(
 	private val byondConnector: ByondConnector,
 ) : TextCommand(discordConfig) {
 	override fun doCommand(event: MessageCreateEvent): Mono<*> {
-		return byondConnector.requestAsync("?mentorwho").map { result ->
+		return byondConnector.requestAsync("?mentorwho").flatMap { result ->
 			var mentors= (if (result.hasError()) result.error else result.value) as String
 			mentors = mentors.replace("\u0000".toRegex(), "")
 			DiscordUtil.reply(event, mentors)
