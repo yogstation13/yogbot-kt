@@ -38,6 +38,8 @@ jobs:
       - uses: azure/container-scan@v0
         with:
           image-name: ${{ env.REGISTRY }}/${{ env.GITHUB_REPOSITORY_OWNER_PART_SLUG }}/${{ env.GITHUB_REPOSITORY_NAME_PART_SLUG }}:${{ env.GITHUB_REF_SLUG }}-${{ github.sha }}
+        env:
+          DOCKLE_HOST: "unix:///var/run/docker.sock"
 
       - name: Push docker image
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
