@@ -9,7 +9,7 @@ import net.yogstation.yogbot.util.StringUtils
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.sql.SQLException
-import java.util.Locale
+import java.util.*
 
 /**
  * Gets the activity of all the admins
@@ -58,7 +58,7 @@ JOIN %s as ranklist ON adminlist.rank = ranklist.`rank`;
 		"Host", "Council Member", "RetCoder", "Tribunal",
 		"Retired Admin", "Senior Coder", "Head Developer",
 		"Maintainer", "Admin Observer", "#Forum Mod", "Bot",
-		"Community Manager"
+		"Community Manager", "Retmin-Maintainerino"
 	)
 
 	// These ranks do not show up as all
