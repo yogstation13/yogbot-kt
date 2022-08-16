@@ -58,7 +58,8 @@ class JamieCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(
 		"https://cdn.discordapp.com/attachments/423761888309018624/878610169653784586/gunbad.PNG",
 		"https://cdn.discordapp.com/attachments/423761888309018624/878610183486586951/gunhere.PNG",
 		"https://cdn.discordapp.com/attachments/423761888309018624/878610197180977162/lag.PNG",
-		"https://cdn.discordapp.com/attachments/423761888309018624/878610208216199228/Shares.PNG"
+		"https://cdn.discordapp.com/attachments/423761888309018624/878610208216199228/Shares.PNG",
+		"https://cdn.discordapp.com/attachments/780885381641011210/991113125157945445/IMG_2887.mov" // Forever Immortalized into history
 	)
 	override val title = "Jamie Image"
 	override val description = "Dumb stuff from Jamie."
