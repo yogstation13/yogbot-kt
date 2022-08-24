@@ -39,7 +39,9 @@ class BanManager(
 		banMessage.append(discordConfig.serverName)
 		banMessage.append(" for `")
 		banMessage.append(reason)
-		banMessage.append("` It will ")
+		banMessage.append("` by ")
+		banMessage.append(author)
+		banMessage.append(". It will ")
 		if (duration > 0) {
 			banMessage.append("expire in ")
 			banMessage.append(duration)
