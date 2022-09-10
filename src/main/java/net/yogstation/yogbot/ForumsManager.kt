@@ -32,7 +32,7 @@ class ForumsManager(
 	private val databaseManager: DatabaseManager
 ) {
 	private val banAppealPattern: Pattern =
-		Pattern.compile("<item>\\s+<title>(?<title>.+-.+-\\s(?<ping>.+) \\[.+)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
+		Pattern.compile("<item>\\s+<title>(?<title>\\[.+-\\s(?<ping>.+))</title>[\\s\\S]+?<link>(?<link>.+)</link>")
 	private val playerComplaintsPattern: Pattern =
 		Pattern.compile("<item>\\s+<title>(?<title>.+report by.+)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
 	private val adminComplaintsPattern: Pattern =
