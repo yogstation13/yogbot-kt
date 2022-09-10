@@ -7,7 +7,6 @@ buildscript {
     }
 }
 
-
 plugins {
     id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
@@ -31,6 +30,11 @@ jar {
     manifest {
         attributes 'Main-Class': 'net.yogstation.yogbot.Yogbot'
     }
+}
+
+dependencyLocking {
+	lockMode = LockMode.STRICT
+	lockAllConfigurations()
 }
 
 dependencies {
