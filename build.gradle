@@ -33,7 +33,6 @@ jar {
 }
 
 dependencyLocking {
-	lockMode = LockMode.STRICT
 	lockAllConfigurations()
 }
 
