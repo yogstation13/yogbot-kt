@@ -7,13 +7,12 @@ buildscript {
     }
 }
 
-
 plugins {
     id 'org.springframework.boot' version '2.7.0'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.6.20-RC2'
-	id "io.gitlab.arturbosch.detekt" version "1.20.0-RC1"
+	id "io.gitlab.arturbosch.detekt" version "1.20.0"
 }
 
 apply plugin: "kotlin-jpa"
@@ -33,10 +32,15 @@ jar {
     }
 }
 
+dependencyLocking {
+	lockAllConfigurations()
+}
+
 dependencies {
     kapt 'org.hibernate:hibernate-jpamodelgen:5.6.7.Final'
     kapt "org.springframework.boot:spring-boot-configuration-processor"
 
+    implementation 'org.yaml:snakeyaml:1.31'
     implementation("com.fasterxml.jackson:jackson-bom:2.13.2.20220324")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.2.1")
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
