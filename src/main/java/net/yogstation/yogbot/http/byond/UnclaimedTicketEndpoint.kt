@@ -8,6 +8,7 @@ import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.http.ByondEndpoint
 import net.yogstation.yogbot.http.byond.payloads.UnclaimedTicketDTO
 import net.yogstation.yogbot.util.HttpUtil
+import org.apache.commons.text.StringEscapeUtils
 import org.springframework.http.HttpEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -27,9 +28,10 @@ class UnclaimedTicketEndpoint(
 		val keyError = validateKey(unclaimedTicketDTO.key)
 		if (keyError != null)
 			return keyError
+		val ticketContent = StringEscapeUtils.unescapeHtml4(unclaimedTicketDTO.message)
         // Send the ticket to the admin channel
 		val message =
-				"Unclaimed Ticket #${unclaimedTicketDTO.id} (${unclaimedTicketDTO.ckey}): ${unclaimedTicketDTO.message}"
+				"Unclaimed Ticket ${unclaimedTicketDTO.round}#${unclaimedTicketDTO.id} (${unclaimedTicketDTO.ckey}): $ticketContent"
 		return client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).flatMap { guild ->
 			guild.getChannelById(Snowflake.of(discordChannelsConfig.channelAdmin)).flatMap { channel ->
 				channel.restChannel.createMessage(message)
