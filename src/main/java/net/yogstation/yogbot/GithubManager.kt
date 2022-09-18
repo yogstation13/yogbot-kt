@@ -274,6 +274,7 @@ class GithubManager(
 			"del", "dels", "rscdel" -> ChangelogEntry("rscdel", "octagonal_sign", entryText)
 			"imageadd" -> ChangelogEntry("imageadd", "art", entryText)
 			"imagedel" -> ChangelogEntry("imagedel", "scissors", entryText)
+			"mapping" -> ChangelogEntry("mapping", "map", entryText)
 			"typo", "spellcheck" -> ChangelogEntry("spellcheck", "pen_ballpoint", entryText)
 			"experimental", "experiment" -> ChangelogEntry("experiment", "biohazard", entryText)
 			"tgs" -> ChangelogEntry("tgs", "question", entryText)
