@@ -3,7 +3,7 @@ package net.yogstation.yogbot.permissions
 import discord4j.core.`object`.entity.Member
 import discord4j.core.`object`.entity.Role
 import org.springframework.stereotype.Component
-import java.util.function.Consumer
+import java.util.function.*
 
 @Component
 class PermissionsManager {
@@ -48,10 +48,11 @@ class PermissionsManager {
 				.build(this)
 		)
 		addNode(PermissionsNode.builder().setName("head-developer").setParents("senior admin").build(this))
+		addNode(PermissionsNode.builder().setName("SysOp").setPerms("bcreds").build(this))
 		addNode(
 			PermissionsNode.builder()
 				.setName("council")
-				.setPerms("userverify")
+				.setPerms("userverify", "bcreds")
 				.setParents("head-developer")
 				.build(this)
 		)
