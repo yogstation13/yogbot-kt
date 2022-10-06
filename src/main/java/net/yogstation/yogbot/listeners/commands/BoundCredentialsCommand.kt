@@ -36,7 +36,8 @@ class BoundCredentialsCommand(discordConfig: DiscordConfig,
 
 	private fun addBoundCredential(event: MessageCreateEvent, args: Array<String>): Mono<*> {
 		if (args.size < 5) {
-			return DiscordUtil.reply(event, "Usage is `${args[0]} ${args[1]} <ckey> <cid> <ip>`\nUse `null` to ignore cid or ip. IP can be ascii or decimal")
+			return DiscordUtil.reply(event, "Usage is `${args[0]} ${args[1]} <ckey> <cid> <ip>`\n" +
+				"Use `null` to ignore cid or ip. IP can be ascii or decimal")
 		}
 		val ipField = if(args[4].toIntOrNull() == null) "INET_ATON(?)" else "?"
 		databaseManager.byondDbConnection.use {conn -> conn.prepareStatement("""
@@ -56,7 +57,8 @@ class BoundCredentialsCommand(discordConfig: DiscordConfig,
 				val bindings = (if(args[3] == "null") 0 else 1) + (if(args[4] == "null") 0 else 2)
 				return DiscordUtil.reply(event,
 					"Created binding ${it.getLong(1)}: ckey `${args[2]}` is now bound to " +
-						"${if(bindings and 1 == 1) "cid `${args[3]}`" else ""}${if(bindings == 3) " and " else ""}${if(bindings and 2 == 2) "ip `${args[4]}`" else ""}"
+						"${if(bindings and 1 == 1) "cid `${args[3]}`" else ""}${if(bindings == 3) " and " else ""}" +
+						if(bindings and 2 == 2) "ip `${args[4]}`" else ""
 				)
 			}
 		}
@@ -64,9 +66,12 @@ class BoundCredentialsCommand(discordConfig: DiscordConfig,
 	}
 
 	private fun findBoundCredential(event: MessageCreateEvent, args: Array<String>): Mono<*> {
-		if(args.size < 3) return DiscordUtil.reply(event, "Usage is `${args[0]} ${args[1]} <search term>`\nSearch is either a ckey, cid, or ip. \n" +
-			"Provide only the search criteria and a best guess will be made for the category, or explicitly state the category first.\n" +
-			"For example `${args[0]} ${args[1]} 127.0.0.1` would search for IP 127.0.0.1, while `${args[0]} ${args[1]} ckey 127.0.0.1` would force a search by ckey")
+		if(args.size < 3) return DiscordUtil.reply(event, "Usage is `${args[0]} ${args[1]} <search term>`\n" +
+			"Search is either a ckey, cid, or ip. \n" +
+			"Provide only the search criteria and a best guess will be made for the category, " +
+			"or explicitly state the category first.\n" +
+			"For example `${args[0]} ${args[1]} 127.0.0.1` would search for IP 127.0.0.1, " +
+			"while `${args[0]} ${args[1]} ckey 127.0.0.1` would force a search by ckey")
 		var searchTerm = ""
 		val searchCriteria: String = if(args.size > 3) {
 			searchTerm = args[3]
@@ -84,7 +89,8 @@ class BoundCredentialsCommand(discordConfig: DiscordConfig,
 			"ip" -> findBy(event, "ip", searchTerm)
 			"cid or ip" -> findBy(event, "cid or ip", searchTerm)
 			"ckey" -> findBy(event, "ckey", StringUtils.ckeyIze(searchTerm))
-			else -> return DiscordUtil.reply(event, "Unknown search criteria `${searchCriteria}`. Valid options are `cid`, `ip`, and `ckey`")
+			else -> return DiscordUtil.reply(event, "Unknown search criteria `${searchCriteria}`. " +
+				"Valid options are `cid`, `ip`, and `ckey`")
 		}
 	}
 
