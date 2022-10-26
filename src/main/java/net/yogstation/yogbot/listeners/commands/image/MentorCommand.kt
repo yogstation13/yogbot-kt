@@ -100,10 +100,7 @@ class MentorCommand(
 		"https://cdn.discordapp.com/attachments/734475284446707753/858070044117827644/unknown.png", //Voice of God tasted good
 		"https://cdn.discordapp.com/attachments/734475284446707753/855932232399978536/Screenshot_20210619-150814.jpg", //What is wrong with mentors
 		"https://cdn.discordapp.com/attachments/734475284446707753/871772581164883988/unknown.png", //Lul Furry
-		"https://cdn.discordapp.com/attachments/734475284446707753/827343050195206164/unknown.png", //April Fools Applications
-		"https://cdn.discordapp.com/attachments/734475284446707753/826626004704559154/image0.png", //Baoimu is colorblind
 		"https://cdn.discordapp.com/attachments/734475284446707753/824401461781332008/unknown.png", //Supermatters are harmless
-		"https://cdn.discordapp.com/attachments/734475284446707753/813471318040117298/unknown.png", //Theos Mustard
 		"https://cdn.discordapp.com/attachments/734475284446707753/813074964391264256/unknown.png", //Always mhelp
 		"https://cdn.discordapp.com/attachments/734475284446707753/809849768595161108/ss13_THEPIPES.PNG", //Too many pipes
 		"https://cdn.discordapp.com/attachments/378318242906636288/807082553126551612/unknown.png", //Speak with the dummy
@@ -111,13 +108,11 @@ class MentorCommand(
 		"https://cdn.discordapp.com/attachments/734475284446707753/803104291430072340/unknown.png", //Why'd you irradiate the shuttle
 		"https://cdn.discordapp.com/attachments/734475284446707753/875103302013042729/unknown.png", //N3D6 is a complete and utter twat
 		"https://cdn.discordapp.com/attachments/734475284446707753/893512372436754462/image0.png", //Everyone is answering Skrem 7's mhelp
-		"https://cdn.discordapp.com/attachments/734475284446707753/903294489408466964/unknown.png", //Old mhelp
 		"https://cdn.discordapp.com/attachments/734475284446707753/917938535649124392/unknown.png", //Hey cuackles
 		"https://cdn.discordapp.com/attachments/734475284446707753/916231741868478485/unknown.png", //Cutting my arms with a toolbox
 		"https://cdn.discordapp.com/attachments/734475284446707753/914011832694493194/unknown.png", //Step 1: Die
 		"https://cdn.discordapp.com/attachments/734475284446707753/906794257002676284/unknown.png", //I killed your gf
 		//June Update
-		"https://cdn.discordapp.com/attachments/734475284446707753/975253806298300486/c30.png", //Fails is a healer but
 		"https://cdn.discordapp.com/attachments/734475284446707753/980826387998973953/preternis.png", //How recharge as preternis
 		"https://cdn.discordapp.com/attachments/734475284446707753/981416123532730428/loophole.png" //Loopless Engine
 	)
