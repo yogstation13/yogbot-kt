@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestHeader
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 import java.security.MessageDigest
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
@@ -73,7 +75,7 @@ class GithubEndpoint (
 		return MessageDigest.isEqual(signature.encodeToByteArray(), hash.encodeToByteArray())
 	}
 
-	private fun pullRequestEvent(
+	fun pullRequestEvent(
 		jsonData: JsonNode
 	): Mono<HttpEntity<String>> {
 		var action = jsonData.get("action").asText()
@@ -99,7 +101,7 @@ class GithubEndpoint (
 			if (action == "opened") {
 				monoCollection.add(
 					byondConnector.requestAsync(
-						"?announce=$title&author=${
+						"?announce=${URLEncoder.encode(title, StandardCharsets.UTF_8)}&author=${
 							jsonData.get("sender").get("login")
 						}&id=${jsonData.get("pull_request").get("number")}"
 					)
