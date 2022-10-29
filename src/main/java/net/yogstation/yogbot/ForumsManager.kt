@@ -1,5 +1,7 @@
 package net.yogstation.yogbot
 
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
 import discord4j.common.util.Snowflake
 import discord4j.core.GatewayDiscordClient
 import discord4j.core.`object`.entity.Guild
@@ -11,6 +13,7 @@ import discord4j.rest.http.client.ClientException
 import io.netty.handler.codec.http.HttpResponseStatus
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
+import net.yogstation.yogbot.config.ForumsConfig
 import net.yogstation.yogbot.util.ByondLinkUtil
 import net.yogstation.yogbot.util.StringUtils
 import org.slf4j.Logger
@@ -29,19 +32,10 @@ class ForumsManager(
 	client: GatewayDiscordClient,
 	private val discordConfig: DiscordConfig,
 	private val webClient: WebClient,
-	private val databaseManager: DatabaseManager
+	private val databaseManager: DatabaseManager,
+	private val forumsConfig: ForumsConfig,
+	private val mapper: ObjectMapper
 ) {
-	private val banAppealPattern: Pattern =
-		Pattern.compile("<item>\\s+<title>(?<title>\\[.+-\\s(?<ping>.+))</title>[\\s\\S]+?<link>(?<link>.+)</link>")
-	private val playerComplaintsPattern: Pattern =
-		Pattern.compile("<item>\\s+<title>(?<title>(?<ping>.*) - report by.+)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
-	private val adminComplaintsPattern: Pattern =
-		Pattern.compile("<item>\\s+<title>(?<title>.+report by.+)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
-	private val staffApplicationPattern: Pattern =
-		Pattern.compile("<item>\\s+<title>(?<title>.+application)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
-	private val mentorApplicationsPattern: Pattern =
-		Pattern.compile("<item>\\s+<title>(?<title>.+application)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
-
 	private val logger: Logger = LoggerFactory.getLogger(javaClass)
 
 	val guild: Guild? = client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).block()
@@ -50,85 +44,88 @@ class ForumsManager(
 	fun handleForums() {
 		handleChannel(
 			channelsConfig.channelBanAppeals,
-			"https://forums.yogstation.net/index.php?forums/ban-appeals.2/index.rss",
-			banAppealPattern,
-			PingType.STAFF_MEMBER
+			forumsConfig.banAppealsForum,
+			PingType.BAN_APPEAL
 		)
 		handleChannel(
 			channelsConfig.channelPlayerComplaints,
-			"https://forums.yogstation.net/index.php?forums/player-complaints.3/index.rss",
-			playerComplaintsPattern,
-			PingType.PLAYER_STAFF
+			forumsConfig.playerComplaintsForum,
+			PingType.PLAYER_COMPLAINT
 		)
 		handleChannel(
 			channelsConfig.channelAdminComplaints,
-			"https://forums.yogstation.net/index.php?forums/administrator-complaints.4/index.rss",
-			adminComplaintsPattern
+			forumsConfig.adminComplaintsForums
+		)
+		handleChannel(
+			channelsConfig.channelAdminAdminComplaints,
+			forumsConfig.adminAdminComplaintsForum
 		)
 		handleChannel(
 			channelsConfig.channelStaffApplications,
-			"https://forums.yogstation.net/index.php?forums/administrator-applications.6/index.rss",
-			staffApplicationPattern
+			forumsConfig.staffApplicationsForum
 		)
 		handleChannel(
 			channelsConfig.channelMentorApplications,
-			"https://forums.yogstation.net/index.php?forums/mentor-applications.206/index.rss",
-			mentorApplicationsPattern,
+			forumsConfig.mentorApplicationsForum,
 			PingType.MENTOR_STAFF
 		)
 	}
 
-	private fun getPing(pingType: PingType, mention: String): Mono<String> {
-		if ((pingType == PingType.STAFF_MEMBER || pingType == PingType.PLAYER_STAFF) && guild != null) {
-			val ckey = StringUtils.ckeyIze(mention)
-			val response = ByondLinkUtil.getMemberID(ckey, databaseManager)
-			if (response.value != null) {
-				return guild.getMemberById(response.value).map {
-					if(pingType == PingType.PLAYER_STAFF) {
-						"${it.mention} ${getDefaultPing(pingType)}"
-					} else if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {
-						it.mention
-					} else getDefaultPing(pingType)
-				}.doOnError {
-					// Equality on the boolean because it is nullable
-					if (it is ClientException &&
-						it.status == HttpResponseStatus.NOT_FOUND &&
-						it.message?.contains("Unknown Member") == true)
-						logger.debug("Error getting member from ID", it)
-					else {
-						logger.error("Unexpected error in getPing: ${it.message}")
-						logger.debug("Get ping exception: ", it)
-					}
-				}.onErrorReturn(getDefaultPing(pingType))
-			}
+	private val appealPattern: Pattern = Pattern.compile(".+ - .+ - (?<ping>.+)")
+	private val complaintPattern: Pattern = Pattern.compile("(?<ping>.+) - report by ")
+
+	private fun getPing(pingType: PingType, title: String): Mono<String> {
+		val defaultPing = getDefaultPing(pingType)
+		val mentionPattern = when(pingType) {
+			PingType.STAFF_ONLY, PingType.MENTOR_STAFF -> null
+			PingType.BAN_APPEAL -> appealPattern
+			PingType.PLAYER_COMPLAINT -> complaintPattern
 		}
-		return Mono.just(getDefaultPing(pingType))
+		if(mentionPattern == null || guild == null) return Mono.just(defaultPing)
+		val mentionMatcher = mentionPattern.matcher(title)
+		if(!mentionMatcher.find()) return Mono.just(defaultPing)
+		val ckey = StringUtils.ckeyIze(mentionMatcher.group("ping"))
+		val response = ByondLinkUtil.getMemberID(ckey, databaseManager)
+		if (response.value == null) return Mono.just(defaultPing)
+		return guild.getMemberById(response.value).map {
+			if(pingType == PingType.PLAYER_COMPLAINT) {
+				"${it.mention} $defaultPing"
+			} else if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {
+				it.mention
+			} else defaultPing
+		}.doOnError {
+			// Equality on the boolean because it is nullable
+			if (it is ClientException &&
+				it.status == HttpResponseStatus.NOT_FOUND &&
+				it.message?.contains("Unknown Member") == true)
+				logger.debug("Error getting member from ID", it)
+			else {
+				logger.error("Unexpected error in getPing: ${it.message}")
+				logger.debug("Get ping exception: ", it)
+			}
+		}.onErrorReturn(defaultPing)
 	}
 
 	private fun getDefaultPing(pingType: PingType): String {
 		return when (pingType) {
-			PingType.STAFF_MEMBER, PingType.STAFF_ONLY, PingType.PLAYER_STAFF -> "<@&${discordConfig.staffRole}>"
+			PingType.BAN_APPEAL, PingType.STAFF_ONLY, PingType.PLAYER_COMPLAINT -> "<@&${discordConfig.staffRole}>"
 			PingType.MENTOR_STAFF -> "<@&${discordConfig.mentorRole}> <@&${discordConfig.staffRole}>"
 		}
 	}
 
-	private fun handleChannel(channelId: Long, url: String, regex: Pattern, pingType: PingType = PingType.STAFF_ONLY) {
+	private fun handleChannel(channelId: Long, forumId: Int, pingType: PingType = PingType.STAFF_ONLY) {
 		guild?.getChannelById(Snowflake.of(channelId))?.flatMap { channel ->
-			fetchData(url).flatMap { response ->
-				val matcher: Matcher = regex.matcher(response)
-
+			fetchData(forumId).flatMap { response ->
+				val threads = response.get("threads")
 				channel.restChannel.getMessagesAfter(Snowflake.of(0)).collectList().flatMap { unprocessedMessages ->
 					var publishResult: Mono<*> = Mono.empty<Any>()
-					while (matcher.find()) {
+					for (thread in threads) {
 						publishResult = publishResult.and(
 							processPost(
 								pingType,
 								unprocessedMessages,
 								channel,
-								matcher.group("link"),
-								matcher.group("title"),
-								if (pingType == PingType.STAFF_MEMBER || pingType == PingType.PLAYER_STAFF)
-									matcher.group("ping") else ""
+								thread
 							)
 						)
 					}
@@ -149,14 +146,14 @@ class ForumsManager(
 		pingType: PingType,
 		unprocessedMessages: MutableList<MessageData>,
 		channel: GuildChannel,
-		link: String,
-		title: String,
-		ping: String,
+		thread: JsonNode
 	): Mono<*> {
+		val link = thread.get("view_url").asText()
+		val title = thread.get("title").asText()
 		for (message in unprocessedMessages) {
 			if (message.content().contains(link)) {
 				unprocessedMessages.remove(message)
-				return getMessageContent(pingType, title, link, ping).flatMap {
+				return getMessageContent(pingType, title, link).flatMap {
 					if (message.content() != it) {
 						channel.restChannel.getRestMessage(Snowflake.of(message.id())).edit(
 							MessageEditRequest.builder().content(Possible.of(Optional.of(it))).build()
@@ -165,21 +162,23 @@ class ForumsManager(
 				}
 			}
 		}
-		return getMessageContent(pingType, title, link, ping).flatMap { channel.restChannel.createMessage(it) }
+		return getMessageContent(pingType, title, link).flatMap { channel.restChannel.createMessage(it) }
 	}
 
-	private fun getMessageContent(pingType: PingType, title: String, link: String, ping: String): Mono<String> {
-		return getPing(pingType, ping).map { "$it `$title`\n        <$link>" }
+	private fun getMessageContent(pingType: PingType, title: String, link: String): Mono<String> {
+		return getPing(pingType, title).map { "$it `$title`\n        <$link>" }
 	}
 
-	private fun fetchData(url: String): Mono<String> {
+	private fun fetchData(forumId: Int): Mono<JsonNode> {
 		return webClient.get()
-			.uri(URI.create(url))
+			.uri(URI.create("https://forums.yogstation.net/api/forums/$forumId?with_threads=true"))
+			.header("XF-Api-Key", forumsConfig.xenforoKey)
 			.retrieve()
 			.bodyToMono(String::class.java)
+			.map { mapper.readTree(it) }
 	}
 
 	enum class PingType {
-		STAFF_ONLY, MENTOR_STAFF, STAFF_MEMBER, PLAYER_STAFF
+		STAFF_ONLY, MENTOR_STAFF, BAN_APPEAL, PLAYER_COMPLAINT
 	}
 }

@@ -26,6 +26,7 @@ data class DiscordChannelsConfig @ConstructorBinding constructor(
 	val channelBanAppeals: Long,
 	val channelPlayerComplaints: Long,
 	val channelAdminComplaints: Long,
+	val channelAdminAdminComplaints: Long,
 	val channelStaffApplications: Long,
 	val channelMentorApplications: Long,
 	val channelGithubSpam: Long,
