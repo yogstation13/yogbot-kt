@@ -34,7 +34,7 @@ class ForumsManager(
 	private val banAppealPattern: Pattern =
 		Pattern.compile("<item>\\s+<title>(?<title>\\[.+-\\s(?<ping>.+))</title>[\\s\\S]+?<link>(?<link>.+)</link>")
 	private val playerComplaintsPattern: Pattern =
-		Pattern.compile("<item>\\s+<title>(?<title>.+report by.+)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
+		Pattern.compile("<item>\\s+<title>(?<title>(?<ping>.*) - report by.+)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
 	private val adminComplaintsPattern: Pattern =
 		Pattern.compile("<item>\\s+<title>(?<title>.+report by.+)</title>[\\s\\S]+?<link>(?<link>.+)</link>")
 	private val staffApplicationPattern: Pattern =
@@ -52,11 +52,13 @@ class ForumsManager(
 			channelsConfig.channelBanAppeals,
 			"https://forums.yogstation.net/index.php?forums/ban-appeals.2/index.rss",
 			banAppealPattern,
-			PingType.AUTODETECT
+			PingType.STAFF_MEMBER
 		)
 		handleChannel(
 			channelsConfig.channelPlayerComplaints,
-			"https://forums.yogstation.net/index.php?forums/player-complaints.3/index.rss", playerComplaintsPattern
+			"https://forums.yogstation.net/index.php?forums/player-complaints.3/index.rss",
+			playerComplaintsPattern,
+			PingType.PLAYER_STAFF
 		)
 		handleChannel(
 			channelsConfig.channelAdminComplaints,
@@ -77,12 +79,14 @@ class ForumsManager(
 	}
 
 	private fun getPing(pingType: PingType, mention: String): Mono<String> {
-		if (pingType == PingType.AUTODETECT && guild != null) {
+		if ((pingType == PingType.STAFF_MEMBER || pingType == PingType.PLAYER_STAFF) && guild != null) {
 			val ckey = StringUtils.ckeyIze(mention)
 			val response = ByondLinkUtil.getMemberID(ckey, databaseManager)
 			if (response.value != null) {
 				return guild.getMemberById(response.value).map {
-					if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {
+					if(pingType == PingType.PLAYER_STAFF) {
+						"${it.mention} ${getDefaultPing(pingType)}"
+					} else if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {
 						it.mention
 					} else getDefaultPing(pingType)
 				}.doOnError {
@@ -103,7 +107,7 @@ class ForumsManager(
 
 	private fun getDefaultPing(pingType: PingType): String {
 		return when (pingType) {
-			PingType.AUTODETECT, PingType.STAFF_ONLY -> "<@&${discordConfig.staffRole}>"
+			PingType.STAFF_MEMBER, PingType.STAFF_ONLY, PingType.PLAYER_STAFF -> "<@&${discordConfig.staffRole}>"
 			PingType.MENTOR_STAFF -> "<@&${discordConfig.mentorRole}> <@&${discordConfig.staffRole}>"
 		}
 	}
@@ -123,7 +127,8 @@ class ForumsManager(
 								channel,
 								matcher.group("link"),
 								matcher.group("title"),
-								if (pingType == PingType.AUTODETECT) matcher.group("ping") else ""
+								if (pingType == PingType.STAFF_MEMBER || pingType == PingType.PLAYER_STAFF)
+									matcher.group("ping") else ""
 							)
 						)
 					}
@@ -175,6 +180,6 @@ class ForumsManager(
 	}
 
 	enum class PingType {
-		STAFF_ONLY, MENTOR_STAFF, AUTODETECT
+		STAFF_ONLY, MENTOR_STAFF, STAFF_MEMBER, PLAYER_STAFF
 	}
 }
