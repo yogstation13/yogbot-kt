@@ -57,8 +57,8 @@ class BoundCredentialsCommand(discordConfig: DiscordConfig,
 				val bindings = (if(args[3] == "null") 0 else 1) + (if(args[4] == "null") 0 else 2)
 				return DiscordUtil.reply(event,
 					"Created binding ${it.getLong(1)}: ckey `${args[2]}` is now bound to " +
-						"${if(bindings and 1 == 1) "cid `${args[3]}`" else ""}${if(bindings == 3) " and " else ""}" +
-						if(bindings and 2 == 2) "ip `${args[4]}`" else ""
+						"${if((bindings and 1) == 1) "cid `${args[3]}`" else ""}${if(bindings == 3) " and " else ""}" +
+						if((bindings and 2) == 2) "ip `${args[4]}`" else ""
 				)
 			}
 		}
