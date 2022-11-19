@@ -109,7 +109,7 @@ class GithubEndpoint (
 			}
 
 			// Disabling Public Open and Close Because people are fucking stupid
-			//monoCollection.add(sendEmbedTo(channelsConfig.channelPublic, embed))
+			monoCollection.add(sendEmbedTo(channelsConfig.channelPublic, embed))
 			monoCollection.add(sendEmbedTo(channelsConfig.channelDevelopmentPublic, embed))
 			monoCollection.add(sendEmbedTo(channelsConfig.channelGithubSpam, embed))
 		} else {
