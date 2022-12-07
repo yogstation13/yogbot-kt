@@ -20,9 +20,9 @@ class MemesChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(chan
 			message.embeds.size > 0 ||
 			memetypes.contains(message.content.split(".").last())
 			) {
-			// Java is strange with unicode in strings, this is thumbs up and down emoji
-			return message.addReaction(ReactionEmoji.unicode("\uD83D\uDC4D"))
-				.and(message.addReaction(ReactionEmoji.unicode("\uD83D\uDC4E")))
+			// Java is strange with unicode in strings, this is horse and fish emoji
+			return message.addReaction(ReactionEmoji.unicode("\ud83d\udc0e"))
+				.and(message.addReaction(ReactionEmoji.unicode("\ud83d\udc1f")))
 		}
 		return Mono.empty<Any>()
 	}
