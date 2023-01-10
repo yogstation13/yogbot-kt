@@ -12,6 +12,8 @@ import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.GithubConfig
 import net.yogstation.yogbot.http.labels.GithubLabel
 import net.yogstation.yogbot.util.YogResult
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -119,7 +121,7 @@ class GithubManager(
 			else Mono.empty<Any>()
 		}
 	}
-
+	private val logger: Logger = LoggerFactory.getLogger(javaClass)
 	fun postPR(channel: MessageChannel, prNumber: String): Mono<*> {
 		return makeRequest("${githubConfig.repoLink}/pulls/$prNumber")
 			.onStatus({ responseCode -> responseCode == HttpStatus.NOT_FOUND }, {
@@ -174,7 +176,7 @@ class GithubManager(
 
 		val title = data.get("title").asText().replace("<", "")
 		return EmbedCreateSpec.builder()
-			.author(titleOverride ?: "$state Pull Request", "", "https://i.imgur.com/tpkgmo8.png")
+			.author(titleOverride ?: "$state Pull Request", null, "https://i.imgur.com/tpkgmo8.png")
 			.description(title)
 			.addField("Author", changelog.value?.author ?: data.get("user").get("login").asText(), true)
 			.addField("Number", "#${data.get("number").asText()}", true)
