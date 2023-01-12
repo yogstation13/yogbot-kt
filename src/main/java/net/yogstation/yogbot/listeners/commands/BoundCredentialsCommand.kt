@@ -82,6 +82,8 @@ class BoundCredentialsCommand(discordConfig: DiscordConfig,
 				"cid or ip"
 			} else if(args[2].split(".").toTypedArray().size == 4) {
 				"ip"
+			} else if(args[2].matches("\\d+".toRegex())) {
+				"cid"
 			} else "ckey"
 		}
 		return when(searchCriteria) {
