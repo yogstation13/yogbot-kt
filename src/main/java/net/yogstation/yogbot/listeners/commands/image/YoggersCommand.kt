@@ -93,7 +93,21 @@ class YoggersCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 		"https://cdn.discordapp.com/attachments/734475284446707753/1007030810475499560/unknown.png", // Sling playing blackjack
 		"https://cdn.discordapp.com/attachments/734475284446707753/1020072191649390693/unknown.png", // Maximum comfort
 		"https://cdn.discordapp.com/attachments/734475284446707753/1020111971967840306/unknown.png", // Cuban Pete
-		"https://cdn.discordapp.com/attachments/734475284446707753/1026258068209668106/skibidi_bop_mm_dada.png" //ReviewTechUSA
+		"https://cdn.discordapp.com/attachments/734475284446707753/1026258068209668106/skibidi_bop_mm_dada.png", // ReviewTechUSA
+		"https://cdn.discordapp.com/attachments/134720091576205312/1038215225385701466/Skill_Issue.JPG", // It got worse
+		"https://cdn.discordapp.com/attachments/734475284446707753/1045446910133153792/image.png", // Crushed by a vending machine
+		"https://cdn.discordapp.com/attachments/734475284446707753/1047260759991779419/unknown.png", // Blind date
+		"https://cdn.discordapp.com/attachments/734475284446707753/1049087971141369936/image.png", // I love rads
+		"https://cdn.discordapp.com/attachments/734475284446707753/1050949885320515634/image.png", // Moth ERT
+		"https://cdn.discordapp.com/attachments/734475284446707753/1051370564981366825/the_public_tube_experience.PNG" // Public cryo tube
+		"https://cdn.discordapp.com/attachments/734475284446707753/1052365894094954516/unknown.png", // Big Singulo setup
+		"https://cdn.discordapp.com/attachments/734475284446707753/1053468530743443516/image.png", // Toothpaste
+		"https://cdn.discordapp.com/attachments/734475284446707753/1053469875735109633/screm.png", // Who is screm
+		"https://cdn.discordapp.com/attachments/734475284446707753/1054449117134336120/image.png", // Boof corgi
+		"https://cdn.discordapp.com/attachments/734475284446707753/1061754219662688256/oop.png", // Clown car explosion
+		"https://cdn.discordapp.com/attachments/734475284446707753/1061754663931760640/hereTEG.png", // Heretic TEG
+		"https://cdn.calones.xyz/a6b127314f1d7269.mp4" // Reposession
+		
 	)
 
 	override val name = "yoggers"
