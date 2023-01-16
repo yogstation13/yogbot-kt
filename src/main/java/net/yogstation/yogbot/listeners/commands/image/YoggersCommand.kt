@@ -106,6 +106,7 @@ class YoggersCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 		"https://cdn.discordapp.com/attachments/734475284446707753/1054449117134336120/image.png", // Boof corgi
 		"https://cdn.discordapp.com/attachments/734475284446707753/1061754219662688256/oop.png", // Clown car explosion
 		"https://cdn.discordapp.com/attachments/734475284446707753/1061754663931760640/hereTEG.png", // Heretic TEG
+		"https://cdn.discordapp.com/attachments/734475284446707753/1062639292851171379/soup_cult.PNG", // Soup cult
 		"https://cdn.calones.xyz/a6b127314f1d7269.mp4" // Reposession
 		
 	)
