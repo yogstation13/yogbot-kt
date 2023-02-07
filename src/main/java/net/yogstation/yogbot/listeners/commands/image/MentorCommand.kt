@@ -115,7 +115,8 @@ class MentorCommand(
 		//June Update
 		"https://cdn.discordapp.com/attachments/734475284446707753/980826387998973953/preternis.png", //How recharge as preternis
 		"https://cdn.discordapp.com/attachments/734475284446707753/981416123532730428/loophole.png", //Loopless Engine
-		"https://cdn.discordapp.com/attachments/734475284446707753/1017396538697338940/unknown.png" // Self mhelp
+		"https://cdn.discordapp.com/attachments/734475284446707753/1017396538697338940/unknown.png", // Self mhelp
+		"https://cdn.discordapp.com/attachments/134720091576205312/1072515691749572679/image-137.png" // Sarah and the Hyper Torus
 	)
 	override val title = "Mentor Image"
 	override val color = 0x259E80
