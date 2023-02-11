@@ -174,7 +174,7 @@ class GithubManager(
 
 		val title = data.get("title").asText().replace("<", "")
 		return EmbedCreateSpec.builder()
-			.author(titleOverride ?: "$state Pull Request", "", "https://i.imgur.com/tpkgmo8.png")
+			.author(titleOverride ?: "$state Pull Request", null, "https://i.imgur.com/tpkgmo8.png")
 			.description(title)
 			.addField("Author", changelog.value?.author ?: data.get("user").get("login").asText(), true)
 			.addField("Number", "#${data.get("number").asText()}", true)
