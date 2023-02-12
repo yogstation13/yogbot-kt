@@ -99,7 +99,7 @@ class YoggersCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 		"https://cdn.discordapp.com/attachments/734475284446707753/1047260759991779419/unknown.png", // Blind date
 		"https://cdn.discordapp.com/attachments/734475284446707753/1049087971141369936/image.png", // I love rads
 		"https://cdn.discordapp.com/attachments/734475284446707753/1050949885320515634/image.png", // Moth ERT
-		"https://cdn.discordapp.com/attachments/734475284446707753/1051370564981366825/the_public_tube_experience.PNG" // Public cryo tube
+		"https://cdn.discordapp.com/attachments/734475284446707753/1051370564981366825/the_public_tube_experience.PNG", // Public cryo tube
 		"https://cdn.discordapp.com/attachments/734475284446707753/1052365894094954516/unknown.png", // Big Singulo setup
 		"https://cdn.discordapp.com/attachments/734475284446707753/1053468530743443516/image.png", // Toothpaste
 		"https://cdn.discordapp.com/attachments/734475284446707753/1053469875735109633/screm.png", // Who is screm
