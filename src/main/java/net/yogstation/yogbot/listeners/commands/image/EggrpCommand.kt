@@ -31,7 +31,8 @@ class EggrpCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(
 		"https://cdn.discordapp.com/attachments/734475284446707753/756286634852352152/dreamseeker_2020-09-17_17-17-21.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/758277438764744704/image0.png",
 		"https://cdn.discordapp.com/attachments/734475284446707753/761010462766399498/unknown-24.png",
-		"https://cdn.discordapp.com/attachments/734475284446707753/806941530915864586/unknown.png" // Egg counter
+		"https://cdn.discordapp.com/attachments/734475284446707753/806941530915864586/unknown.png", // Egg counter
+		"https://cdn.discordapp.com/attachments/734475284446707753/1055146458342510643/unknown-36.png" // We have egg!!!
 	)
 	override val title = "EggRP Image"
 	override val name = "eggrp"
