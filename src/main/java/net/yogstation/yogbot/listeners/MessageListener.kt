@@ -28,9 +28,6 @@ class MessageListener(
 		val content: String = event.message.content
 		if (event.message.author.isEmpty) return responses
 
-		if (content.contains("snail", ignoreCase = true) && content.contains("when", ignoreCase = true))
-			responses = responses.and(DiscordUtil.reply(event, "When you code it"))
-
 		val jesterRole = Snowflake.of(discordConfig.jesterRole)
 		if (event.message.roleMentionIds.contains(jesterRole)) {
 			responses = responses.and(
