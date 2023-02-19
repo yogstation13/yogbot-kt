@@ -116,7 +116,7 @@ class MentorCommand(
 		"https://cdn.discordapp.com/attachments/734475284446707753/980826387998973953/preternis.png", //How recharge as preternis
 		"https://cdn.discordapp.com/attachments/734475284446707753/981416123532730428/loophole.png", //Loopless Engine
 		"https://cdn.discordapp.com/attachments/734475284446707753/1017396538697338940/unknown.png", // Self mhelp
-		"https://cdn.discordapp.com/attachments/134720091576205312/1072515691749572679/image-137.png" //Sarah and the Hyper Torus
+		"https://cdn.discordapp.com/attachments/134720091576205312/1072515691749572679/image-137.png", //Sarah and the Hyper Torus
 		"https://cdn.discordapp.com/attachments/734475284446707753/1043317943179685908/image.png", // Skub
 		"https://cdn.discordapp.com/attachments/734475284446707753/1053552468669239328/sarah_sm.png", // Can't remove Sarah
 		"https://cdn.discordapp.com/attachments/734475284446707753/1060911339159166997/L_no_mentors.png" // L + No mentors
