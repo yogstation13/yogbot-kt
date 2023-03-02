@@ -6,7 +6,6 @@ import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.permissions.PermissionsManager
 import net.yogstation.yogbot.util.DiscordUtil
 import net.yogstation.yogbot.util.StringUtils
-import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
 import java.sql.SQLException
 import java.util.*
@@ -14,7 +13,7 @@ import java.util.*
 /**
  * Gets the activity of all the admins
  */
-@Component
+//@Component
 class ActivityCommand(
 	discordConfig: DiscordConfig,
 	permissions: PermissionsManager,
