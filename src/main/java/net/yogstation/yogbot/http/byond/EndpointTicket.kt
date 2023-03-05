@@ -7,6 +7,7 @@ import net.yogstation.yogbot.DatabaseManager
 import net.yogstation.yogbot.config.ByondConfig
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.http.byond.payloads.TicketDTO
+import org.apache.commons.text.StringEscapeUtils
 import org.springframework.http.HttpEntity
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -34,9 +35,11 @@ class EndpointTicket(
 		val keyError = validateKey(ticketPayload.key)
 		if (keyError != null) return keyError
 
+		val message = StringEscapeUtils.unescapeHtml4(ticketPayload.message)
+
 		val node = mapper.createObjectNode()
 		node.put("username", ticketPayload.roundId)
-		node.put("content", "**${ticketPayload.user}, Ticket #${ticketPayload.ticketId}:** ${ticketPayload.message}")
+		node.put("content", "**${ticketPayload.user}, Ticket #${ticketPayload.ticketId}:** $message")
 		// Disallow all pings
 		node.set<JsonNode>("allowed_mentions", mapper.createObjectNode().set("parse", mapper.createArrayNode()))
 		return sendData(node)
