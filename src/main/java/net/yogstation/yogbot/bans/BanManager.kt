@@ -6,6 +6,7 @@ import discord4j.core.`object`.entity.Member
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.data.BanRepository
 import net.yogstation.yogbot.data.entity.Ban
+import net.yogstation.yogbot.data.entity.Ban_.reason
 import net.yogstation.yogbot.util.LogChannel
 import net.yogstation.yogbot.util.YogResult
 import org.springframework.data.jpa.domain.Specification.where
@@ -33,7 +34,8 @@ class BanManager(
 	 * @param duration The duration of the ban in minutes, zero or negative values provide indefinite bans
 	 * @param author The person who issued the ban, for logging purposes
 	 */
-	fun ban(snowflake: Snowflake, reason: String, duration: Int, author: String): Mono<YogResult<Mono<*>?, String?>> {
+	fun ban(snowflake: Snowflake, rawReason: String, duration: Int, author: String): Mono<YogResult<Mono<*>?, String?>> {
+		val reason = rawReason.replace("\n", " ");
 
 		val banMessage: StringBuilder = StringBuilder("You have been banned from ")
 		banMessage.append(discordConfig.serverName)
