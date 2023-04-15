@@ -18,6 +18,7 @@ import net.yogstation.yogbot.util.ByondLinkUtil
 import net.yogstation.yogbot.util.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
@@ -39,7 +40,7 @@ class ForumsManager(
 
 	val guild: Guild? = client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).block()
 
-//	@Scheduled(fixedRate = 15000)
+	@Scheduled(fixedRate = 15000)
 	fun handleForums() {
 		handleChannel(
 			channelsConfig.channelBanAppeals,
