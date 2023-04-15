@@ -40,7 +40,7 @@ dependencies {
     kapt 'org.hibernate:hibernate-jpamodelgen:5.6.7.Final'
     kapt "org.springframework.boot:spring-boot-configuration-processor"
 
-    implementation 'org.yaml:snakeyaml:1.33'
+    implementation 'org.yaml:snakeyaml:2.0'
     implementation("com.fasterxml.jackson:jackson-bom:2.14.0-rc1")
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0-rc1'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
