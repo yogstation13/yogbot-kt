@@ -16,6 +16,7 @@ import net.yogstation.yogbot.http.byond.payloads.CkeyMessageDTO
 import net.yogstation.yogbot.util.ByondLinkUtil
 import net.yogstation.yogbot.util.HttpUtil
 import net.yogstation.yogbot.util.StringUtils
+import org.apache.commons.text.StringEscapeUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpEntity
@@ -47,7 +48,7 @@ abstract class DiscordWebhookEndpoint(
 	fun handleData(data: CkeyMessageDTO): Mono<HttpEntity<String>> {
 		val node = mapper.createObjectNode()
 		node.put("username", data.ckey)
-		node.put("content", data.message)
+		node.put("content", StringEscapeUtils.unescapeHtml4(data.message))
 		// No pinging everyone in msay or asay
 		node.set<JsonNode>("allowed_mentions", mapper.createObjectNode().set("parse", mapper.createArrayNode()))
 		// Attempts to get the discord user for the person speaking
