@@ -6,6 +6,7 @@ import net.yogstation.yogbot.config.ByondConfig
 import net.yogstation.yogbot.http.ByondEndpoint
 import net.yogstation.yogbot.http.byond.payloads.CkeyMessageDTO
 import net.yogstation.yogbot.util.HttpUtil
+import org.apache.commons.text.StringEscapeUtils
 import org.springframework.http.HttpEntity
 import reactor.core.publisher.Mono
 
@@ -20,7 +21,9 @@ abstract class MessageRelayEndpoint protected constructor(val client: GatewayDis
 	fun receiveData(payload: CkeyMessageDTO): Mono<HttpEntity<String>> {
 		return client.getChannelById(channelId)
 			.flatMap { channel ->
-				channel.restChannel.createMessage("**${payload.ckey}**: ${payload.message.replace("@", "@ ")}")
+				val message = StringEscapeUtils.unescapeHtml4(payload.message).replace("@", "@ ")
+
+				channel.restChannel.createMessage("**${payload.ckey}**: $message")
 					.then(HttpUtil.ok("Message sent"))
 			}
 	}
