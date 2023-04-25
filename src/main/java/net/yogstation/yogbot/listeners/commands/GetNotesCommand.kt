@@ -26,7 +26,7 @@ abstract class GetNotesCommand(
 			database.byondDbConnection.use { connection ->
 				connection.prepareStatement(
 					String.format(
-						"SELECT timestamp, text, adminckey FROM `%s` " +
+						"SELECT timestamp, text, adminckey, playtime FROM `%s` " +
 							"WHERE `targetckey` = ? AND " +
 							"`type`= \"note\" AND " +
 							"deleted = 0 AND " +
@@ -54,7 +54,9 @@ abstract class GetNotesCommand(
 		val messages: MutableList<String> = ArrayList()
 		val notesString = StringBuilder("Notes for ").append(ckey).append("\n")
 		while (notesResult.next()) {
-			val nextNote = "```${notesResult.getDate("timestamp")}\t${notesResult.getString("text")}${
+			val hours = notesResult.getObject("playtime")
+			val hoursString = if (hours == null) "" else " (${playtimeFormat(hours as Long)})"; // It's a long for some reason
+			val nextNote = "```${notesResult.getDate("timestamp")}$hoursString\t${notesResult.getString("text")}${
 				if (showAdmin) "   ${
 					notesResult.getString("adminckey")
 				}" else ""
@@ -67,5 +69,12 @@ abstract class GetNotesCommand(
 		}
 		messages.add(notesString.toString())
 		return messages
+	}
+
+	private fun playtimeFormat(playtime: Long): String {
+		if(playtime < 60) {
+			return "${playtime}m"
+		}
+		return "${playtime/60}h"
 	}
 }
