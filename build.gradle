@@ -37,7 +37,7 @@ dependencyLocking {
 }
 
 dependencies {
-    kapt 'org.hibernate:hibernate-jpamodelgen:6.1.7.Final'
+    kapt 'org.hibernate:hibernate-jpamodelgen:5.6.15.Final'
     kapt "org.springframework.boot:spring-boot-configuration-processor"
 
     implementation 'org.yaml:snakeyaml:2.0'
