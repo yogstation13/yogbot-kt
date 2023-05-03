@@ -119,7 +119,14 @@ class MentorCommand(
 		"https://cdn.discordapp.com/attachments/134720091576205312/1072515691749572679/image-137.png", //Sarah and the Hyper Torus
 		"https://cdn.discordapp.com/attachments/734475284446707753/1043317943179685908/image.png", // Skub
 		"https://cdn.discordapp.com/attachments/734475284446707753/1053552468669239328/sarah_sm.png", // Can't remove Sarah
-		"https://cdn.discordapp.com/attachments/734475284446707753/1060911339159166997/L_no_mentors.png" // L + No mentors
+		"https://cdn.discordapp.com/attachments/734475284446707753/1060911339159166997/L_no_mentors.png", // L + No mentors
+		"https://cdn.discordapp.com/attachments/734475284446707753/1072667253557973062/image.png", //Too much radiation
+		"https://cdn.discordapp.com/attachments/734475284446707753/1072701385709203498/image.png", // Quote Boxta
+		"https://cdn.discordapp.com/attachments/734475284446707753/1075191961008484422/womd.png", // Sarah WOMDs
+		"https://cdn.discordapp.com/attachments/734475284446707753/1082084696567066715/bitch.png", // I like bitch a lot as sec
+		"https://cdn.discordapp.com/attachments/734475284446707753/1085179579305570304/mhelp_this.png", // Mhelp this
+		"https://cdn.discordapp.com/attachments/734475284446707753/1094309046372286664/sol_cycle.png", // Sol cycle
+		"https://cdn.discordapp.com/attachments/734475284446707753/1095851816983466024/IMG_0527.png" // Chicken nugget
 	)
 	override val title = "Mentor Image"
 	override val color = 0x259E80
