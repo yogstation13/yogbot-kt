@@ -18,7 +18,8 @@ class CouncilCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 			"https://cdn.discordapp.com/attachments/734475284446707753/1004911936124764303/Screenshot_2022-08-04_183955.png", // You expect adam to read?
 			"https://cdn.discordapp.com/attachments/734475284446707753/1028837256481493012/unknown.png", // YOU'RE COUNCIL. SO ARE YOU
 			"https://cdn.discordapp.com/attachments/734475284446707753/1031688697533435904/IMG_9748.png", // Adam has thoughts?
-			"https://cdn.discordapp.com/attachments/608072786224742455/1035978792230989844/unknown.png" // Cope
+			"https://cdn.discordapp.com/attachments/608072786224742455/1035978792230989844/unknown.png", // Cope
+			"https://cdn.discordapp.com/attachments/734475284446707753/1065319151402491945/image.png" // Every tool in order
 		)
 	override val title = "Council Image"
 	override val name = "council"

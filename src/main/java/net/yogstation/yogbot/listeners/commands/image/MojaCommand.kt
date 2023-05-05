@@ -111,7 +111,11 @@ class MojaCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"https://cdn.discordapp.com/attachments/734475284446707753/1009223724366561360/Screenshot_2022-08-16_161406.png", // Moja Fursona
 		"https://cdn.discordapp.com/attachments/734475284446707753/1047039904611311677/image.png", // Belt hell
 		"https://cdn.discordapp.com/attachments/734475284446707753/1064244516300804167/image.png", // Hostage nugget
-		"https://cdn.discordapp.com/attachments/734475284446707753/1064317313047859291/image.png" // The correct way to drink tea
+		"https://cdn.discordapp.com/attachments/734475284446707753/1064317313047859291/image.png", // The correct way to drink tea
+		"https://cdn.discordapp.com/attachments/734475284446707753/1065306460034191461/image.png", // Me greytiding
+		"https://cdn.discordapp.com/attachments/734475284446707753/1066884764474286161/image.png", // Moja peaking
+		"https://cdn.discordapp.com/attachments/734475284446707753/1071173403337302096/image.png", // Moja bus
+		"https://cdn.discordapp.com/attachments/734475284446707753/1096895604610838648/image.png" // Moja vs BSA
 	)
 	override val title = "Moja Image"
 	override val description = "Wise words beyond mortal comprehension"

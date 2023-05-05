@@ -106,7 +106,28 @@ class YoggersCommand(discordConfig: DiscordConfig, random: Random) : ImageComman
 		"https://cdn.discordapp.com/attachments/734475284446707753/1054449117134336120/image.png", // Boof corgi
 		"https://cdn.discordapp.com/attachments/734475284446707753/1061754219662688256/oop.png", // Clown car explosion
 		"https://cdn.discordapp.com/attachments/734475284446707753/1061754663931760640/hereTEG.png", // Heretic TEG
-		"https://cdn.discordapp.com/attachments/734475284446707753/1062639292851171379/soup_cult.PNG" // Soup cult		
+		"https://cdn.discordapp.com/attachments/734475284446707753/1062639292851171379/soup_cult.PNG", // Soup cult
+		"https://cdn.discordapp.com/attachments/734475284446707753/1064715697835495474/unknown.png", // Engine trapped
+		"https://cdn.discordapp.com/attachments/734475284446707753/1068680486131597332/Gone_reduced_to_atoms.PNG", // Reduced to atoms
+		"https://cdn.discordapp.com/attachments/734475284446707753/1071940479505158216/image.png", // I'm racist
+		"https://cdn.discordapp.com/attachments/734475284446707753/1077942851477962772/image.png", // Incoming pods
+		"https://cdn.discordapp.com/attachments/734475284446707753/1077971545311424655/Screenshot_2023-02-12_120749.png", // Law 4: Shard
+		"https://cdn.discordapp.com/attachments/734475284446707753/1079426136653709364/image.png", // Bonfire roasted
+		"https://cdn.discordapp.com/attachments/734475284446707753/1080139605174661231/image.png", // I fear no god
+		"https://cdn.discordapp.com/attachments/734475284446707753/1080170019540979742/image.png", // I come from splirt
+		"https://cdn.discordapp.com/attachments/734475284446707753/1082059381081911296/image-95.png", // Duel me
+		"https://cdn.discordapp.com/attachments/734475284446707753/1083458447841968218/image.png", // 20 page apology
+		"https://cdn.discordapp.com/attachments/734475284446707753/1085610759003848754/image.png", // Huskbay
+		"https://cdn.discordapp.com/attachments/734475284446707753/1090656677902164070/IMG_7111.png", // Suicide kitchen
+		"https://cdn.discordapp.com/attachments/734475284446707753/1094379650521759784/image.png", // Gravy clown
+		"https://cdn.discordapp.com/attachments/734475284446707753/1094379728103821432/image.png", // Competetive shitting
+		"https://cdn.discordapp.com/attachments/734475284446707753/1094969534965895237/image.png", // Regroup at the spoon
+		"https://cdn.discordapp.com/attachments/734475284446707753/1095120299747463348/96ephs3coqn81-1.png", // Curator gun store
+		"https://cdn.discordapp.com/attachments/734475284446707753/1098292003088912495/mouseperative.png", // Mouse ops
+		"https://cdn.discordapp.com/attachments/734475284446707753/1101095555259711508/bun.png", // Wall of bun
+		"https://cdn.discordapp.com/attachments/734475284446707753/1101095710264401990/SM-Momento-1.png", // Spicy SM
+		"https://cdn.discordapp.com/attachments/734475284446707753/1102463731021119609/image.png", // I call the appendix
+		"https://cdn.discordapp.com/attachments/734475284446707753/1103315277984301228/uwupewmattew.png" // Supewmattew Cwystaw
 	)
 
 	override val name = "yoggers"
