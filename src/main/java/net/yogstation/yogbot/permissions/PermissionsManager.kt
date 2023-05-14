@@ -48,11 +48,11 @@ class PermissionsManager {
 				.build(this)
 		)
 		addNode(PermissionsNode.builder().setName("head-developer").setParents("senior admin").build(this))
-		addNode(PermissionsNode.builder().setName("SysOp").setPerms("bcreds").build(this))
+		addNode(PermissionsNode.builder().setName("SysOp").setPerms("bcreds", "echelon").build(this))
 		addNode(
 			PermissionsNode.builder()
 				.setName("council")
-				.setPerms("userverify", "bcreds")
+				.setPerms("userverify", "bcreds", "echelon")
 				.setParents("head-developer")
 				.build(this)
 		)
