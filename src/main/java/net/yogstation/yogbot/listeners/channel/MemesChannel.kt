@@ -1,8 +1,8 @@
 package net.yogstation.yogbot.listeners.channel
 
 import discord4j.common.util.Snowflake
-import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.`object`.reaction.ReactionEmoji
+import discord4j.core.event.domain.message.MessageCreateEvent
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
@@ -15,7 +15,7 @@ class MemesChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(chan
 	override fun handle(event: MessageCreateEvent): Mono<*> {
 		val message = event.message
 		// If the message has an attachment, an embed, or a type in memetypes
-		return if (
+		if (
 			message.attachments.size > 0 ||
 			message.embeds.size > 0 ||
 			memetypes.contains(message.content.split(".").last()) ||
@@ -23,10 +23,9 @@ class MemesChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(chan
 			message.content.contains("://imgur.com/", ignoreCase = true)
 		) {
 			// Java is strange with unicode in strings, this is thumbs up and down emoji
-			message.addReaction(ReactionEmoji.unicode("\uD83D\uDC4D"))
+			return message.addReaction(ReactionEmoji.unicode("\uD83D\uDC4D"))
 				.and(message.addReaction(ReactionEmoji.unicode("\uD83D\uDC4E")))
-		} else {
-			message.delete("Non-meme in meme channel")
 		}
+		return Mono.empty<Any>()
 	}
 }
