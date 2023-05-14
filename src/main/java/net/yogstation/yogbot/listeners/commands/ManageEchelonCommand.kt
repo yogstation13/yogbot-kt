@@ -91,7 +91,6 @@ class ManageEchelonCommand(discordConfig: DiscordConfig,
 		if(args.size < 3) return DiscordUtil.reply(event, "Usage is `${args[0]} ${args[1]} <whitelist>`")
 		val id = args[2].toIntOrNull() ?: return DiscordUtil.reply(event, "${args[2]} is not a valid integer")
 		databaseManager.byondDbConnection.use {  connection ->
-			var oldFlags = ""
 			connection.prepareStatement("""
 				UPDATE ${databaseManager.prefix("bound_credentials")}
 				SET flags = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', flags, ','), ',allow_proxies,', ','))
