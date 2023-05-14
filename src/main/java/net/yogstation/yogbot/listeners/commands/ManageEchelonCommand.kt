@@ -90,44 +90,18 @@ class ManageEchelonCommand(discordConfig: DiscordConfig,
 	private fun removeWhitelist(event: MessageCreateEvent, args: Array<String>): Mono<*> {
 		if(args.size < 3) return DiscordUtil.reply(event, "Usage is `${args[0]} ${args[1]} <whitelist>`")
 		val id = args[2].toIntOrNull() ?: return DiscordUtil.reply(event, "${args[2]} is not a valid integer")
-		val monos: MutableList<Mono<*>> = ArrayList()
 		databaseManager.byondDbConnection.use {  connection ->
 			var oldFlags = ""
 			connection.prepareStatement("""
-				SELECT `ckey`, `flags`
-				FROM ${databaseManager.prefix("bound_credentials")}
+				UPDATE ${databaseManager.prefix("bound_credentials")}
+				SET flags = TRIM(BOTH ',' FROM REPLACE(CONCAT(',', flags, ','), ',allow_proxies,', ','))
 				WHERE `id` = ? AND FIND_IN_SET('allow_proxies', flags)
 			""".trimIndent()).use { preparedStatement ->
 				preparedStatement.setInt(1, id)
-				preparedStatement.executeQuery().use {
-					if(!it.next()) return DiscordUtil.reply(event, "No binding with id $id found!")
-					monos.add(DiscordUtil.reply(event, "Deleted whitelist for ckey `${it.getString("ckey")}`"))
-					oldFlags = it.getString("flags")
-				}
-			}
-			if(oldFlags == "allow_proxies") {
-				connection.prepareStatement("""
-					DELETE FROM ${databaseManager.prefix("bound_credentials")}
-					WHERE `id` = ? AND FIND_IN_SET('allow_proxies', flags)
-				""".trimIndent()).use { preparedStatement ->
-					preparedStatement.setInt(1, id)
-					val rows = preparedStatement.executeUpdate()
-					if (rows == 0) return DiscordUtil.reply(event, "Unable to delete bond.")
-					return Mono.`when`(monos)
-				}
-			} else {
-				val flagsArray = oldFlags.split(",")
-				val newFlags = flagsArray.filter { it != "allow_proxies" }.joinToString(",")
-				connection.prepareStatement("""
-					UPDATE ${databaseManager.prefix("bound_credentials")}
-					SET flags = ?
-					WHERE `id` = ? AND FIND_IN_SET('allow_proxies', flags)
-				""".trimIndent()).use { preparedStatement ->
-					preparedStatement.setString(1, newFlags)
-					preparedStatement.setInt(2, id)
-					val rows = preparedStatement.executeUpdate()
-					if(rows == 0) return DiscordUtil.reply(event, "Unable to delete bond.")
-					return Mono.`when`(monos)
+				return if(preparedStatement.executeUpdate() == 0) {
+					DiscordUtil.reply(event, "No binding with id $id found!")
+				} else {
+					DiscordUtil.reply(event, "Deleted whitelist $id")
 				}
 			}
 		}

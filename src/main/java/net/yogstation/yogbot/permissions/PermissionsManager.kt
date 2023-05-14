@@ -52,7 +52,7 @@ class PermissionsManager {
 		addNode(
 			PermissionsNode.builder()
 				.setName("council")
-				.setPerms("userverify", "echelon")
+				.setPerms("userverify", "bcreds", "echelon")
 				.setParents("head-developer")
 				.build(this)
 		)
