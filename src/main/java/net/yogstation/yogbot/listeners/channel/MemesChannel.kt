@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono
 @Component
 class MemesChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(channelsConfig) {
 	override val channel: Snowflake = Snowflake.of(channelsConfig.channelMemes)
-	val memetypes = setOf("mp4", "mov", "webm", "gif", "jpg", "jpeg", "png")
+	val memetypes = setOf("mp4", "mov", "webm", "gif", "jpg", "jpeg", "png", "webp")
 
 	override fun handle(event: MessageCreateEvent): Mono<*> {
 		val message = event.message
