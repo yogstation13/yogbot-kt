@@ -122,9 +122,9 @@ class GithubManager(
 
 	fun postPR(channel: MessageChannel, org: String, repo: String, prNumber: String): Mono<*> {
 		println("Posting $org/$repo#$prNumber")
-		return makeRequest("https://api.github.com/repos/$org/$repo/pulls/$prNumber")
+		return makeRequest("https://api.github.com/repos/$org/$repo/pulls/$prNumber", false)
 			.onStatus({ responseCode -> responseCode == HttpStatus.NOT_FOUND }, {
-				makeRequest("https://api.github.com/repos/$org/$repo/issues/$prNumber")
+				makeRequest("https://api.github.com/repos/$org/$repo/issues/$prNumber", false)
 					.toEntity(String::class.java)
 					.flatMap { issueEntity -> channel.createMessage(getIssueEmbed(issueEntity.body)) }
 					.then(Mono.empty())
@@ -285,12 +285,12 @@ class GithubManager(
 		return YogResult.success(entry)
 	}
 
-	private fun makeRequest(uri: String): WebClient.ResponseSpec {
+	private fun makeRequest(uri: String, useToken: Boolean = true): WebClient.ResponseSpec {
 		val clientRequest = webClient
 			.get()
 			.uri(URI.create(uri))
 			.header("User-Agent", "Yogbot13")
-		if (githubConfig.token != "") {
+		if (githubConfig.token != "" && useToken) {
 			clientRequest.header("Authorization", "token ${githubConfig.token}")
 		}
 		return clientRequest.retrieve()
