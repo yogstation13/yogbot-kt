@@ -120,16 +120,18 @@ class GithubManager(
 		}
 	}
 
-	fun postPR(channel: MessageChannel, prNumber: String): Mono<*> {
-		return makeRequest("${githubConfig.repoLink}/pulls/$prNumber")
+	fun postPR(channel: MessageChannel, org: String, repo: String, prNumber: String): Mono<*> {
+		println("Posting $org/$repo#$prNumber")
+		return makeRequest("https://api.github.com/repos/$org/$repo/pulls/$prNumber")
 			.onStatus({ responseCode -> responseCode == HttpStatus.NOT_FOUND }, {
-				makeRequest("${githubConfig.repoLink}/issues/$prNumber")
+				makeRequest("https://api.github.com/repos/$org/$repo/issues/$prNumber")
 					.toEntity(String::class.java)
 					.flatMap { issueEntity -> channel.createMessage(getIssueEmbed(issueEntity.body)) }
 					.then(Mono.empty())
 			})
 			.toEntity(String::class.java)
 			.flatMap { prEntity ->
+				println(prEntity.body)
 				if (prEntity.statusCode.is2xxSuccessful) channel.createMessage(
 					getManualPrEmbed(
 						mapper.readTree(prEntity.body)

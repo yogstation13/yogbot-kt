@@ -16,7 +16,7 @@ class MessageListener(
 	val discordConfig: DiscordConfig,
 	private val githubManager: GithubManager
 ) {
-	private val prPattern: Pattern = Pattern.compile("\\[#([0-9]+)]")
+	private val prPattern: Pattern = Pattern.compile("\\[(?:(?<org>[\\w.-]+)/)?(?<repo>[\\w.-]+)?#(?<id>\\d+)]")
 
 	init {
 		client.on(MessageCreateEvent::class.java) { event: MessageCreateEvent -> handle(event) }.subscribe()
@@ -54,7 +54,9 @@ class MessageListener(
 				event.message.channel.flatMap { channel ->
 					githubManager.postPR(
 						channel,
-						prMatcher.group(1)
+						prMatcher.group("org") ?: "yogstation13",
+						prMatcher.group("repo") ?: "Yogstation",
+						prMatcher.group("id")
 					)
 				}
 			)
