@@ -160,11 +160,7 @@ class ByondTicketManager (
 		return ticket.updateMessage(client, channelsConfig.channelLiveTickets)
 	}
 
-	fun setRound(roundID: Int): Mono<*> {
-		return setRound(roundID, false)
-	}
-
-	private fun setRound(roundID: Int, force: Boolean): Mono<*> {
+	fun setRound(roundID: Int, force: Boolean = false): Mono<*> {
 		if(currentRound == roundID && !force) return Mono.empty<Void>()
 		currentRound = roundID
 		tickets.clear()
@@ -273,7 +269,12 @@ data class ByondTicket(
 			}
 			.onErrorComplete()
 			.flatMap { message ->
-				message.edit(MessageEditSpec.builder().embeds(listOf(toEmbed())).components(listOf(getActionRow())).build()).flatMap {
+				message.edit(MessageEditSpec
+					.builder()
+					.embeds(listOf(toEmbed()))
+					.components(listOf(getActionRow()))
+					.build()
+				).flatMap {
 					postMessageUpdate(client, channelId)
 				}
 			}

@@ -38,7 +38,12 @@ class TicketEndpoints (
 	fun newTicket(@RequestBody ticketPayload: TicketNewDTO): Mono<HttpEntity<String>> {
 		val keyError = validateKey(ticketPayload.key)
 		if(keyError != null) return keyError
-		return handleError(ticketManager.newTicket(ticketPayload.ckey, ticketPayload.message, ticketPayload.ticketId, ticketPayload.round))
+		return handleError(ticketManager.newTicket(
+			ticketPayload.ckey,
+			ticketPayload.message,
+			ticketPayload.ticketId,
+			ticketPayload.round
+		))
 	}
 
 	@PostMapping("/byond/ticket_administer")
