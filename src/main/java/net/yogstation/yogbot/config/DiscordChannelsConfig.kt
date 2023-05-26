@@ -31,6 +31,7 @@ data class DiscordChannelsConfig @ConstructorBinding constructor(
 	val channelMentorApplications: Long,
 	val channelGithubSpam: Long,
 	val channelBugReports: Long,
+	val channelLiveTickets: Long
 ) {
 
 	private val adminChannels: Set<Long> by lazy {
