@@ -64,7 +64,12 @@ class CoderCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(
 		"https://cdn.discordapp.com/attachments/734475284446707753/921906106752704592/firefox_rx9in6oPrZ.png", // Files Changed 145
 		"https://cdn.discordapp.com/attachments/734475284446707753/920021959247560744/unknown.png", // Force italian accent
 		"https://cdn.discordapp.com/attachments/734475284446707753/920021959247560744/unknown.png", // Reverts and alternatives
-		"https://cdn.discordapp.com/attachments/734475284446707753/933964199065968650/unknown.png" //Too late retard
+		"https://cdn.discordapp.com/attachments/734475284446707753/933964199065968650/unknown.png", //Too late retard
+		"https://cdn.discordapp.com/attachments/734475284446707753/1069354001897898024/image.png", // Playing with fire
+		"https://cdn.discordapp.com/attachments/734475284446707753/1069662131630379028/image-56.png", // Depression
+		"https://cdn.discordapp.com/attachments/734475284446707753/1070126630950940833/image.png", // Fishing
+		"https://cdn.discordapp.com/attachments/734475284446707753/1099496558870921217/image.png", // Can't call it an ided
+		"https://cdn.discordapp.com/attachments/734475284446707753/1103234273735090196/image.png" // Just get playtime
 	)
 
 	override val title = "Coder Image"

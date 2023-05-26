@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '2.7.0'
+    id 'org.springframework.boot' version '2.7.11'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.6.20-RC2'
@@ -37,24 +37,24 @@ dependencyLocking {
 }
 
 dependencies {
-    kapt 'org.hibernate:hibernate-jpamodelgen:5.6.7.Final'
+    kapt 'org.hibernate:hibernate-jpamodelgen:5.6.15.Final'
     kapt "org.springframework.boot:spring-boot-configuration-processor"
 
     implementation 'org.yaml:snakeyaml:2.0'
-    implementation("com.fasterxml.jackson:jackson-bom:2.14.0-rc1")
-	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.0-rc1'
+    implementation('com.fasterxml.jackson:jackson-bom:2.14.2')
+	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
     implementation 'com.discord4j:discord4j-core:3.2.3'
-    implementation 'mysql:mysql-connector-java:8.0.30'
+    implementation 'mysql:mysql-connector-java:8.0.32'
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.apache.commons:commons-text:1.10.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
     implementation "org.springframework:spring-jdbc"
-    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.7.20'
-	implementation "io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.0-M1"
+    implementation 'org.jetbrains.kotlin:kotlin-reflect:1.8.10'
+	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2'
 }
 
 compileKotlin {

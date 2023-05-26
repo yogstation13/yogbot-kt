@@ -56,8 +56,11 @@ class LockerCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand
 		"https://cdn.discordapp.com/attachments/734475284446707753/978290534332399627/unknown-132.png", // Vampire Locker
 		"https://cdn.discordapp.com/attachments/734475284446707753/978395660774694992/unknown.png", // Medbay Locker
 		"https://cdn.discordapp.com/attachments/734475284446707753/978397276269580338/The_Squad.png", //Yet another medbay locker
-		"https://cdn.discordapp.com/attachments/734475284446707753/978410919426138202/Screenshot_2022-05-23_153508.png" //Atmos locker
+		"https://cdn.discordapp.com/attachments/734475284446707753/978410919426138202/Screenshot_2022-05-23_153508.png", //Atmos locker
 		//Stop adding locker images like half of this shit is the same
+		"https://cdn.discordapp.com/attachments/734475284446707753/1075879161031295116/image.png", // I am very sad
+		"https://cdn.discordapp.com/attachments/734475284446707753/1100988467195936799/image.png" // Traitor murder room
+		
 	)
 
 	override val title = "Locker Image"
