@@ -8,6 +8,7 @@ import discord4j.core.`object`.presence.ClientPresence
 import discord4j.core.spec.EmbedCreateSpec
 import discord4j.discordjson.json.MessageCreateRequest
 import discord4j.rest.util.Color
+import net.yogstation.yogbot.ByondTicketManager
 import net.yogstation.yogbot.config.ByondConfig
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
@@ -29,7 +30,8 @@ class ServerStatusEndpoint(
 	byondConfig: ByondConfig,
 	private val channelsConfig: DiscordChannelsConfig,
 	private val client: GatewayDiscordClient,
-	private val discordConfig: DiscordConfig
+	private val discordConfig: DiscordConfig,
+	private val byondTicketManager: ByondTicketManager
 ) :
 	ByondEndpoint(byondConfig) {
 
@@ -58,6 +60,7 @@ class ServerStatusEndpoint(
 					)
 				}
 					.and(client.updatePresence(ClientPresence.online(ClientActivity.playing("Round Starting!"))))
+					.and(byondTicketManager.setRound(payload.round ?: 0))
 					.then(HttpUtil.ok("Status set"))
 			}
 
