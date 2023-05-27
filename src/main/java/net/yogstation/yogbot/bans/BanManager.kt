@@ -6,7 +6,6 @@ import discord4j.core.`object`.entity.Member
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.data.BanRepository
 import net.yogstation.yogbot.data.entity.Ban
-import net.yogstation.yogbot.data.entity.Ban_.reason
 import net.yogstation.yogbot.util.LogChannel
 import net.yogstation.yogbot.util.YogResult
 import org.springframework.data.jpa.domain.Specification.where
@@ -30,7 +29,7 @@ class BanManager(
 	/**
 	 * Issues a ban for a member
 	 * @param snowflake The snowflake of the member to ban
-	 * @param reason The text reason for the ban, it will be sent to the user and logged
+	 * @param rawReason The text reason for the ban, it will be sent to the user and logged
 	 * @param duration The duration of the ban in minutes, zero or negative values provide indefinite bans
 	 * @param author The person who issued the ban, for logging purposes
 	 */
