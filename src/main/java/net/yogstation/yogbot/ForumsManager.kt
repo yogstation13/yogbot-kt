@@ -18,9 +18,11 @@ import net.yogstation.yogbot.util.ByondLinkUtil
 import net.yogstation.yogbot.util.StringUtils
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.http.HttpStatus
 import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.web.reactive.function.client.WebClientResponseException
 import reactor.core.publisher.Mono
 import java.net.URI
 import java.util.*
@@ -115,7 +117,8 @@ class ForumsManager(
 
 	private fun handleChannel(channelId: Long, forumId: Int, pingType: PingType = PingType.STAFF_ONLY) {
 		guild?.getChannelById(Snowflake.of(channelId))?.flatMap { channel ->
-			fetchData(forumId).flatMap { response ->
+			fetchData(forumId).flatMap forumData@ { response ->
+				if(response == null) return@forumData Mono.empty<Void>()
 				val threads = response.get("threads")
 				channel.restChannel.getMessagesAfter(Snowflake.of(0)).collectList().flatMap { unprocessedMessages ->
 					var publishResult: Mono<*> = Mono.empty<Any>()
@@ -169,12 +172,19 @@ class ForumsManager(
 		return getPing(pingType, title).map { "$it `$title`\n        <$link>" }
 	}
 
-	private fun fetchData(forumId: Int): Mono<JsonNode> {
+	private fun fetchData(forumId: Int): Mono<JsonNode?> {
 		return webClient.get()
 			.uri(URI.create("https://forums.yogstation.net/api/forums/$forumId?with_threads=true"))
 			.header("XF-Api-Key", forumsConfig.xenforoKey)
 			.retrieve()
 			.bodyToMono(String::class.java)
+			.doOnError {
+				if (it is WebClientResponseException) {
+					if(it.statusCode == HttpStatus.FORBIDDEN) {
+						logger.error("Cannot access forum $forumId")
+					} else logger.error("Error response received", it)
+				} else logger.error("Unknown error making web request", it)
+			}.onErrorComplete()
 			.map { mapper.readTree(it) }
 	}
 
