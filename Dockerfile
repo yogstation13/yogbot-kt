@@ -1,4 +1,4 @@
-FROM alpine:3.18.0 as compiler
+FROM alpine:3.18.2 as compiler
 
 RUN apk add --no-cache openjdk17 gradle
 
@@ -9,7 +9,7 @@ COPY src src
 RUN gradle --no-daemon bootJar
 
 
-FROM alpine:3.18.0
+FROM alpine:3.18.2
 
 RUN apk add --no-cache openjdk17-jre-headless
 
