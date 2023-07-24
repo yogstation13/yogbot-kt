@@ -214,6 +214,7 @@ data class ByondTicket(
 		val builder = EmbedCreateSpec.builder()
 
 		builder.title("#$id: $title")
+		builder.addField("Player", ckey, true)
 		builder.addField("Admin", admin, true)
 		builder.color(if(resolved) Color.GRAY else if(admin == "Unclaimed") Color.RED else Color.GREEN)
 

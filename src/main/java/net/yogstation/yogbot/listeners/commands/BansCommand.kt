@@ -51,8 +51,10 @@ class BansCommand(discordConfig: DiscordConfig,
 					} else {
 						it.issuedAt.toInstant().until(it.expiresAt!!.toInstant(), ChronoUnit.SECONDS).seconds
 					}
-					val active = it.expiresAt != null && it.expiresAt!!.before(Date())
-					val activeMark = if(active) "+" else "-"
+					val revoked = it.revokedAt != null && it.revokedAt!!.before(Date())
+					val expired = it.expiresAt != null && it.expiresAt!!.before(Date())
+					val activeMark = if(revoked || expired) "+" else "-"
+					val endReason = if(revoked) "(revoked)" else if (expired) "(expired)" else ""
 					val issuedAt = dateFormat.format(it.issuedAt)
 					val durationString = if(duration.isInfinite()) {
 						"permanently"
@@ -67,7 +69,7 @@ class BansCommand(discordConfig: DiscordConfig,
 							}
 						}}"
 					}
-					"$activeMark ($issuedAt): Banned $durationString. Reason: ${it.reason}"
+					"$activeMark ($issuedAt): Banned $durationString. Reason: ${it.reason}${endReason}"
 				}
 
 				bans = DiscordUtil.toMessages(banStrings, "```diff\n", "```")
