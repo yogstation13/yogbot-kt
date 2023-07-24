@@ -4,7 +4,6 @@ import discord4j.core.event.domain.message.MessageCreateEvent
 import net.yogstation.yogbot.ByondConnector
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import org.apache.commons.text.StringEscapeUtils
-import org.slf4j.LoggerFactory
 import reactor.core.publisher.Mono
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
@@ -18,7 +17,6 @@ abstract class RelayChannel(channelsConfig: DiscordChannelsConfig, private val b
 	AbstractChannel(
 		channelsConfig
 	) {
-	private val logger = LoggerFactory.getLogger(javaClass)
 
 	/**
 	 * Setting this to true will take attached images and include them in the message sent to byond
