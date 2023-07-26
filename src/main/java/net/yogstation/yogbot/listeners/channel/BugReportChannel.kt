@@ -4,9 +4,9 @@ package net.yogstation.yogbot.listeners.channel
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.annotation.JsonProperty
 import discord4j.common.util.Snowflake
+import discord4j.core.event.domain.message.MessageCreateEvent
 import discord4j.core.`object`.entity.Attachment
 import discord4j.core.`object`.entity.User
-import discord4j.core.event.domain.message.MessageCreateEvent
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.GithubConfig
 import net.yogstation.yogbot.util.DiscordUtil
@@ -34,7 +34,12 @@ class BugReportChannel(
 		val lines = event.message.content.split("\n")
 
 		val bugReport: BugReport = BugReport()
-		bugReport.parse(lines)
+		event.message.attachments.forEach { attachment -> logger.info(attachment.contentType.orElse("Unknown content type")) }
+		val logZip = event.message.attachments
+			.filter { attachment -> attachment.contentType.orElse("").equals("application/zip") }
+			.map { attachment -> attachment.url }
+			.firstOrNull() ?: ""
+		bugReport.parse(lines, logZip)
 		val missing: String? = bugReport.checkMissing()
 
 		if(missing != null) {
@@ -81,18 +86,25 @@ class BugReportChannel(
 	class BugReport {
 		private var author: String = ""
 		private var title = ""
-		private var roundId = ""
+		private var roundId = 0
 		private var testmerges = "Not Supplied / None"
+		private var logZip = ""
 		private val bodyBuilder = StringBuilder()
 		private val suppliedImages = StringBuilder()
 
 		fun parse(
-			lines: List<String>
+			lines: List<String>,
+			logZip: String
 		) {
+			this.logZip = logZip
 			for (line in lines) {
 				val parts = line.split(":", limit = 2)
 				when (parts[0].lowercase()) {
-					"round id" -> roundId = parts[1]
+					"round id" -> {
+						try {
+							roundId = parts[1].toInt()
+						} catch (_: NumberFormatException) {} // Not a valid number, don't error, will be caught later
+					}
 					"testmerges" -> testmerges = parts[1]
 					"title" -> title = parts[1]
 					else -> bodyBuilder.append(line).append("\n")
@@ -111,8 +123,8 @@ class BugReportChannel(
 
 			}
 
-			if (roundId == "") {
-				return "round ID"
+			if (roundId == 0 && logZip == "") {
+				return "round id or log zip"
 			}
 
 			return null
@@ -129,12 +141,21 @@ class BugReportChannel(
 		}
 
 		fun toDTO(): IssueSubmitDTO {
-			val formattedBody = StringBuilder("## Round ID: $roundId\n\n")
+			val formattedBody = StringBuilder()
+
+			if (roundId != 0) {
+				formattedBody.append("## Round ID: $roundId\n\n")
+			}
+
 			formattedBody.append("## Test Merges: \n$testmerges\n")
 			formattedBody.append("## Reproduction:\n$bodyBuilder")
 
 			if (suppliedImages.isNotEmpty()) {
 				formattedBody.append("## Supplied Image:\n$suppliedImages")
+			}
+
+			if (logZip != "") {
+				formattedBody.append("\n Logs: $logZip")
 			}
 
 			formattedBody.append("\n Submitted by: $author")
