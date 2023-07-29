@@ -9,7 +9,9 @@ import discord4j.rest.http.client.ClientException
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.data.BanRepository
+import net.yogstation.yogbot.data.StaffBanRepository
 import net.yogstation.yogbot.data.entity.Ban
+import net.yogstation.yogbot.data.entity.StaffBan
 import net.yogstation.yogbot.util.LogChannel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -27,18 +29,19 @@ class RoleUpdater(
 	private val discordConfig: DiscordConfig,
 	private val logChannel: LogChannel,
 	private val channelsConfig: DiscordChannelsConfig,
-	private val banRepository: BanRepository
+	private val banRepository: BanRepository,
+	private val staffBanRepository: StaffBanRepository
 ) {
 	private val logger: Logger = LoggerFactory.getLogger(javaClass)
 	private val softbanRole = Snowflake.of(discordConfig.softBanRole)
 	private val donorRole = Snowflake.of(discordConfig.donorRole)
 	private val verificationRole = Snowflake.of(discordConfig.byondVerificationRole)
+	private val staffBanRole = Snowflake.of(discordConfig.staffPublicBanRole)
 
-	@Scheduled(fixedRate = 30000)
-	fun handleRoles() {
+	private fun getMainGuild(): Guild? {
 		if (!client.gatewayResources.intents.contains(Intent.GUILD_MEMBERS)) {
 			logger.error("Unable to process unbans and donors, lacking GUILD_MEMBERS intent")
-			return
+			return null
 		}
 
 		val guild: Guild?
@@ -46,18 +49,28 @@ class RoleUpdater(
 			guild = client.getGuildById(Snowflake.of(discordConfig.mainGuildID)).block()
 		} catch (e: ClientException) {
 			logger.error("Cannot access main guild, unable to handle unbans and donors: ${e.message}")
-			return
+			return null
 		}
 		if (guild == null) {
 			logger.error("Unable to locate guild, cannot handle unbans and donors")
-			return
+			return null
 		}
+		return guild
+	}
+
+	@Scheduled(fixedRate = 30000)
+	fun handleRoles() {
+		val guild = getMainGuild() ?: return
 
 		val donorSnowflakes: MutableSet<Snowflake> = HashSet()
 		val verifiedSnowflakes: MutableSet<Snowflake> = HashSet()
 		val bannedSnowflakes: Set<Snowflake> = banRepository
 			.findAll(Specification.where(Ban.isBanActive()))
 			.map { Snowflake.of(it.discordId) }.toSet()
+
+		val staffBannedSnowflakes: Set<Snowflake> = staffBanRepository
+			.findAll(Specification.where(StaffBan.isBanActive()))
+			.map { Snowflake.of(it.discordId ) }.toSet()
 
 		try {
 			databaseManager.byondDbConnection.use { connection ->
@@ -91,6 +104,12 @@ class RoleUpdater(
 					it.addRole(verificationRole, "Reapplying verification role")
 				}) {
 					it.removeRole(verificationRole, "Unable to verify")
+				}
+			).and(
+				updateRole(staffBannedSnowflakes, member, staffBanRole, {
+					it.addRole(staffBanRole, "Reapplying staff ban role")
+				}) {
+					it.removeRole(staffBanRole, "Staff ban expired")
 				}
 			)
 		}.subscribe()

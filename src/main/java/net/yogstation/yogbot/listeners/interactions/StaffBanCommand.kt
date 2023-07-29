@@ -1,17 +1,24 @@
 package net.yogstation.yogbot.listeners.interactions
 
 import discord4j.common.util.Snowflake
-import discord4j.core.`object`.entity.Member
-import discord4j.core.`object`.entity.User
 import discord4j.core.event.domain.interaction.ApplicationCommandInteractionEvent
 import discord4j.core.event.domain.interaction.UserInteractionEvent
+import discord4j.core.`object`.entity.Member
+import discord4j.core.`object`.entity.User
 import net.yogstation.yogbot.config.DiscordConfig
+import net.yogstation.yogbot.data.StaffBanRepository
+import net.yogstation.yogbot.data.entity.StaffBan
 import net.yogstation.yogbot.permissions.PermissionsManager
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import reactor.core.scheduler.Schedulers
 
 @Component
-class StaffBanCommand(private val permissions: PermissionsManager, private val discordConfig: DiscordConfig) :
+class StaffBanCommand(
+	private val permissions: PermissionsManager,
+	private val discordConfig: DiscordConfig,
+	private val staffBanRepository: StaffBanRepository
+) :
 	IUserCommand {
 	override val name = "staffban"
 
@@ -37,6 +44,9 @@ class StaffBanCommand(private val permissions: PermissionsManager, private val d
 	): Mono<Void> {
 		val roles = member.roleIds
 		return if (roles.contains(Snowflake.of(discordConfig.secondWarningRole))) {
+			Mono.fromRunnable<StaffBan>{
+				staffBanRepository.save(StaffBan(member.id.asLong()))
+			}.subscribeOn(Schedulers.boundedElastic()).subscribe()
 			member.addRole(Snowflake.of(discordConfig.staffPublicBanRole))
 				.then(event.reply().withContent("${member.mention} was banned from staff public"))
 		} else if (roles.contains(Snowflake.of(discordConfig.firstWarningRole))) {
