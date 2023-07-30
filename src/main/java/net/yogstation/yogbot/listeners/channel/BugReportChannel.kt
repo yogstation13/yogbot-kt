@@ -102,7 +102,7 @@ class BugReportChannel(
 				when (parts[0].lowercase()) {
 					"round id" -> {
 						try {
-							roundId = parts[1].toInt()
+							roundId = parts[1].trim().toInt()
 						} catch (_: NumberFormatException) {} // Not a valid number, don't error, will be caught later
 					}
 					"testmerges" -> testmerges = parts[1]
