@@ -12,4 +12,7 @@ data class ForumsConfig @ConstructorBinding constructor(
 	val adminAdminComplaintsForum: Int,
 	val staffApplicationsForum: Int,
 	val mentorApplicationsForum: Int,
+
+	val activityGroups: String,
+	val activityExempt: String
 )
