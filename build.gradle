@@ -8,7 +8,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '2.7.12'
+    id 'org.springframework.boot' version '2.7.15'
     id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.6.20-RC2'
@@ -43,6 +43,8 @@ dependencies {
     implementation 'org.yaml:snakeyaml:2.0'
     implementation('com.fasterxml.jackson:jackson-bom:2.14.2')
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
+	implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
+	implementation 'org.thymeleaf:thymeleaf-spring5:3.1.2.RELEASE'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
