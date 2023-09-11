@@ -180,7 +180,7 @@ class ForumsManager(
 			.bodyToMono(String::class.java)
 			.doOnError {
 				if (it is WebClientResponseException) {
-					if(it.statusCode == HttpStatus.FORBIDDEN) {
+					if(it.statusCode == HttpStatus.FORBIDDEN || it.statusCode == HttpStatus.UNAUTHORIZED) {
 						logger.error("Cannot access forum $forumId")
 					} else logger.error("Error response received", it)
 				} else logger.error("Unknown error making web request", it)
