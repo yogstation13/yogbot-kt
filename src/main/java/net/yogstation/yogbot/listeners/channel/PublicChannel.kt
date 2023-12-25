@@ -6,6 +6,7 @@ import discord4j.core.event.domain.message.MessageCreateEvent
 import net.yogstation.yogbot.config.DiscordChannelsConfig
 import org.springframework.stereotype.Component
 import reactor.core.publisher.Mono
+import net.yogstation.yogbot.util.DiscordUtil
 
 @Component
 class PublicChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(channelsConfig) {
