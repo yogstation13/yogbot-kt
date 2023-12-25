@@ -12,7 +12,8 @@ class PublicChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(cha
 	override val channel: Snowflake = Snowflake.of(channelsConfig.channelPublic)
 	override fun handle(event: MessageCreateEvent): Mono<*> {
 		val message = event.message
-		if (!message.contains("hohoho", ignoreCase = true) && !message.contains("hohoho", ignoreCase = true)) {
+		var message_content = message.getContent()
+		if (!message_content.contains("hohoho", ignoreCase = true) && !message_content.contains("hohoho", ignoreCase = true)) {
 			message.delete("You must be festive! Include "hohoho" or "ho ho ho" in your message for the christmas season!")
 		}
 	}
