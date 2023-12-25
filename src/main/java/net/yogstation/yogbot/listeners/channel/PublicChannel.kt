@@ -14,7 +14,7 @@ class PublicChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(cha
 		val message = event.message
 		var content = message.getContent()
 		if (!content.contains("hohoho", ignoreCase = true) && !content.contains("ho ho ho", ignoreCase = true)) {
-			event.reply("You must be festive! Include \"hohoho\" or \"ho ho ho\" in your message for the christmas season!")
+			DiscordUtil.reply(event, "You must be festive! Include \"hohoho\" or \"ho ho ho\" in your message for the christmas season!")
 			return message.delete()
 		}
 		return Mono.empty<Any>()
