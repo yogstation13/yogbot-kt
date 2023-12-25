@@ -557,7 +557,7 @@ style:
     active: false
   MaxLineLength:
     active: true
-    maxLineLength: 130
+    maxLineLength: 170
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
