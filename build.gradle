@@ -57,6 +57,11 @@ dependencies {
     implementation "org.springframework:spring-jdbc"
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.8.10'
 	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2'
+	implementation 'ch.qos.logback:logback-classic:1.4.12'
+	implementation 'ch.qos.logback:logback-core:1.4.12'
+	implementation 'io.netty:netty-codec-http2:4.1.100.Final'
+	implementation 'io.projectreactor.netty:reactor-netty-http:1.0.39'
+
 }
 
 compileKotlin {
