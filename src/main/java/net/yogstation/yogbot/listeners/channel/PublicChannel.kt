@@ -13,8 +13,9 @@ class PublicChannel(channelsConfig: DiscordChannelsConfig) : AbstractChannel(cha
 	override fun handle(event: MessageCreateEvent): Mono<*> {
 		val message = event.message
 		var content = message.getContent()
-		return if (!content.contains("hohoho", ignoreCase = true) && !content.contains("hohoho", ignoreCase = true)) {
-			message.delete("You must be festive! Include \"hohoho\" or \"ho ho ho\" in your message for the christmas season!")
+		if (!content.contains("hohoho", ignoreCase = true) && !content.contains("hohoho", ignoreCase = true)) {
+			return message.delete("You must be festive! Include \"hohoho\" or \"ho ho ho\" in your message for the christmas season!")
 		}
+		return Mono.empty<Any>()
 	}
 }
