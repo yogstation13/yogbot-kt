@@ -76,6 +76,7 @@ data class DiscordConfig @ConstructorBinding constructor(
 			purgedRole,
 			unemojiworthyRole,
 			reactionlessRole,
+			wikibanRole,
 			quickfireBanRole
 		)
 	}
