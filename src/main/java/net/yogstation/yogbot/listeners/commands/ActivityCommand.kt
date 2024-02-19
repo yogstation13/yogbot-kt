@@ -57,7 +57,7 @@ SELECT adminlist.ckey as 'Ckey',
 	FROM %s as rolelog
 		WHERE rolelog.ckey = adminlist.ckey
 			AND rolelog.job = 'Admin'
-			AND rolelog.datetime > (Now() - INTERVAL 2 week)) / 60, 1), 0) as Activity
+			AND rolelog.datetime > (Now() - INTERVAL 1 month)) / 60, 1), 0) as Activity
 FROM admin_tmp as adminlist;
 	"""
 
@@ -198,7 +198,7 @@ FROM admin_tmp as adminlist;
 			val line = StringBuilder()
 			val loa = loaAdmins.contains(activity.ckey)
 			val exempt = exemptRanks.contains(activity.rank.groupId)
-			if (activity.activity >= 12) line.append('+') else if (loa || exempt) line.append(' ') else line.append(
+			if (activity.activity >= 20) line.append('+') else if (loa || exempt) line.append(' ') else line.append(
 				'-'
 			)
 			line.append(' ')
