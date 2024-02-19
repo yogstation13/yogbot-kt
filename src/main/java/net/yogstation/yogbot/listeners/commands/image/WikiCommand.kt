@@ -82,7 +82,8 @@ class WikiCommand(discordConfig: DiscordConfig, random: Random) : ImageCommand(d
 		"https://cdn.discordapp.com/attachments/734475284446707753/925666350750375966/catch_plush.png", // Catch UtaPlush
 		"https://cdn.discordapp.com/attachments/734475284446707753/944432609155514408/unknown.png", // Context Clues
 		"https://cdn.discordapp.com/attachments/134720091576205312/1084588722072322158/YogsBonk.png", // No horny
-		"https://cdn.discordapp.com/attachments/134720091576205312/1091290589997322360/VoteForWiki.png" // Vote wiki
+		"https://cdn.discordapp.com/attachments/134720091576205312/1091290589997322360/VoteForWiki.png", // Vote wiki
+		"https://cdn.discordapp.com/attachments/134720091576205312/1181833441029935124/image.png" // It's my mental illness
 	)
 
 	override val name = "wiki"
