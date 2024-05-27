@@ -40,7 +40,7 @@ dependencies {
     kapt "org.springframework.boot:spring-boot-configuration-processor:2.7.18"
 
     constraints {
-        implementation('org.springframework:spring-web:5.3.32'){
+        implementation('org.springframework:spring-web:5.3.36'){
             because 'Patch CVE-2024-22243, CVE-2024-22259, CVE-2024-22262'
         }
     }
