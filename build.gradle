@@ -8,10 +8,9 @@ buildscript {
 }
 
 plugins {
-    id 'org.springframework.boot' version '2.7.15'
-    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'org.springframework.boot' version '2.7.18'
     id 'java'
-    id 'org.jetbrains.kotlin.jvm' version '1.6.20-RC2'
+    id 'org.jetbrains.kotlin.jvm' version '1.9.24'
 	id "io.gitlab.arturbosch.detekt" version "1.20.0"
 }
 
@@ -38,23 +37,28 @@ dependencyLocking {
 
 dependencies {
     kapt 'org.hibernate:hibernate-jpamodelgen:5.6.15.Final'
-    kapt "org.springframework.boot:spring-boot-configuration-processor"
+    kapt "org.springframework.boot:spring-boot-configuration-processor:2.7.18"
 
+    constraints {
+        implementation('org.springframework:spring-web:5.3.36'){
+            because 'Patch CVE-2024-22243, CVE-2024-22259, CVE-2024-22262'
+        }
+    }
     implementation 'org.yaml:snakeyaml:2.0'
     implementation('com.fasterxml.jackson:jackson-bom:2.14.2')
 	implementation 'com.fasterxml.jackson.core:jackson-databind:2.14.2'
 	implementation 'org.thymeleaf:thymeleaf:3.1.2.RELEASE'
 	implementation 'org.thymeleaf:thymeleaf-spring5:3.1.2.RELEASE'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.7.18'
 
     testImplementation group: 'junit', name: 'junit', version: '4.12'
     implementation 'com.discord4j:discord4j-core:3.2.3'
     implementation 'mysql:mysql-connector-java:8.0.32'
-    implementation 'org.springframework.boot:spring-boot-starter-webflux'
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.7.18'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.7.18'
     implementation 'org.apache.commons:commons-text:1.10.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
-    implementation "org.springframework:spring-jdbc"
+    implementation "org.springframework:spring-jdbc:5.3.36"
     implementation 'org.jetbrains.kotlin:kotlin-reflect:1.8.10'
 	implementation 'io.projectreactor.kotlin:reactor-kotlin-extensions:1.2.2'
 	implementation 'ch.qos.logback:logback-classic:1.2.13'
