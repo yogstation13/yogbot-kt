@@ -41,7 +41,7 @@ class Yogbot {
 			Function<ReadyEvent, Publisher<Any>> { event: ReadyEvent ->
 				Mono.fromRunnable {
 					val self: User = event.self
-					logger.info("Logged in as {}#{}", self.username, self.discriminator)
+					logger.info("Logged in as {}", self.username)
 				}
 			}
 		).subscribe()
