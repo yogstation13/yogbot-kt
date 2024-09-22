@@ -11,7 +11,7 @@ RUN gradle --no-daemon bootJar
 
 FROM alpine:3.20.3
 
-RUN apk add --no-cache openjdk23-jre-headless
+RUN apk add --no-cache openjdk21-jre-headless
 
 COPY --from=compiler /app/build/libs/Yogbot-1.0-SNAPSHOT.jar app.jar
 
