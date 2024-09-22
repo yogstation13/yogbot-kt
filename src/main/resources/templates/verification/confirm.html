@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 	<head>
 		<meta charset="utf-8">
 		<meta content="width=device-width, initial-scale=1.0, shrink-to-fit=no" name="viewport">
@@ -17,7 +17,7 @@
 					<h4 class="card-title">Please confirm account linking</h4>
 					<p class="card-text">Is this your discord account?</p>
 					<span th:text="${ discordTag }">User tag here</span>
-					<img class="rounded-circle d-block" style="margin: 0 auto;" th:src="${ discordAvatar }">
+					<img alt="discord config" class="rounded-circle d-block" style="margin: 0 auto;" th:src="${ discordAvatar }">
 					<form method="post" style="margin-top: 2rem;">
 						<input class="form-control" name="csrftoken" th:value="${ csrfToken }" type="hidden">
 						<input class="form-control" name="state" th:value="${ state }" type="hidden">

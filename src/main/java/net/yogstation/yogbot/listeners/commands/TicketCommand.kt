@@ -105,7 +105,7 @@ class TicketCommand(
 		val resultSet = preparedStatement.executeQuery()
 		var hasData = false
 		var hasSent = false
-		val monos: MutableList<Mono<*>> = ArrayList();
+		val monos: MutableList<Mono<*>> = ArrayList()
 		val builder = StringBuilder("Ticket ").append(ticketId)
 		builder.append(" for round ").append(roundId).append("\n```\n")
 
@@ -120,7 +120,7 @@ class TicketCommand(
 					monos.add(DiscordUtil.reply(event, builder.toString()))
 				else
 					monos.add(DiscordUtil.send(event, builder.toString()))
-				hasSent = true;
+				hasSent = true
 				builder.setLength(0)
 				builder.append("```\n")
 			}
@@ -135,7 +135,7 @@ class TicketCommand(
 			monos.add(DiscordUtil.reply(event, builder.toString()))
 		else
 			monos.add(DiscordUtil.send(event, builder.toString()))
-		return Mono.`when`(monos);
+		return Mono.`when`(monos)
 	}
 
 	private fun getSingleTicket(

@@ -42,7 +42,7 @@ class BansCommand(discordConfig: DiscordConfig,
 			}
 			val targetID = target.snowflake
 			if (targetID != null) {
-				val dateFormat = DateFormat.getInstance();
+				val dateFormat = DateFormat.getInstance()
 				val banStrings = banRepository.findAll(Specification.where(Ban.isBanFor(targetID.asLong())))
 					.sortedByDescending { it.issuedAt }
 					.map {

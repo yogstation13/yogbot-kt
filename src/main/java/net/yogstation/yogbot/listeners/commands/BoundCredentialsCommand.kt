@@ -72,7 +72,7 @@ class BoundCredentialsCommand(discordConfig: DiscordConfig,
 			"or explicitly state the category first.\n" +
 			"For example `${args[0]} ${args[1]} 127.0.0.1` would search for IP 127.0.0.1, " +
 			"while `${args[0]} ${args[1]} ckey 127.0.0.1` would force a search by ckey")
-		var searchTerm = ""
+		val searchTerm: String;
 		val searchCriteria: String = if(args.size > 3) {
 			searchTerm = args[3]
 			args[2].lowercase()
@@ -113,7 +113,7 @@ class BoundCredentialsCommand(discordConfig: DiscordConfig,
 			if(criteria == "cid or ip") preparedStatement.setString(2, term)
 			preparedStatement.executeQuery().use { results ->
 				val builder = StringBuilder("Bound credentials for $criteria `$term`:\n```\n")
-				val monos: MutableList<Mono<*>> = ArrayList();
+				val monos: MutableList<Mono<*>> = ArrayList()
 				var first = true
 				while(results.next()) {
 					builder.append("${results.getInt("id")}: Ckey ${results.getString("ckey")} is bonded to ")
@@ -147,7 +147,7 @@ class BoundCredentialsCommand(discordConfig: DiscordConfig,
 			""".trimIndent()).use { preparedStatement ->
 				preparedStatement.setInt(1, id)
 				preparedStatement.executeQuery().use {
-					if(!it.next()) return DiscordUtil.reply(event, "No binding with id ${id} found!")
+					if(!it.next()) return DiscordUtil.reply(event, "No binding with id $id found!")
 					monos.add(DiscordUtil.reply(event, "Deleted bond: Ckey `${it.getString("ckey")}` bonded to " +
 						"cid `${it.getString("computerid")}` and " +
 						"ip `${it.getString("INET_NTOA(`ip`)")}`"))

@@ -44,7 +44,7 @@ class InfoCommand(
 			if (roundId == "") roundId = "Unknown"
 			val securityLevel = statusValues.getOrDefault("security_level", listOf("Unknown"))[0]
 			val embedColor = getSecurityLevelColor(securityLevel)
-			var mapName = statusValues.getOrDefault("map_name", listOf("Unknown"))[0]
+			val mapName = statusValues.getOrDefault("map_name", listOf("Unknown"))[0]
 			val embedBuilder = EmbedCreateSpec.builder()
 				.color(embedColor)
 				.author("Information", byondConfig.serverJoinAddress, "https://i.imgur.com/GPZgtbe.png")

@@ -89,7 +89,7 @@ class ForumsManager(
 		val ckey = StringUtils.ckeyIze(mentionMatcher.group("ping"))
 		val response = ByondLinkUtil.getMemberID(ckey, databaseManager)
 		if (response.value == null) return Mono.just(defaultPing)
-		return guild.getMemberById(response.value).map {
+		return guild!!.getMemberById(response.value).map {
 			if(pingType == PingType.PLAYER_COMPLAINT) {
 				"${it.mention} $defaultPing"
 			} else if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {

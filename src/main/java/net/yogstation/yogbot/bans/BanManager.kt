@@ -34,7 +34,7 @@ class BanManager(
 	 * @param author The person who issued the ban, for logging purposes
 	 */
 	fun ban(snowflake: Snowflake, rawReason: String, duration: Int, author: String): Mono<YogResult<Mono<*>?, String?>> {
-		val reason = rawReason.replace("\n", " ");
+		val reason = rawReason.replace("\n", " ")
 
 		val banMessage: StringBuilder = StringBuilder("You have been banned from ")
 		banMessage.append(discordConfig.serverName)

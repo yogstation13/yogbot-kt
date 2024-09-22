@@ -1,14 +1,14 @@
 package net.yogstation.yogbot.data.entity
 
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Column
+import jakarta.persistence.Temporal
+import jakarta.persistence.TemporalType
 import org.springframework.data.jpa.domain.Specification
 import java.util.*
-import javax.persistence.Column
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
-import javax.persistence.Temporal
-import javax.persistence.TemporalType
 
 @Entity
 data class StaffBan(
@@ -28,12 +28,12 @@ data class StaffBan(
 ) {
 
 	constructor(discordId: Long) :
-		this(0, discordId, Date(System.currentTimeMillis()), Date(System.currentTimeMillis() + banLength), null)
+		this(0, discordId, Date(System.currentTimeMillis()), Date(System.currentTimeMillis() + BAN_LENGTH), null)
 
 	companion object {
-		private const val banLength: Long = 3 * 30 * 24 * 60 * 60 * 1000L // 3 Months, in millis
+		private const val BAN_LENGTH: Long = 3 * 30 * 24 * 60 * 60 * 1000L // 3 Months, in millis
 		fun isBanFor(discordId: Long): Specification<StaffBan> {
-			return Specification { root, query, criteriaBuilder ->
+			return Specification { root, _, criteriaBuilder ->
 				criteriaBuilder.equal(root.get(StaffBan_.discordId), discordId)
 			}
 		}

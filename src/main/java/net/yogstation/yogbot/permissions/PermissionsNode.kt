@@ -52,7 +52,7 @@ class PermissionsNode(
 			node.permissions.addAll(perms)
 			for (parentName in parents) {
 				val parentNode = manager.getNodeFor(parentName)
-					?: throw java.lang.IllegalStateException("Cannot initialize a permissions node before its parents")
+					checkNotNull(parentNode) { "Cannot initialize a permissions node before its parents" }
 				node.parents.add(parentNode)
 			}
 			return node

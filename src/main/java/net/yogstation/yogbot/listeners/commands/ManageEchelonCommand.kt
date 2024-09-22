@@ -67,7 +67,7 @@ class ManageEchelonCommand(discordConfig: DiscordConfig,
 			preparedStatement.setString(1, args[2])
 			preparedStatement.executeQuery().use { results ->
 				val builder = StringBuilder("Whitelists for ckey `${args[2]}`:\n```\n")
-				val monos: MutableList<Mono<*>> = ArrayList();
+				val monos: MutableList<Mono<*>> = ArrayList()
 				var first = true
 				while(results.next()) {
 					builder.append("${results.getInt("id")}: Ckey ${results.getString("ckey")}\n")

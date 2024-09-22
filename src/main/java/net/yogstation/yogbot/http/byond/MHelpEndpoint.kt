@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 class MHelpEndpoint(
-	private val channelsConfig: DiscordChannelsConfig,
+	channelsConfig: DiscordChannelsConfig,
 	client: GatewayDiscordClient,
 	byondConfig: ByondConfig
 ) :
