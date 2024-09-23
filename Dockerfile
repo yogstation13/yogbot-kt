@@ -6,7 +6,7 @@ WORKDIR /app
 COPY build.gradle settings.gradle ./
 COPY src src
 
-RUN gradle --no-daemon bootJar
+RUN gradle --no-daemon --debug bootJar
 
 
 FROM alpine:3.20.3
