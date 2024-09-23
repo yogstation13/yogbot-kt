@@ -32,7 +32,7 @@ dependencyLocking {
 }
 
 dependencies {
-	kapt 'org.hibernate:hibernate-jpamodelgen'
+	kapt 'org.hibernate:hibernate-jpamodelgen:6.5.3.Final'
 	kapt 'org.springframework.boot:spring-boot-configuration-processor'
 	detektPlugins "io.gitlab.arturbosch.detekt:detekt-rules-libraries:1.23.7"
 
