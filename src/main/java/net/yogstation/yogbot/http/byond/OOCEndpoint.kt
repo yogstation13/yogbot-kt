@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono
 @RestController
 class OOCEndpoint(
 	client: GatewayDiscordClient,
-	private val channelsConfig: DiscordChannelsConfig,
+	channelsConfig: DiscordChannelsConfig,
 	byondConfig: ByondConfig
 ) : MessageRelayEndpoint(client, byondConfig) {
 	override val channelId: Snowflake = Snowflake.of(channelsConfig.channelOOC)

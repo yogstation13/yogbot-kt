@@ -21,7 +21,7 @@ class MemberJoinListener(
 	}
 
 	fun handle(event: MemberJoinEvent): Mono<*> {
-		return logChannel.log("**${event.member.username}#${event.member.discriminator}** joined the server")
+		return logChannel.log("**${event.member.username}** joined the server")
 			.and(banManager.onLogin(event.member))
 			.and(stickyRoleManager.doLogin(event.member))
 	}

@@ -13,7 +13,6 @@ import net.yogstation.yogbot.listeners.interactions.UnbanCommand as UserUnbanCom
 @Component
 class UnbanSlashCommand(
 	private val unbanCommand: UserUnbanCommand,
-	private val permissions: PermissionsManager
 ): ISlashCommand {
 	override val name = "unban"
 

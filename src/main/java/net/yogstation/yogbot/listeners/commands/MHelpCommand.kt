@@ -37,7 +37,7 @@ class MHelpCommand(
 		if (author != null) {
 			builder.append(
 				URLEncoder.encode(
-					"@${author.username}#${author.discriminator}",
+					"@${author.username}",
 					StandardCharsets.UTF_8
 				)
 			)

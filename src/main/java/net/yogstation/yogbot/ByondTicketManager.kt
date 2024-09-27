@@ -186,8 +186,8 @@ class ByondTicketManager (
 			)
 			tickets[data.id] = byondTicket
 			val ticketMono = byondTicket.createMessage(client, channelsConfig.channelLiveTickets)
-			ticketsMono = ticketsMono.flatMap<String> { prevString ->
-				ticketMono.map<String> { newString ->
+			ticketsMono = ticketsMono.flatMap { prevString ->
+				ticketMono.map { newString ->
 					if(prevString.isEmpty() != newString.isEmpty()) "$prevString$newString" // One is empty, one isn't, concatenate
 					else if(prevString.isEmpty()) "" // Both are empty
 					else "$prevString\n$newString" // Both are populated
@@ -235,7 +235,7 @@ data class ByondTicket(
 	}
 
 	private fun getActionRow(): ActionRow {
-		val buttons = mutableListOf<Button>(
+		val buttons = mutableListOf(
 			if(admin == "Unclaimed") Button.primary("ticket-$id-administer", "Administer")
 			else Button.secondary("ticket-$id-administer", "Administer"),
 			Button.primary("ticket-$id-reply", "Reply"),

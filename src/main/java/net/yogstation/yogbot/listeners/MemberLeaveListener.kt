@@ -19,7 +19,7 @@ class MemberLeaveListener(
 	}
 
 	fun handle(event: MemberLeaveEvent): Mono<*> {
-		return logChannel.log("**${event.user.username}#${event.user.discriminator}** left the server")
+		return logChannel.log("**${event.user.username}** left the server")
 			.and(stickyRoleManager.doLogout(event.member.orElse(null)))
 	}
 }

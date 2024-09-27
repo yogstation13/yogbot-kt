@@ -29,7 +29,7 @@ class WhoIsCommand(
 		val snowflake: Snowflake = target.snowflake ?: return DiscordUtil.reply(event, "Error getting discord id")
 		return client.getUserById(snowflake)
 			.flatMap { user ->
-				var tag = "${user.username}${if(user.discriminator == "0") "" else "#${user.discriminator}"}"
+				val tag = user.username
 				DiscordUtil.reply(
 					event, if(givenCkey)
 						"Ckey ${target.ckey} is linked to discord account $tag"

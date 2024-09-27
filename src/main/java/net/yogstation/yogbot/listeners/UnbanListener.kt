@@ -14,6 +14,6 @@ class UnbanListener(val client: GatewayDiscordClient, private val logChannel: Lo
 	}
 
 	fun handle(event: UnbanEvent): Mono<*> {
-		return logChannel.log("**${event.user.username}#${event.user.discriminator}** was un from the server")
+		return logChannel.log("**${event.user.username}** was un from the server")
 	}
 }

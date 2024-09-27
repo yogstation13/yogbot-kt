@@ -13,7 +13,6 @@ import java.util.regex.*
 class TextCommandListener(
 	private val commands: List<TextCommand>,
 	client: GatewayDiscordClient,
-	private val config: DiscordConfig
 ) {
 	private val commandPattern: Pattern = Pattern.compile("^!(?<command>\\w+)")
 

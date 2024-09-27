@@ -1,6 +1,6 @@
-FROM alpine:3.18.5 as compiler
+FROM alpine:3.20.3 as compiler
 
-RUN apk add --no-cache openjdk17 gradle
+RUN apk add --no-cache openjdk21 gradle
 
 WORKDIR /app
 COPY build.gradle settings.gradle ./
@@ -9,9 +9,9 @@ COPY src src
 RUN gradle --no-daemon bootJar
 
 
-FROM alpine:3.18.5
+FROM alpine:3.20.3
 
-RUN apk add --no-cache openjdk17-jre-headless
+RUN apk add --no-cache openjdk21-jre-headless
 
 COPY --from=compiler /app/build/libs/Yogbot-1.0-SNAPSHOT.jar app.jar
 

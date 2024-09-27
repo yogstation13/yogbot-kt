@@ -52,25 +52,15 @@ class ReviewCommand(
 
 	internal class ReviewWorker(
 		private val initialCkey: String,
-		channel: MessageChannel,
-		strict: Boolean,
-		database: DatabaseManager
-	) : Thread() {
-		private val startTime: LocalDateTime
-		private val messages = ArrayList<Message>()
-		private val channel: MessageChannel
-		private val strict: Boolean
+		private val channel: MessageChannel,
+		private val strict: Boolean,
 		private val database: DatabaseManager
+	) : Thread() {
+		private val startTime: LocalDateTime = LocalDateTime.now()
+		private val messages = ArrayList<Message>()
 		private val ckeysQueue: MutableList<String> = ArrayList()
 		private val ckeysChecked: MutableMap<String, String> = LinkedHashMap()
 		private var updateIdx = 0
-
-		init {
-			this.channel = channel
-			startTime = LocalDateTime.now()
-			this.strict = strict
-			this.database = database
-		}
 
 		private val logger: Logger = LoggerFactory.getLogger(javaClass)
 

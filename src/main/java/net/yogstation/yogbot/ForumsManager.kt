@@ -16,6 +16,7 @@ import net.yogstation.yogbot.config.DiscordConfig
 import net.yogstation.yogbot.config.ForumsConfig
 import net.yogstation.yogbot.util.ByondLinkUtil
 import net.yogstation.yogbot.util.StringUtils
+import org.apache.logging.log4j.util.Strings.isBlank
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
@@ -44,10 +45,13 @@ class ForumsManager(
 
 	@Scheduled(fixedRate = 15000)
 	fun handleForums() {
+		if(isBlank(forumsConfig.xenforoKey)) {
+			logger.info("Xenforo key unset, skipping forums updates")
+			return;
+		}
 		handleChannel(
 			channelsConfig.channelBanAppeals,
-			forumsConfig.banAppealsForum,
-			PingType.BAN_APPEAL
+			forumsConfig.banAppealsForum
 		)
 		handleChannel(
 			channelsConfig.channelPlayerComplaints,
@@ -89,7 +93,7 @@ class ForumsManager(
 		val ckey = StringUtils.ckeyIze(mentionMatcher.group("ping"))
 		val response = ByondLinkUtil.getMemberID(ckey, databaseManager)
 		if (response.value == null) return Mono.just(defaultPing)
-		return guild.getMemberById(response.value).map {
+		return guild!!.getMemberById(response.value).map {
 			if(pingType == PingType.PLAYER_COMPLAINT) {
 				"${it.mention} $defaultPing"
 			} else if (it.roleIds.contains(Snowflake.of(discordConfig.staffRole))) {

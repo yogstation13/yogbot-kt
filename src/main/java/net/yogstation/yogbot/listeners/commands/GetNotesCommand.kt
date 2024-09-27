@@ -55,7 +55,7 @@ abstract class GetNotesCommand(
 		val notesString = StringBuilder("Notes for ").append(ckey).append("\n")
 		while (notesResult.next()) {
 			val hours = notesResult.getObject("playtime")
-			val hoursString = if (hours == null) "" else " (${playtimeFormat(hours as Long)})"; // It's a long for some reason
+			val hoursString = if (hours == null) "" else " (${playtimeFormat(hours as Long)})" // It's a long for some reason
 			val nextNote = "```${notesResult.getDate("timestamp")}$hoursString\t${notesResult.getString("text")}${
 				if (showAdmin) "   ${
 					notesResult.getString("adminckey")

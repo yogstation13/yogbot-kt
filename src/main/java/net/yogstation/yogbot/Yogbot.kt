@@ -26,9 +26,9 @@ import java.util.function.*
 @SpringBootApplication
 @EnableScheduling
 @ConfigurationPropertiesScan
-open class Yogbot {
+class Yogbot {
 	@Bean
-	open fun getGatewayDiscordClient(config: DiscordConfig): GatewayDiscordClient? {
+	fun getGatewayDiscordClient(config: DiscordConfig): GatewayDiscordClient? {
 		val client = DiscordClientBuilder.create(config.botToken)
 			.build()
 			.gateway()
@@ -41,7 +41,7 @@ open class Yogbot {
 			Function<ReadyEvent, Publisher<Any>> { event: ReadyEvent ->
 				Mono.fromRunnable {
 					val self: User = event.self
-					logger.info("Logged in as {}#{}", self.username, self.discriminator)
+					logger.info("Logged in as {}", self.username)
 				}
 			}
 		).subscribe()
@@ -49,27 +49,27 @@ open class Yogbot {
 	}
 
 	@Bean
-	open fun getRestClient(client: GatewayDiscordClient): RestClient {
+	fun getRestClient(client: GatewayDiscordClient): RestClient {
 		return client.restClient
 	}
 
 	@Bean
-	open fun getRandom(): Random {
+	fun getRandom(): Random {
 		return Random()
 	}
 
 	@Bean
-	open fun getWebClient(): WebClient {
+	fun getWebClient(): WebClient {
 		return WebClient.create()
 	}
 
 	@Bean
-	open fun getObjectMapper(): ObjectMapper {
+	fun getObjectMapper(): ObjectMapper {
 		return ObjectMapper()
 	}
 
 	@Bean
-	open fun getRestTemplate(): RestTemplate {
+	fun getRestTemplate(): RestTemplate {
 		return RestTemplate()
 	}
 
@@ -79,7 +79,7 @@ open class Yogbot {
 		/**
 		 * Maximum number of characters in a message
 		 */
-		const val MAX_MESSAGE_LENGTH = 2000;
+		const val MAX_MESSAGE_LENGTH = 2000
 	}
 }
 

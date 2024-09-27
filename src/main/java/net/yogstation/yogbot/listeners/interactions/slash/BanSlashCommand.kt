@@ -13,7 +13,6 @@ import reactor.core.publisher.Mono
 @Component
 class BanSlashCommand(
 	private val softbanCommand: SoftbanCommand,
-	private val permissions: PermissionsManager
 ): ISlashCommand {
 	override val name = "ban"
 

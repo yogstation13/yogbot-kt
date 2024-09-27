@@ -33,7 +33,7 @@ class BugReportChannel(
 		if (event.message.content.startsWith("-")) return Mono.empty<Any>()
 		val lines = event.message.content.split("\n")
 
-		val bugReport: BugReport = BugReport()
+		val bugReport = BugReport()
 		event.message.attachments.forEach { attachment -> logger.info(attachment.contentType.orElse("Unknown content type")) }
 		val logZip = event.message.attachments
 			.filter { attachment -> attachment.contentType.orElse("").equals("application/zip") }

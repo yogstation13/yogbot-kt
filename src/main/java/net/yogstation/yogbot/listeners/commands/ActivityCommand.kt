@@ -80,7 +80,7 @@ FROM admin_tmp as adminlist;
 		execStatement.execute("CREATE TEMPORARY TABLE IF NOT EXISTS admin_tmp (ckey varchar(32) NOT NULL)")
 		val populateTableStatement = conn.prepareStatement("INSERT INTO admin_tmp VALUES (?)")
 		admins.forEach { entry ->
-			populateTableStatement.setString(1, entry.key);
+			populateTableStatement.setString(1, entry.key)
 			populateTableStatement.addBatch()
 		}
 		populateTableStatement.executeBatch()
@@ -133,9 +133,7 @@ FROM admin_tmp as adminlist;
 	private val groupsRegex = "^(?:\\d+,?)+".toRegex()
 
 	private fun getGroups(groupIds: String): Mono<Map<String, AdminRank>> {
-		if(!groupsRegex.matches(groupIds)) {
-			throw IllegalArgumentException("Groups is an invalid format: $groupIds")
-		}
+		require(groupsRegex.matches(groupIds)) { "Groups is an invalid format: $groupIds"}
 
 		return webClient.get()
 			.uri(URI.create("https://forums.yogstation.net/api/group/users/?groups=$groupIds"))
